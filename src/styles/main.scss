@@ -1,0 +1,45 @@
+@import "bulma/sass/utilities/_all";
+
+@import "./variables/imports";
+@import "./variables/bulma";
+
+// Import Bulma styles
+@import "bulma/bulma";
+// @import "../../node_modules/bulma/bulma.sass";
+
+
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 0.3s;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0
+}
+
+html,
+body {
+  overflow: auto;
+  height: 100%;
+}
+
+body {
+  font-family: $family-sans-serif;
+  background-color: $white;
+}
+
+.image.avatar {
+  padding: $size-1;
+  background-color: $white;
+  border-radius: 100%;
+  width: 100%;
+  max-width: 250px;
+  margin: $size-5 auto $size-2 auto;
+}
+
+.hero.is-primary .subtitle a {
+    color: $secondary !important;
+}
