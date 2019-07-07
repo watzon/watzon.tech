@@ -23,7 +23,7 @@
   <div class="container">
 	<div class="navbar-brand">
 		<a class="navbar-item" href="/">
-			<h2>Chris Watson</h2>
+			<h2>watzon.tech</h2>
 		</a>
 
 		<a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" href="." on:click|preventDefault>

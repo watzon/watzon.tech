@@ -1,18 +1,19 @@
 <script>
-import axios from 'axios';
-import { onMount } from 'svelte';
-
 export let repo;
 export let text = 'Github';
 
-let count;
+let promise = fetchStargazers();
 
-onMount(async () => {
-    let endpoint = `https://api.github.com/repos/${repo}`;
-    let response = await axios.get(endpoint);
-    console.log(response);
-    count = response.data.stargazers_count || 0;
-})
+async function fetchStargazers () {
+    const res = await fetch(`https://api.github.com/repos/${repo}`);
+    const data = await res.json();
+    
+    if (res.ok) {
+        return data.stargazers_count;
+    } else {
+        throw new Error(data);
+    }
+}
 </script>
 
 <style>
@@ -62,7 +63,6 @@ onMount(async () => {
 }
 </style>
 
-<template>
 <span class="github-stars-button">
     <a href="https://github.com/{repo}" class="button is-rounded">
         <span class="icon">
@@ -72,7 +72,8 @@ onMount(async () => {
     </a>
 
     <a href="https://github.com/{repo}/stargazers" class="stars-count">
-        <i class="fas fa-star" /> {count}
+        {#await promise then stargazers_count}
+            <i class="fas fa-star" /> {stargazers_count}
+        {/await}
     </a>
 </span>
-</template>

@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import ProjectCard from '../../components/ProjectCard.svelte';
 
-	const projectsJson = 'https://gist.githubusercontent.com/watzon/772419598a0b47af0c6b1247c7429160/raw/projects.json';
+	const projectsJson = 'https://gist.githubusercontent.com/watzon/772419598a0b47af0c6b1247c7429160/raw';
 	export let projects = [];
 
 	onMount(() => {

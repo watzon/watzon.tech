@@ -31,6 +31,12 @@ body {
   background-color: $white;
 }
 
+.button {
+  span {
+    vertical-align: middle;
+  }
+}
+
 .image.avatar {
   padding: $size-1;
   background-color: $white;
