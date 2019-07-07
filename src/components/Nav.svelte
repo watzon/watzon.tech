@@ -33,9 +33,9 @@
 		</a>
 
 		<a role="button" class="navbar-burger" class:is-active="{open}" aria-label="menu" aria-expanded="{open}" href="." on:click|preventDefault={toggleOpen}>
-		<span aria-hidden="true"></span>
-		<span aria-hidden="true"></span>
-		<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
 		</a>
 	</div>
 

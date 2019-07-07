@@ -1,20 +1,8 @@
 {
-	"background_color": "#ffffff",
-	"theme_color": "#333333",
-	"name": "watzon",
-	"short_name": "watzon",
+	"background_color": "#305f72",
+	"theme_color": "#305f72",
+	"name": "watzon.tech",
+	"short_name": "watzon.tech",
 	"display": "minimal-ui",
-	"start_url": "/",
-	"icons": [
-		{
-			"src": "logo-192.png",
-			"sizes": "192x192",
-			"type": "image/png"
-		},
-		{
-			"src": "logo-512.png",
-			"sizes": "512x512",
-			"type": "image/png"
-		}
-	]
+	"start_url": "/"
 }
