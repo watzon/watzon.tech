@@ -31,6 +31,11 @@
     background: url("/images/card-content-bg.svg") left center no-repeat;
     background-size: cover;
     height: 100%;
+
+    @media only screen and (max-width: 768px) {
+      padding: 2.5rem;
+      background: #ffffff;
+    }
   }
 
   .title {
