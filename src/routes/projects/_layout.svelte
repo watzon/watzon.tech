@@ -7,6 +7,10 @@
 @import "../../styles/main.scss";
 </style>
 
+<svelte:head>
+	<title>Chris Watson - Projects</title>
+</svelte:head>
+
 <template>
     <Nav segment='projects'/>
 
