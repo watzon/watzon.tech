@@ -1,0 +1,9 @@
+.avatar-wrapper {
+    margin: 0 auto;
+    width: #{$avatar-width * 2};
+    clip-path: circle(#{$avatar-width} at #{$avatar-width} #{$avatar-width});
+
+    img {
+        width: 100%;
+    }
+}

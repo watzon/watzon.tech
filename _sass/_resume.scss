@@ -1,0 +1,41 @@
+.resume {
+    section {
+        margin: .5em 0;
+        padding: .5em 0;
+
+        &:not(:last-child) {
+            border-bottom: 1px dotted #444;
+        }
+    }
+
+    .title {
+        margin: 0 0 .5em;
+        padding: 0;
+    }
+
+    .block-item {
+        margin: 0 0 15px 0;
+
+        .bold {
+            font-weight: 700;
+            margin: 5px 0;
+        }
+
+        .light {
+            font-weight: 300;
+        }
+
+        .timespan {
+            font-style: italic;
+        }
+    }
+
+    .language-table {
+        margin: 0 auto;
+        column-count: 3;
+
+        div:nth-child(odd) {
+            font-weight: bold;
+        }
+    }
+}

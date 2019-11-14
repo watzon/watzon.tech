@@ -1,0 +1,20 @@
+.project-list {
+    .project {
+        padding: 10px;
+        display: block;
+
+        &:nth-child(odd) {
+            background-color: #EEE;
+        }
+
+        h2 {
+            margin-bottom: .5em;
+            padding: 0;
+        }
+
+        p {
+            font-size: 13pt;
+            color: #333;
+        }
+    }
+}

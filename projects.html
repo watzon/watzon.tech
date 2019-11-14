@@ -1,0 +1,20 @@
+---
+layout: default
+title: Projects
+---
+
+<h1 class="title">Projects</h1>
+
+<p>
+  These are just a few of my many projects. For all of my open source contributions, see 
+  <a href="https://github.com/watzon">my GitHub profile</a>.
+</p>
+
+<div class="project-list">
+  {% for project in site.projects %}
+    <a class="project" href="{{project.url}}">
+      <h2>{{ project.name }}</h2>
+      <p>{{ project.content | markdownify }}</p>
+    </a>
+  {% endfor %}
+</div>

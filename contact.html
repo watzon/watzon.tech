@@ -1,0 +1,39 @@
+---
+layout: default
+title: Projects
+---
+
+<h1 class="title">Contact Me</h1>
+
+<form class="contact-form" action="https://mailthis.to/watzon" method="POST">
+    <div class="form-group">
+        <input id="name" name="Name" type="text" placeholder="Your Name" />
+        <label for="name">Your Name</label>
+    </div>
+
+    <div class="form-group">
+        <input id="email" name="_replyto" type="text" placeholder="Your Email"/>
+        <label for="email">Your Email</label>
+    </div>
+
+    <div class="form-group">
+        <select id="reason" name="Reason" required>
+            <option value="" disabled selected hidden>Please Select a Reason</option>
+            <option value="question">Question</option>
+            <option value="job offer">Job Offer</option>
+            <option value="other">Other</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <textarea cols="30" id="" name="" rows="10" placeholder="Message..."></textarea>
+    </div>
+
+    <input type="hidden" name="_subject" value="Contact form submitted">
+    <input type="hidden" name="_after" value="https://watzon.tech/contact-submit.html">
+    <input type="hidden" name="_honeypot" value="">
+
+    <div class="form-group">
+        <button type="submit">Send</button>
+    </div>
+</form>
