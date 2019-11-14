@@ -12,7 +12,7 @@ title: Projects
 
 <div class="project-list">
   {% for project in site.projects %}
-    <a class="project" href="{{project.url}}">
+    <a class="project" href="{{project.github}}">
       <h2>{{ project.name }}</h2>
       <p>{{ project.content | markdownify }}</p>
     </a>
