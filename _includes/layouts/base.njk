@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Lume</title>
+
+    <meta name="supported-color-schemes" content="light dark">
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/styles/main.windi.css">
+    
+    <script src="/main.js" type="module"></script>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ title }}">
+    <meta property="og:url" content="{{ url | url(true) }}">
+    <meta property="og:description" content="{{ description | md(true) | striptags }}">
+    <meta property="og:image" content="{{ "/avatar.png" | url(true) }}">
+
+    <meta name="twitter:title" content="{{ title }}">
+    <meta name="twitter:description" content="{{ description | md(true) | striptags }}">
+    <meta name="twitter:site" content="@_watzon">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="{{ "/avatar.png" | url(true) }}">
+
+    <meta name="theme-color" content="#fff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#141b1f" media="(prefers-color-scheme: dark)">
+
+    <script>
+    if (
+      localStorage.getItem('color-theme') === 'dark' ||
+      (!('color-theme' in localStorage) &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+  </head>
+  <body>
+    {% include "templates/navbar.njk" %}
+    <div>
+      {{ content | safe }}
+    </div>
+    {% include "templates/footer.njk" %}
+  </body>
+</html>
