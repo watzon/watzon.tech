@@ -16,6 +16,7 @@ const { centered = false, withText = false } = Astro.props;
     SOCIALS.filter(social => social.active).map(social => (
       <LinkButton
         href={social.href}
+        rel={social.name==="Mastodon" ? "me" : ""}
         className="link-button flex flex-row items-center gap-2"
         title={social.linkTitle}
       >
