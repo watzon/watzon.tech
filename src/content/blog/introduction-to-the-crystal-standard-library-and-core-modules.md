@@ -8,8 +8,6 @@ tags:
   - programming
 ---
 
-## Table of contents
-
 Crystal is a modern, high-performance programming language that combines the expressiveness of Ruby with the efficiency of low-level languages like C. One of the key features of Crystal is its rich and comprehensive standard library, which provides a wide range of tools and modules for common tasks and operations. In this blog post, I'll introduce the Crystal standard library and highlight some of its core modules and functions. Whether you're new to Crystal or an experienced user, this article will give you a better understanding of the power and flexibility of the language.
 
 One of the greatest strengths of Crystal lies in its standard library, or the modules, classes, and functions that come baked in to the language. From the beginning, Crystal has pulled inspiration from Ruby. This can be seen in the syntax most obviously, but it's also very apparent in its standard library. Glancing through the [API docs](https://crystal-lang.org/api) you'll see a lot of familiar modules (assuming you're familiar with Ruby that is). While there are way too many modules to go over individually, I want to highlight some of the ones that stand out the most to me when coming from other languages.
