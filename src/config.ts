@@ -13,9 +13,9 @@ export const SITE: Site = {
 export const LOCALE = ["en-US"]; // set to [] to use the environment default
 
 export const LOGO_IMAGE = {
-  enable: false,
+  enable: true,
   svg: true,
-  width: 216,
+  width: 300,
   height: 46,
 };
 
@@ -37,5 +37,5 @@ export const SOCIALS: SocialObjects = [
     href: "https://www.tiktok.com/@3dprintifer",
     linkTitle: `Watzon on TikTok`,
     active: true,
-  }
+  },
 ];
