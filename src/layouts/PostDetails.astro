@@ -13,7 +13,7 @@ export interface Props {
 
 const { post } = Astro.props;
 
-const { title, author, description, ogImage, canonicalURL, pubDatetime, tags } = post.data;
+const { title, author, description, ogImage, canonicalURL, date, tags } = post.data;
 
 const { Content } = await post.render();
 
@@ -37,7 +37,7 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
   </div>
   <main id="main-content">
     <h1 class="post-title">{title}</h1>
-    <Datetime datetime={pubDatetime} size="lg" className="my-2" />
+    <Datetime datetime={date} size="lg" className="my-2" />
     <article id="article" role="article" class="prose mx-auto mt-8 max-w-3xl">
       <Content />
     </article>
@@ -45,6 +45,27 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
     <ul class="tags-container">
       {tags.map(tag => <Tag name={slugifyStr(tag)} />)}
     </ul>
+
+    <div id="coral_thread"></div>
+
+    <script type="text/javascript" define:vars={{ canonicalURL, postID: post.id }}>
+      (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://coral.watzon.tech/assets/js/embed.js';
+          s.async = false;
+          s.defer = true;
+          s.onload = function() {
+              Coral.createStreamEmbed({
+                  id: "coral_thread",
+                  autoRender: true,
+                  rootURL: 'https://coral.watzon.tech',
+                  storyID: `${postID}`,
+                  storyURL: `${canonicalURL}`,
+              });
+          };
+          (d.head || d.body).appendChild(s);
+      })();
+    </script>
   </main>
   <Footer />
 </Layout>
