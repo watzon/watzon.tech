@@ -6,6 +6,9 @@ import LinkButton from "./LinkButton.astro";
 import logoPNG from "/assets/logo.png";
 import logoSVG from "/assets/logo.svg";
 
+import logoLightPNG from "/assets/logo-light.png";
+import logoLightSVG from "/assets/logo-light.svg";
+
 export interface Props {
   activeNav?: "posts" | "tags" | "about" | "search";
 }
@@ -25,6 +28,14 @@ const { activeNav } = Astro.props;
               alt="AstroPaper Logo"
               width={LOGO_IMAGE.width}
               height={LOGO_IMAGE.height}
+              class="hidden dark:block"
+            />
+            <img
+              src={LOGO_IMAGE.svg ? logoLightSVG : logoLightPNG}
+              alt="AstroPaper Logo"
+              width={LOGO_IMAGE.width}
+              height={LOGO_IMAGE.height}
+              class="block dark:hidden"
             />
           ) : (
             SITE.title
