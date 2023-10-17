@@ -17,7 +17,7 @@ I currently host my own [Firefish](https://joinfirefish.org) instance and have b
 
 Firefish relies on two databases. Postgres for standard data storage, and Redis for caching. The Postgres database is easy enough to migrate, I even wrote a [simple bash script](https://0x45.st/mostly-eventually-themselves.bash) to make it even easier. Redis, however, doesn't have an easy way to dump all of its data to a file, and it doesn't have a way to import that data either. It does have something that might be even easier though.
 
-### Redis replication
+## Redis replication
 
 Redis has a built-in replication system that allows you to replicate a master database to one or more slave databases. This is useful for a number of reasons, but the one we're interested in is the ability to replicate a database to another server. This is exactly what we need to do in order to migrate our Redis database to another server.
 
@@ -49,7 +49,7 @@ KEYS *
 
 This will list all the keys in the database. If you see the keys you expect to see, then the replication is working. If you don't see any keys, then something went wrong.
 
-### Authentication
+## Authentication
 
 If you have authentication enabled on your master server via `requirepass`, you'll need to provide the password to the replica server. This can be done by running the following command:
 
@@ -57,7 +57,7 @@ If you have authentication enabled on your master server via `requirepass`, you'
 config set masterauth <password>
 ```
 
-### Stopping replication
+## Stopping replication
 
 Once you're done with the replication, you can stop it by running the following command:
 
