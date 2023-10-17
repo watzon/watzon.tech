@@ -9,8 +9,6 @@ tags:
   - databases
 ---
 
-## Table of contents
-
 Seeing this title you might be thinking to yourself, _why would I ever need to do that?_. After all, redis is meant to be used as a throwaway cache right? Caches by their very nature are generally disposable, so what would posess you to want to migrate that cache somewhere else? Well, I can't speak for you, but I can tell you why I needed to do it.
 
 I currently host my own [Firefish](https://joinfirefish.org) instance and have been doing so for the last couple months. In that couple of months I have moved from [Caprover](https://caprover.com), to [Coolify](https://coolify.io), to finally running it in its own VPS. Why all the moving? Because as it turns out, something like Firefish likes to be on its own, especially if you plan on opening your instance up to other people.
