@@ -18,6 +18,12 @@
           "type": "string"
         },
         {
+          "title": "Tags",
+          "name": "tags",
+          "type": "tags",
+          "single": true
+        },
+        {
           "title": "Publishing date",
           "name": "date",
           "type": "datetime",
@@ -25,13 +31,31 @@
           "isPublishDate": true
         },
         {
-          "title": "Content preview",
-          "name": "heroImage",
-          "type": "image",
-          "isPreviewImage": true
+          "title": "Featured",
+          "name": "featured",
+          "type": "boolean"
+        },
+        {
+          "title": "Draft",
+          "name": "draft",
+          "type": "boolean"
+        },
+        {
+          "title": "OG image",
+          "name": "ogImage",
+          "type": "image"
+        },
+        {
+          "title": "author",
+          "name": "author",
+          "type": "string"
         }
       ]
     }
   ],
-  "frontMatter.content.supportedFileTypes": [ "md", "markdown", "mdx" ]
+  "frontMatter.content.supportedFileTypes": [
+    "md",
+    "markdown",
+    "mdx"
+  ]
 }

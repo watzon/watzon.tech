@@ -4,9 +4,10 @@ date: 2023-10-17T18:53:50.702Z
 title: Migrating your Redis database to another server
 description: How to migrate your Redis database to another server using replication
 tags:
+  - databases
   - redis
   - servers
-  - databases
+  - devops
 ---
 
 Seeing this title you might be thinking to yourself, _why would I ever need to do that?_. After all, redis is meant to be used as a throwaway cache right? Caches by their very nature are generally disposable, so what would posess you to want to migrate that cache somewhere else? Well, I can't speak for you, but I can tell you why I needed to do it.
