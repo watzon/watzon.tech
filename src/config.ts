@@ -5,7 +5,7 @@ export const SITE: Site = {
   author: "Chris Watson",
   desc: "Personal website and blog of Chris Watson",
   title: "Watzon Does Tech",
-  ogImage: "astropaper-og.jpg",
+  ogImage: "watzon-tech-og.png",
   lightAndDarkMode: true,
   postPerPage: 5,
 };
