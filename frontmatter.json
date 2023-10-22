@@ -1,44 +1,52 @@
 {
   "frontMatter.taxonomy.contentTypes": [
     {
-      "name": "default",
-      "pageBundle": false,
+      "name": "blog",
       "previewPath": "'blog'",
+      "pageBundle": false,
+      "clearEmpty": true,
       "filePrefix": null,
       "fields": [
         {
-          "title": "Title",
-          "name": "title",
+          "name": "author",
           "type": "string",
-          "single": true
+          "single": true,
+          "required": true
         },
         {
-          "title": "Description",
-          "name": "description",
-          "type": "string"
-        },
-        {
-          "title": "Tags",
-          "name": "tags",
-          "type": "tags",
-          "single": true
-        },
-        {
-          "title": "Publishing date",
           "name": "date",
           "type": "datetime",
           "default": "{{now}}",
-          "isPublishDate": true
+          "required": true
         },
         {
-          "title": "Featured",
+          "name": "title",
+          "type": "string",
+          "single": true,
+          "required": true
+        },
+        {
+          "name": "postSlug",
+          "type": "string",
+          "single": true,
+          "required": false
+        },
+        {
           "name": "featured",
-          "type": "boolean"
+          "type": "boolean",
+          "required": true,
+          "default": true
         },
         {
-          "title": "Draft",
           "name": "draft",
-          "type": "boolean"
+          "type": "boolean",
+          "required": true,
+          "default": true
+        },
+        {
+          "title": "tags",
+          "name": "tags",
+          "type": "tags"
         },
         {
           "title": "OG image",
@@ -46,9 +54,16 @@
           "type": "image"
         },
         {
-          "title": "author",
-          "name": "author",
-          "type": "string"
+          "name": "description",
+          "type": "string",
+          "single": true,
+          "required": true
+        },
+        {
+          "name": "canonicalURL",
+          "type": "string",
+          "single": true,
+          "required": false
         }
       ]
     }
@@ -57,5 +72,21 @@
     "md",
     "markdown",
     "mdx"
+  ],
+  "frontMatter.framework.id": "astro",
+  "frontMatter.preview.host": "http://localhost:4321",
+  "frontMatter.content.publicFolder": {
+    "path": "src/assets",
+    "relative": true
+  },
+  "frontMatter.content.pageFolders": [
+    {
+      "path": "[[workspace]]/src/pages",
+      "title": "pages"
+    },
+    {
+      "title": "blog",
+      "path": "[[workspace]]/src/content/blog"
+    }
   ]
 }
