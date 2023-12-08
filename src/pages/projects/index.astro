@@ -1,0 +1,96 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects'))
+	// sort by name, but keep projects that are marked as featured first
+	.sort((a, b) => {
+		if (a.data.featured && !b.data.featured) return -1;
+		if (!a.data.featured && b.data.featured) return 1;
+		return a.data.name.localeCompare(b.data.name);
+	});
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Projects - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				width: 960px;
+			}
+			ul {
+				@apply flex flex-wrap gap-8 list-none m-0 p-0;
+			}
+			ul li {
+				width: calc(50% - 1rem);
+				@apply relative;
+			}
+			ul li.featured::after {
+				content: 'Featured';
+				@apply absolute top-2 right-2 px-2 py-1 text-xs font-bold text-white bg-sky-500 rounded-lg shadow-sm;
+			}
+			ul li * {
+				@apply transition duration-200 ease-in-out;
+			}
+			ul li img {
+				@apply mb-2 rounded-lg;
+			}
+			ul li a {
+				@apply block;
+			}
+			.title {
+				@apply m-0 text-gray-800 dark:text-gray-200 leading-8;
+			}
+			.description {
+				@apply m-0 text-gray-500;
+			}
+			ul li a:hover h4,
+			ul li a:hover .description {
+				@apply text-sky-500;
+			}
+			ul a:hover img {
+				@apply shadow-lg;
+			}
+			@media (max-width: 720px) {
+				ul {
+					@apply gap-2;
+				}
+				ul li {
+					@apply w-full text-center;
+				}
+				ul li:first-child {
+					@apply mb-0;
+				}
+				ul li:first-child .title {
+					@apply text-2xl;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section>
+				<ul>
+					{
+						projects
+							.map((project) => (
+								<li class={project.data.featured ? 'featured' : ''}>
+									<a href={project.data.linkOnly ? project.data.url : `/projects/${project.slug}/`}>
+										<img width={720} height={360} src={project.data.heroImage ?? '/images/placeholder.webp'} alt="" />
+										<h4 class="title">{project.data.name}</h4>
+										<p class="description">{project.data.description}</p>
+									</a>
+								</li>
+							))
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

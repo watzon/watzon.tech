@@ -1,149 +1,106 @@
 ---
-import { getCollection } from "astro:content";
-import Layout from "@layouts/Layout.astro";
-import Header from "@components/Header.astro";
-import Footer from "@components/Footer.astro";
-import LinkButton from "@components/LinkButton.astro";
-import Hr from "@components/Hr.astro";
-import Card from "@components/Card";
-import Socials from "@components/Socials.astro";
-import getSortedPosts from "@utils/getSortedPosts";
-import slugify from "@utils/slugify";
-import { SOCIALS } from "@config";
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from 'astro:content';
 
-const posts = await getCollection("blog");
-
-const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-
-const socialCount = SOCIALS.filter(social => social.active).length;
+const featuredProjects = (await getCollection('projects', (item) => item.data.featured));
+const latestPosts = (await getCollection('posts'))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
 ---
 
-<Layout>
-  <Header />
-  <main id="main-content">
-    <section id="hero">
-      <h1>Watzon Does Tech</h1>
-      <a
-        target="_blank"
-        href="/rss.xml"
-        class="rss-link"
-        aria-label="rss feed"
-        title="RSS Feed"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="rss-icon"
-          ><path
-            d="M19 20.001C19 11.729 12.271 5 4 5v2c7.168 0 13 5.832 13 13.001h2z"
-          ></path><path
-            d="M12 20.001h2C14 14.486 9.514 10 4 10v2c4.411 0 8 3.589 8 8.001z"
-          ></path><circle cx="6" cy="18" r="2"></circle>
-        </svg>
-      </a>
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header title={SITE_TITLE} />
+		<main>
+			<h1 class="header">Hey, I'm Chris.</h1>
+			<h4>Welcome to my personal website, portfolio, and blog.</h3>
+			<p>
+				I am a software engineer with a love for open source, learning, and lesser known/used languages such as
+				Crystal, Nim, Zig, and Roc. I am also a fan of TypeScript, Go, and occasionally even PHP.
+			</p>
+			<p>
+				When I'm not programming, I'm probably doing something with one of my many other hobbies such as 3d printing,
+				photography, or playing video games. My whole life is an ADHD and Autism fueled adventure, so who knows
+				what I'll be up to next.
+			</p>
+			<h5>My Links</h5>
+			<p>
+				I don't spend a ton of time on social media, but you will see me posting occasionally on
+				<a href="https://watzonmanor.com/@watzon" title="It's really Misskey, but Mastodon is more well known">Mastodon</a>
+				and on my main <a href="https://tiktok.com/@3dprintifer">TikTok account</a>. You can also check out my projects
+				on <a href="https://github.com/watzon">Github</a>.
+			</p>
+			<h5>Featured Projects</h5>
+			<div class="project-list">
+				{
+					featuredProjects.map((project) => (
+						<a href={project.data.linkOnly ? project.data.url : `/projects/${project.slug}/`} title={project.data.name}>
+							<b class="name">{project.data.name}</b>
+							-
+							<span class="description">{project.data.description}</span>
+						</a>
+					))
+				}
+			</div>
+			<h5>From the Blog</h5>
+			<div class="post-list">
+				{
+					latestPosts.map((post) => (
+						<a href="{post.url}" title={post.data.title}><b>{post.data.title}</b></a>
+					))
+				}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
 
-      <p>
-        Hello, and welcome to my blog. I am Chris, a software engineer from Utah. As such, the prevailing theme 
-        of this blog will be software development and technology, but will also be open to other topics on 
-        things that interest me such as 3d printing, photography, gaming, and more.
-      </p>
-      {
-        // only display if at least one social link is enabled
-        socialCount > 0 && (
-          <div class="social-wrapper">
-            <div class="social-links">You can also find me on:</div>
-            <Socials withText />
-          </div>
-        )
-      }
-    </section>
+<style lang="postcss">
+	.header {
+		/* Transitioning rainbow gradient */
+		background: linear-gradient(90deg, #ffb3b3, #ffd9b3, #ffffb3, #b3ffcc, #b3ffff, #b3b3ff, #ffb3ff, #ffb3b3, #ffb3b3);
+		background-size: 400% 400%;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		animation: gradient 15s linear infinite;
+	}
 
-    <Hr />
+	@keyframes gradient {
+		0% {
+			background-position: 0% 50%;
+		}
+		50% {
+			background-position: 100% 50%;
+		}
+		100% {
+			background-position: 0% 50%;
+		}
+	}
 
-    {
-      featuredPosts.length > 0 && (
-        <>
-          <section id="featured">
-            <h2>Featured</h2>
-            <ul>
-              {featuredPosts.map(({ data }) => (
-                <Card
-                  href={`/posts/${slugify(data)}`}
-                  frontmatter={data}
-                  secHeading={false}
-                />
-              ))}
-            </ul>
-          </section>
-          <Hr />
-        </>
-      )
-    }
+	.project-list {
+		@apply mb-6;
+	}
 
-    <section id="recent-posts">
-      <h2>Recent Posts</h2>
-      <ul>
-        {
-          sortedPosts.map(
-            ({ data }, index) =>
-              index < 4 && (
-                <Card
-                  href={`/posts/${slugify(data)}`}
-                  frontmatter={data}
-                  secHeading={false}
-                />
-              )
-          )
-        }
-      </ul>
-      <div class="all-posts-btn-wrapper">
-        <LinkButton href="/posts">
-          All Posts
-          <svg xmlns="http://www.w3.org/2000/svg"
-            ><path
-              d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"
-            ></path>
-          </svg>
-        </LinkButton>
-      </div>
-    </section>
-  </main>
+	.project-list a {
+		@apply flex flex-row gap-2 items-baseline;
+	}
 
-  <Footer />
-</Layout>
+	.project-list .name {
+		@apply text-lg;
+	}
 
-<style>
-  /* ===== Hero Section ===== */
-  #hero {
-    @apply pb-6 pt-8;
-  }
-  #hero h1 {
-    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-5xl;
-  }
-  #hero .rss-link {
-    @apply mb-6;
-  }
-  #hero .rss-icon {
-    @apply mb-2 h-6 w-6 scale-110 fill-skin-accent sm:mb-3 sm:scale-125;
-  }
-  #hero p {
-    @apply my-2;
-  }
-  .social-wrapper {
-    @apply mt-4;
-  }
-  .social-links {
-    @apply mb-1 mr-2 whitespace-nowrap;
-  }
+	.project-list .description {
+		@apply text-base;
+	}
 
-  /* ===== Featured & Recent Posts Sections ===== */
-  #featured,
-  #recent-posts {
-    @apply pb-6 pt-12;
-  }
-  #featured h2,
-  #recent-posts h2 {
-    @apply text-2xl font-semibold tracking-wide;
-  }
-  .all-posts-btn-wrapper {
-    @apply my-8 text-center;
-  }
+	.post-list {
+		@apply flex flex-col gap-1 mb-6 text-lg;
+	}
 </style>

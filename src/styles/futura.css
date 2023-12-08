@@ -1,0 +1,240 @@
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-CondensedOblique.eot');
+    src: local('Futura LT Condensed Medium Oblique'), local('FuturaLT-CondensedOblique'),
+        url('/fonts/futura/FuturaLT-CondensedOblique.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-CondensedOblique.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-CondensedOblique.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-CondensedOblique.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-Light.eot');
+    src: local('Futura LT Light'), local('FuturaLT-Light'),
+        url('/fonts/futura/FuturaLT-Light.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-Light.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-Light.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-ExtraBold.eot');
+    src: local('Futura LT Extra Bold'), local('FuturaLT-ExtraBold'),
+        url('/fonts/futura/FuturaLT-ExtraBold.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-ExtraBold.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-ExtraBold.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-ExtraBoldOblique.eot');
+    src: local('Futura LT Extra Bold Oblique'), local('FuturaLT-ExtraBoldOblique'),
+        url('/fonts/futura/FuturaLT-ExtraBoldOblique.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-ExtraBoldOblique.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-ExtraBoldOblique.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-ExtraBoldOblique.ttf') format('truetype');
+    font-weight: 800;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-LightOblique.eot');
+    src: local('Futura LT Light Oblique'), local('FuturaLT-LightOblique'),
+        url('/fonts/futura/FuturaLT-LightOblique.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-LightOblique.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-LightOblique.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-LightOblique.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-Condensed.eot');
+    src: local('Futura LT Condensed Medium'), local('FuturaLT-Condensed'),
+        url('/fonts/futura/FuturaLT-Condensed.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-Condensed.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-Condensed.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-Condensed.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-Book.eot');
+    src: local('Futura LT Book'), local('FuturaLT-Book'),
+        url('/fonts/futura/FuturaLT-Book.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-Book.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-Book.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-Book.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-Oblique.eot');
+    src: local('Futura LT Medium Oblique'), local('FuturaLT-Oblique'),
+        url('/fonts/futura/FuturaLT-Oblique.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-Oblique.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-Oblique.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-Oblique.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-CondensedExtraBold.eot');
+    src: local('Futura LT Condensed Extra Bold'), local('FuturaLT-CondensedExtraBold'),
+        url('/fonts/futura/FuturaLT-CondensedExtraBold.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-CondensedExtraBold.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-CondensedExtraBold.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-CondensedExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT.eot');
+    src: local('Futura LT Medium'), local('FuturaLT'),
+        url('/fonts/futura/FuturaLT.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT.woff') format('woff'),
+        url('/fonts/futura/FuturaLT.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-CondensedLightObl.eot');
+    src: local('Futura LT Condensed Light Oblique'), local('FuturaLT-CondensedLightObl'),
+        url('/fonts/futura/FuturaLT-CondensedLightObl.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-CondensedLightObl.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-CondensedLightObl.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-CondensedLightObl.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-BookOblique.eot');
+    src: local('Futura LT Book Oblique'), local('FuturaLT-BookOblique'),
+        url('/fonts/futura/FuturaLT-BookOblique.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-BookOblique.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-BookOblique.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-BookOblique.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-CondExtraBoldObl.eot');
+    src: local('Futura LT Condensed Extra Bold Oblique'), local('FuturaLT-CondExtraBoldObl'),
+        url('/fonts/futura/FuturaLT-CondExtraBoldObl.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-CondExtraBoldObl.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-CondExtraBoldObl.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-CondExtraBoldObl.ttf') format('truetype');
+    font-weight: 800;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-HeavyOblique.eot');
+    src: local('Futura LT Heavy Oblique'), local('FuturaLT-HeavyOblique'),
+        url('/fonts/futura/FuturaLT-HeavyOblique.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-HeavyOblique.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-HeavyOblique.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-HeavyOblique.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-BoldOblique.eot');
+    src: local('Futura LT Bold Oblique'), local('FuturaLT-BoldOblique'),
+        url('/fonts/futura/FuturaLT-BoldOblique.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-BoldOblique.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-BoldOblique.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-BoldOblique.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-CondensedBoldOblique.eot');
+    src: local('Futura LT Condensed Bold Oblique'), local('FuturaLT-CondensedBoldOblique'),
+        url('/fonts/futura/FuturaLT-CondensedBoldOblique.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-CondensedBoldOblique.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-CondensedBoldOblique.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-CondensedBoldOblique.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-CondensedLight.eot');
+    src: local('Futura LT Condensed Light'), local('FuturaLT-CondensedLight'),
+        url('/fonts/futura/FuturaLT-CondensedLight.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-CondensedLight.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-CondensedLight.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-CondensedLight.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-Bold.eot');
+    src: local('Futura LT Bold'), local('FuturaLT-Bold'),
+        url('/fonts/futura/FuturaLT-Bold.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-Bold.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-Bold.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-Heavy.eot');
+    src: local('Futura LT Heavy'), local('FuturaLT-Heavy'),
+        url('/fonts/futura/FuturaLT-Heavy.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-Heavy.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-Heavy.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-Heavy.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura LT';
+    src: url('/fonts/futura/FuturaLT-CondensedBold.eot');
+    src: local('Futura LT Condensed Bold'), local('FuturaLT-CondensedBold'),
+        url('/fonts/futura/FuturaLT-CondensedBold.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/futura/FuturaLT-CondensedBold.woff2') format('woff2'),
+        url('/fonts/futura/FuturaLT-CondensedBold.woff') format('woff'),
+        url('/fonts/futura/FuturaLT-CondensedBold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+

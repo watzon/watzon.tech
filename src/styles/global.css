@@ -1,0 +1,125 @@
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+	@apply w-1 h-1;
+}
+
+::-webkit-scrollbar-track {
+	@apply bg-gray-900;
+}
+
+::-webkit-scrollbar-thumb {
+	@apply bg-gray-700;
+}
+
+body {
+	font-family: 'Futura LT', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+	background-size: 100% 100%;
+	@apply min-h-screen m-0 p-0 text-left break-words text-xl leading-7 bg-gray-200 dark:bg-gray-900 bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 dark:text-gray-100;
+}
+
+main {
+	@apply w-[720px] max-w-[calc(100%-2em)] m-auto px-4 py-12;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: 'TikTok Text', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+	@apply m-0 mb-6 text-4xl font-bold leading-10 text-gray-900 dark:text-gray-100;
+}
+h1 {
+	@apply text-6xl
+}
+h2 {
+	@apply text-5xl
+}
+h3 {
+	@apply text-4xl
+}
+h4 {
+	@apply text-3xl
+}
+h5 {
+	@apply text-2xl
+}
+
+strong,
+b {
+	font-family: 'TikTok Text', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+	@apply font-bold;
+}
+
+a {
+	@apply text-teal-600 no-underline;
+}
+
+a:hover {
+	@apply text-teal-700;
+}
+
+p {
+	@apply mb-4;
+}
+
+.prose p {
+	@apply mb-6;
+}
+
+textarea {
+	@apply w-full text-base;
+}
+
+input {
+	@apply text-base;
+}
+
+table {
+	@apply w-full;
+}
+
+img {
+	@apply max-w-full h-auto rounded-lg;
+}
+
+code {
+	@apply px-1 py-0 bg-gray-200 dark:bg-gray-700 rounded-lg;
+}
+
+pre {
+	@apply mb-6 p-6 rounded-lg overflow-y-auto;
+}
+
+pre > code {
+	all: unset;
+}
+
+blockquote {
+	@apply border-l-4 border-gray-200 dark:border-gray-700 pl-4;
+}
+
+hr {
+	@apply border-none border-t-2 border-gray-200 dark:border-gray-700;
+}
+
+@media (max-width: 720px) {
+	body {
+		@apply text-lg;
+	}
+	main {
+		@apply p-4;
+	}
+}
+
+.sr-only {
+	@apply border-0 p-0 m-0 w-1 h-1 overflow-hidden absolute whitespace-nowrap;
+
+	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
+	clip: rect(1px 1px 1px 1px);
+	/* maybe deprecated but we need to support legacy browsers */
+	clip: rect(1px, 1px, 1px, 1px);
+	/* modern browsers, clip-path works inwards from each corner */
+	clip-path: inset(50%);
+}

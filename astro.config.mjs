@@ -1,43 +1,22 @@
-import { defineConfig } from "astro/config";
-import tailwind from "@astrojs/tailwind";
-import react from "@astrojs/react";
-import remarkToc from "remark-toc";
-import remarkCollapse from "remark-collapse";
-import sitemap from "@astrojs/sitemap";
+import { defineConfig } from 'astro/config';
+import icon from "astro-icon";
 import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
+
+import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://watzon.tech/", // replace this with your deployed domain
+  site: 'https://watzon.tech',
   integrations: [
     mdx(),
-    tailwind({
-      config: {
-        applyBaseStyles: false,
-      },
-    }),
-    react(),
     sitemap(),
-  ],
-  markdown: {
-    remarkPlugins: [
-      remarkToc,
-      [
-        remarkCollapse,
-        {
-          test: "Table of contents",
-        },
-      ],
-    ],
-    shikiConfig: {
-      theme: "one-dark-pro",
-      wrap: true,
-    },
-    extendDefaultPlugins: true,
-  },
-  vite: {
-    optimizeDeps: {
-      exclude: ["@resvg/resvg-js"],
-    },
-  },
+    tailwind(),
+    icon({
+      include: {
+        mdi: ['*'],
+        ic: ['*'],
+      }
+    }),
+  ]
 });

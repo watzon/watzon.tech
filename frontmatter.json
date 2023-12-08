@@ -1,92 +1,58 @@
 {
-  "frontMatter.taxonomy.contentTypes": [
-    {
-      "name": "blog",
-      "previewPath": "'blog'",
-      "pageBundle": false,
-      "clearEmpty": true,
-      "filePrefix": null,
-      "fields": [
-        {
-          "name": "author",
-          "type": "string",
-          "single": true,
-          "required": true
-        },
-        {
-          "name": "date",
-          "type": "datetime",
-          "default": "{{now}}",
-          "required": true
-        },
-        {
-          "name": "title",
-          "type": "string",
-          "single": true,
-          "required": true
-        },
-        {
-          "name": "postSlug",
-          "type": "string",
-          "single": true,
-          "required": false
-        },
-        {
-          "name": "featured",
-          "type": "boolean",
-          "required": true,
-          "default": true
-        },
-        {
-          "name": "draft",
-          "type": "boolean",
-          "required": true,
-          "default": true
-        },
-        {
-          "title": "tags",
-          "name": "tags",
-          "type": "tags"
-        },
-        {
-          "title": "OG image",
-          "name": "ogImage",
-          "type": "image"
-        },
-        {
-          "name": "description",
-          "type": "string",
-          "single": true,
-          "required": true
-        },
-        {
-          "name": "canonicalURL",
-          "type": "string",
-          "single": true,
-          "required": false
-        }
-      ]
-    }
-  ],
-  "frontMatter.content.supportedFileTypes": [
-    "md",
-    "markdown",
-    "mdx"
-  ],
+  "$schema": "https://frontmatter.codes/frontmatter.schema.json",
   "frontMatter.framework.id": "astro",
   "frontMatter.preview.host": "http://localhost:4321",
-  "frontMatter.content.publicFolder": {
-    "path": "src/assets",
-    "relative": true
-  },
+  "frontMatter.content.publicFolder": "public",
   "frontMatter.content.pageFolders": [
     {
-      "path": "[[workspace]]/src/pages",
-      "title": "pages"
-    },
-    {
       "title": "blog",
-      "path": "[[workspace]]/src/content/blog"
+      "path": "[[workspace]]/src/content/posts"
+    }
+  ],
+  "frontMatter.taxonomy.contentTypes": [
+    {
+      "name": "default",
+      "pageBundle": false,
+      "previewPath": "'posts'",
+      "filePrefix": null,
+      "clearEmpty": true,
+      "fields": [
+        {
+          "title": "Title",
+          "name": "title",
+          "type": "string",
+          "single": true
+        },
+        {
+          "title": "Description",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "title": "Author",
+          "name": "author",
+          "type": "string",
+          "single": true
+        },
+        {
+          "title": "Publishing date",
+          "name": "pubDate",
+          "type": "datetime",
+          "default": "{{now}}",
+          "isPublishDate": true
+        },
+        {
+          "title": "Hero image",
+          "name": "heroImage",
+          "type": "image",
+          "isPreviewImage": true
+        },
+        {
+          "title": "Tags",
+          "name": "tags",
+          "type": "tags"
+        }
+      ]
     }
   ]
 }
