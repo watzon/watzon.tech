@@ -8,6 +8,8 @@ tags:
   - nlp
   - linguistics
   - library
+pubDate: 2023-12-08T18:06:53.000Z
 heroImage: /images/cadmium-header.png
 linkOnly: true
+type: project
 ---

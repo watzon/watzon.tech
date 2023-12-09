@@ -7,6 +7,10 @@
     {
       "title": "blog",
       "path": "[[workspace]]/src/content/posts"
+    },
+    {
+      "title": "projects",
+      "path": "[[workspace]]/src/content/projects"
     }
   ],
   "frontMatter.taxonomy.contentTypes": [
@@ -51,6 +55,60 @@
           "title": "Tags",
           "name": "tags",
           "type": "tags"
+        }
+      ]
+    },
+    {
+      "name": "project",
+      "pageBundle": false,
+      "previewPath": "'projects'",
+      "filePrefix": null,
+      "clearEmpty": true,
+      "fields": [
+        {
+          "title": "Name",
+          "name": "name",
+          "type": "string",
+          "single": true
+        },
+        {
+          "title": "Description",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "title": "URL",
+          "name": "url",
+          "type": "string"
+        },
+        {
+          "title": "Publishing date",
+          "name": "pubDate",
+          "type": "datetime",
+          "default": "{{now}}",
+          "isPublishDate": true
+        },
+        {
+          "title": "Hero image",
+          "name": "heroImage",
+          "type": "image",
+          "isPreviewImage": true
+        },
+        {
+          "title": "Tags",
+          "name": "tags",
+          "type": "tags"
+        },
+        {
+          "title": "Featured",
+          "name": "featured",
+          "type": "boolean"
+        },
+        {
+          "title": "Link only",
+          "name": "linkOnly",
+          "type": "boolean"
+
         }
       ]
     }
