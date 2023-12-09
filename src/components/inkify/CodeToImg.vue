@@ -32,7 +32,6 @@ const imgUrl = ref<string | undefined>(undefined)
 const windowTitle = "Inkify"
 const pad_horiz = 20;
 const pad_vert = 20;
-const font = "Monaspace Neon=32"
 
 const themes = [
   "1337",
@@ -60,7 +59,7 @@ const themes = [
 
 const inkifyRequest = () => {
     const encodedCode = encodeURIComponent(code.value)
-    const endpoint = `https://inkify.0x45.st/generate?code=${encodedCode}&theme=${theme.value}&window_title=${windowTitle}&pad_horiz=${pad_horiz}&pad_vert=${pad_vert}&font=${font}`
+    const endpoint = `https://inkify.0x45.st/generate?code=${encodedCode}&theme=${theme.value}&window_title=${windowTitle}&pad_horiz=${pad_horiz}&pad_vert=${pad_vert}`
     imgUrl.value = endpoint
 }
 </script>
