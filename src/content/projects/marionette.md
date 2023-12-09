@@ -10,4 +10,5 @@ tags:
   - webdriver
 linkOnly: true
 featured: true
+heroImage: /images/marionette-header.webp
 ---

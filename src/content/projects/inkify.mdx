@@ -1,0 +1,38 @@
+---
+name: Inkify
+url: https://github.com/watzon/inkify
+description: Generate images of your code with this open source server
+tags:
+  - project
+  - rust
+  - server
+  - self-hosted
+featured: true
+heroImage: /images/inkify-header.webp
+---
+
+import CodeToImg from '../../components/inkify/CodeToImg.vue'
+
+Many developers are familiar with the likes of [Carbon](https://carbon.now.sh/) and [Codeimg](https://codeimg.io/), which allow you to generate images of your code. They are extremely useful projects, but they are also closed source, don't have APIs, and are not self-hostable. Inkify is an open source alternative that aims to solve these problems.
+
+Inkify is written in Rust and makes use of a couple of other open source projects, including [Silicon](https://github.com/Aloxaf/silicon) for rendering the code images, [guesslang](https://github.com/yoeo/guesslang) for detecting the programming language, and [Actix Web](https://github.com/actix/actix-web) for the server. Without these projects, Inkify would not be possible. Silicon is really the backbone and inspiration for the whole project, but since it's mostly made to be a CLI tool it took some work to make it into a server.
+
+## The API
+
+Inkify has a very simple to use JSON based API, which is entirely documented with a GET request to the server root. You can see it yourself [here](https://inkify.0x45.st), where I host the official instance. The most important route is `/generate`, which takes a JSON body and returns a PNG image, though there are several other routes available including `/detect` which does some language detection on the provided code.
+
+## Self-hosting
+
+I host pretty much everything I build with Docker, and Inkify is no exception. As such there is a ready-to-go Docker container available at [https://hub.docker.com/r/watzon/inkify](https://hub.docker.com/r/watzon/inkify). You can also, of course, build it youself with the provided Dockerfile; be warned, the build process takes a while as it has to compile Tensorflow, download fonts, and build the Rust project.
+
+## Testing
+
+Want to give Inkify a try without writing your own code? Here's a simple component that make use of the Inkify API:
+
+<div class="mb-8">
+    <CodeToImg client:load />
+</div>
+
+## Conclusion
+
+Inkify was inspired by my wanting to generate open graph images for my pastebin, [paste69](https://0x45.st), and I'm very happy with how it turned out. It's a simple project, but it's also very useful and I hope others find it useful as well. Be sure to give the project a [star on GitHub](https://github.com/watzon/inkify) if you like it, and feel free to open an issue if you have any questions or suggestions.

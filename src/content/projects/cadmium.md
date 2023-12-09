@@ -10,5 +10,4 @@ tags:
   - library
 heroImage: /images/cadmium-header.png
 linkOnly: true
-featured: true
 ---

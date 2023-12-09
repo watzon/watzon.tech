@@ -63,9 +63,21 @@ const latestPosts = (await getCollection('posts'))
 </html>
 
 <style lang="postcss">
-	.header {
-		/* Transitioning rainbow gradient */
-		background: linear-gradient(90deg, #ffb3b3, #ffd9b3, #ffffb3, #b3ffcc, #b3ffff, #b3b3ff, #ffb3ff, #ffb3b3, #ffb3b3);
+	:root {
+		--gradient-colors-light: #b36b6b, #d99e85, #e6d9a3, #7fbf8e, #7fbfbf, #7f7fbf, #b37fbf, #b36b6b, #b36b6b;
+		--gradient-colors-dark: #ffb3b3, #ffd9b3, #ffffb3, #b3ffcc, #b3ffff, #b3b3ff, #ffb3ff, #ffb3b3, #ffb3b3;
+	}
+
+	:global(.dark) .header {
+		background: linear-gradient(90deg, var(--gradient-colors-dark));
+		background-size: 400% 400%;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		animation: gradient 15s linear infinite;
+	}
+
+	:global(:not(.dark)) .header {
+		background: linear-gradient(90deg, var(--gradient-colors-light));
 		background-size: 400% 400%;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;

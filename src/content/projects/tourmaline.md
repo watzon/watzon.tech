@@ -10,5 +10,4 @@ tags:
   - framework
 heroImage: /images/tourmaline-header.png
 linkOnly: true
-featured: true
 ---
