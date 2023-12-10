@@ -52,7 +52,7 @@ Lastly we'll update the database with the new post.
 
 ![The finished workflow](/images/using-n8n-to-create-a-simple-mastodon-bot.png)
 
-You can check out the JSON for the entire finished workflow [here](https://0x45.st/repeat-gain-sum.json), and import it into your own n8n instance if you want to use it as a starting point for your own bot.
+You can check out the JSON for the entire finished workflow [here](https://0x45.st/repeat-gain-sum.json), and import it into your own n8n instance if you want to use it as a starting point for your own bot. You can check out the actual bot in action [@watzontech@watzonmanor.com](https://watzonmanor.com/@watzontech).
 
 ## Conclusion
 
