@@ -5,8 +5,10 @@ author: Chris W
 pubDate: 2024-01-03T22:41:33.691Z
 tags:
     - crystal
-    - project
     - programming
+    - project
+    - athena-framework
+heroImage: /images/rolling-my-own-pastebin.png
 ---
 
 Anyone who follows me on Mastodon or interacts with me on Telegram and Discord probably knows that I've been working on a paste bin project for a while now. The project has gone through several renditions as I've used it as a testing ground for different languages and frameworks. Ultimately, I was hoping to find the perfect solutions for my personal projects going forward. Some framework that meets all of my needs, but is light weight and easy to deploy. Unfortunately, I wasn't able to find that perfect framework, and it's pretty likely that it doesn't exist. However, I did have a lot of fun experimenting and finally landed on a solution that I'm fairly happy with.
