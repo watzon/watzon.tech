@@ -4,7 +4,6 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { getCollection } from 'astro:content';
-import slugify from "@utils/sligify";
 
 const featuredProjects = (await getCollection('projects', (item) => item.data.featured));
 const latestPosts = (await getCollection('posts'))
