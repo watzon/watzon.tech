@@ -31,8 +31,8 @@ This did give me enough of a reason to go back and re-do the project though. And
 
 Sometimes, the simple way is the best way, and it was looking me in the face the whole time. 0x0.st had everything I was looking for in a paste bin, save one thing. It was written in Python using Flask, and I'm not a huge fan of either. Seeing as how I already had momentum on this project and I didn't just want to let it rot, I had two options.
 
-1) I could just use 0x0 and integrate it into my current deployment pipeline with a simple fork and a Dockerfile.
-2) I could rewrite the whole thing in another language and have some fun along the way.
+1. I could just use 0x0 and integrate it into my current deployment pipeline with a simple fork and a Dockerfile.
+2. I could rewrite the whole thing in another language and have some fun along the way.
 
 While option 1 would have been quick and easy, I was doing this more out of want for a project and not because I just had to self-host a paste bin. I wanted a project to work on, so option 2 it was. The only thing I needed to decide on was what language (and framework?) I wanted to use.
 
