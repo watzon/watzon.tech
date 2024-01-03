@@ -104,6 +104,14 @@ hr {
 	@apply border-none border-t-2 border-gray-200 dark:border-gray-700;
 }
 
+ul {
+	@apply list-disc list-inside space-y-2 ml-4 mb-6;
+}
+
+ol {
+	@apply list-decimal list-inside space-y-2 ml-4 mb-6;
+}
+
 @media (max-width: 720px) {
 	body {
 		@apply text-lg;
