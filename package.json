@@ -16,6 +16,7 @@
     "@astrojs/sitemap": "^3.0.3",
     "@astrojs/tailwind": "^5.0.3",
     "@astrojs/vue": "^4.0.2",
+    "@octokit/rest": "^20.0.2",
     "astro": "^4.0.3",
     "tailwindcss": "^3.0.24",
     "typescript": "^5.3.3",
