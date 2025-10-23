@@ -1,4 +1,5 @@
-import { default as MarkdownIt } from 'markdown-it';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import MarkdownIt from 'markdown-it';
 
 // Custom renderer that adds Tailwind classes and handles Reddit tags
 function createRedditRenderer(darkMode: boolean = false) {
@@ -6,55 +7,54 @@ function createRedditRenderer(darkMode: boolean = false) {
   const md = new MarkdownIt();
 
   // Helper function for default rendering
-  const defaultRender = (tokens, idx, options, env, self) => {
+  const defaultRender = (tokens: any[], idx: number, options: any, env: any, self: any) => {
     return self.renderToken(tokens, idx, options);
   };
 
   // Override paragraph rendering
   const defaultParagraphOpen = md.renderer.rules.paragraph_open || defaultRender;
-  md.renderer.rules.paragraph_open = function(tokens, idx, options, env, self) {
+  md.renderer.rules.paragraph_open = function(tokens: any[], idx: number, options: any, env: any, self: any) {
     tokens[idx].attrJoin('class', 'mb-4');
     return defaultParagraphOpen(tokens, idx, options, env, self);
   };
 
   // Override list item rendering
   const defaultListItemOpen = md.renderer.rules.list_item_open || defaultRender;
-  md.renderer.rules.list_item_open = function(tokens, idx, options, env, self) {
+  md.renderer.rules.list_item_open = function(tokens: any[], idx: number, options: any, env: any, self: any) {
     tokens[idx].attrJoin('class', 'mb-1');
     return defaultListItemOpen(tokens, idx, options, env, self);
   };
 
   // Override bullet list rendering
   const defaultBulletListOpen = md.renderer.rules.bullet_list_open || defaultRender;
-  md.renderer.rules.bullet_list_open = function(tokens, idx, options, env, self) {
+  md.renderer.rules.bullet_list_open = function(tokens: any[], idx: number, options: any, env: any, self: any) {
     tokens[idx].attrJoin('class', 'list-disc list-inside ml-6 mb-4');
     return defaultBulletListOpen(tokens, idx, options, env, self);
   };
 
   // Override ordered list rendering
   const defaultOrderedListOpen = md.renderer.rules.ordered_list_open || defaultRender;
-  md.renderer.rules.ordered_list_open = function(tokens, idx, options, env, self) {
+  md.renderer.rules.ordered_list_open = function(tokens: any[], idx: number, options: any, env: any, self: any) {
     tokens[idx].attrJoin('class', 'list-decimal list-inside ml-6 mb-4');
     return defaultOrderedListOpen(tokens, idx, options, env, self);
   };
 
   // Override blockquote rendering
   const defaultBlockquoteOpen = md.renderer.rules.blockquote_open || defaultRender;
-  md.renderer.rules.blockquote_open = function(tokens, idx, options, env, self) {
+  md.renderer.rules.blockquote_open = function(tokens: any[], idx: number, options: any, env: any, self: any) {
     tokens[idx].attrJoin('class', `border-l-4 ${darkMode ? 'border-gray-600' : 'border-gray-300'} pl-4 italic my-4`);
     return defaultBlockquoteOpen(tokens, idx, options, env, self);
   };
 
   // Override code inline rendering
-  md.renderer.rules.code_inline = function(tokens, idx, options, env, self) {
+  md.renderer.rules.code_inline = function(tokens: any[], idx: number, _options: any, _env: any, _self: any) {
     const token = tokens[idx];
     return `<code class="bg-${darkMode ? 'gray-700' : 'gray-200'} px-2 py-1 rounded text-sm font-mono">${md.utils.escapeHtml(token.content)}</code>`;
   };
 
   // Override code block rendering
-  md.renderer.rules.fence = function(tokens, idx, options, env, self) {
+  md.renderer.rules.fence = function(tokens: any[], idx: number, _options: any, _env: any, _self: any) {
     const token = tokens[idx];
-    const langName = token.info ? md.utils.escapeHtml(token.info) : '';
     const highlighted = token.content ? md.utils.escapeHtml(token.content) : '';
 
     return `<pre class="bg-${darkMode ? 'gray-800' : 'gray-100'} p-4 rounded-lg overflow-x-auto my-4"><code class="text-sm font-mono">${highlighted}</code></pre>`;
@@ -62,7 +62,7 @@ function createRedditRenderer(darkMode: boolean = false) {
 
   // Override link rendering with better colors
   const defaultLinkOpen = md.renderer.rules.link_open || defaultRender;
-  md.renderer.rules.link_open = function(tokens, idx, options, env, self) {
+  md.renderer.rules.link_open = function(tokens: any[], idx: number, options: any, env: any, self: any) {
     const token = tokens[idx];
     const hrefIndex = token.attrIndex('href');
     if (hrefIndex >= 0) {
@@ -78,7 +78,7 @@ function createRedditRenderer(darkMode: boolean = false) {
 
   // Override heading rendering
   const defaultHeadingOpen = md.renderer.rules.heading_open || defaultRender;
-  md.renderer.rules.heading_open = function(tokens, idx, options, env, self) {
+  md.renderer.rules.heading_open = function(tokens: any[], idx: number, options: any, env: any, self: any) {
     const token = tokens[idx];
     const level = parseInt(token.tag.substr(1));
     const sizes = ['text-3xl', 'text-2xl', 'text-xl', 'text-lg', 'text-base', 'text-sm'];
