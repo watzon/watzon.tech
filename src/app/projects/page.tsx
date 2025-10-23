@@ -7,20 +7,7 @@ import { ExternalLink, Star, Github } from 'lucide-react';
 export default async function ProjectsPage() {
   const projects = await getAllProjects();
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'LIVE':
-        return 'bg-green-500/10 text-green-400 border-green-500/20';
-      case 'BETA':
-        return 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20';
-      case 'DEV':
-        return 'bg-blue-500/10 text-blue-400 border-blue-500/20';
-      case 'ARCHIVED':
-        return 'bg-red-500/10 text-red-400 border-red-500/20';
-      default:
-        return 'bg-phosphor-primary/10 text-phosphor-accent border-phosphor-primary/20';
-    }
-  };
+  // Status color function removed since we no longer display status badges
 
   return (
     <PageTransition>
@@ -48,34 +35,29 @@ export default async function ProjectsPage() {
                 className="bg-phosphor-primary/20 border border-phosphor-secondary/50 rounded p-6 hover:border-phosphor-secondary/50 transition-all duration-300 group relative"
               >
                 {project.frontmatter.featured && (
-                  <div className="absolute top-4 left-4 flex items-center gap-1 px-2 py-1 text-xs font-bold bg-phosphor-primary/20 text-phosphor-accent border border-phosphor-primary/30 rounded">
+                  <div className="absolute top-4 right-4 flex items-center gap-1 px-2 py-1 text-xs font-bold bg-phosphor-primary/20 text-phosphor-accent border border-phosphor-primary/30 rounded">
                     <Star size={12} />
                     FEATURED
                   </div>
                 )}
 
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <h3 className="text-xl font-bold text-phosphor-accent mb-2 group-hover:text-phosphor-primary transition-colors">
-                      {project.frontmatter.repoUrl ? (
-                        <Link
-                          href={project.frontmatter.repoUrl}
-                          className="hover:underline"
-                          target="_blank"
-                        >
-                          {project.frontmatter.name}
-                        </Link>
-                      ) : (
-                        project.frontmatter.name
-                      )}
-                    </h3>
-                    <p className="text-phosphor-secondary opacity-80 text-sm">
-                      {project.frontmatter.description}
-                    </p>
-                  </div>
-                  <span className={`px-3 py-1 text-xs font-bold uppercase tracking-wider rounded border ${getStatusColor(project.frontmatter.status)}`}>
-                    {project.frontmatter.status}
-                  </span>
+                <div className="mb-4">
+                  <h3 className="text-xl font-bold text-phosphor-accent mb-2 group-hover:text-phosphor-primary transition-colors">
+                    {project.frontmatter.repoUrl ? (
+                      <Link
+                        href={project.frontmatter.repoUrl}
+                        className="hover:underline"
+                        target="_blank"
+                      >
+                        {project.frontmatter.name}
+                      </Link>
+                    ) : (
+                      project.frontmatter.name
+                    )}
+                  </h3>
+                  <p className="text-phosphor-secondary opacity-80 text-sm">
+                    {project.frontmatter.description}
+                  </p>
                 </div>
 
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -89,19 +71,7 @@ export default async function ProjectsPage() {
                   ))}
                 </div>
 
-                {project.frontmatter.tags && project.frontmatter.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.frontmatter.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2 py-1 text-xs border border-phosphor-primary/20 text-phosphor-accent opacity-70"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-
+  
                 <div className="flex justify-between items-center">
                   <div className="text-xs opacity-40">
                     ID: {project.frontmatter.id}

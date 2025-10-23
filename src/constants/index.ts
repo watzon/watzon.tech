@@ -1,4 +1,5 @@
 import { Skill, Project, BlogPost, Experience } from '@/types';
+import { PROJECTS_DATA } from '@/data/projects';
 
 export const SECTIONS = ['HOME', 'PROJECTS', 'BLOG', 'EXPERIMENTS', 'RESUME'] as const;
 
@@ -30,43 +31,13 @@ export const DEVOPS_SKILLS: Skill[] = [
 
 export const SKILLS: Skill[] = [...FRONTEND_SKILLS, ...BACKEND_SKILLS, ...DEVOPS_SKILLS];
 
-export const PROJECTS: Project[] = [
-  {
-    id: 'PROJ-001',
-    name: 'HyperGrid',
-    desc: 'Distributed computing protocol written in Rust. Handles 1M+ concurrent connections with <5ms latency. Built for high-frequency trading systems requiring sub-millisecond response times.',
-    stack: ['Rust', 'gRPC', 'Tokio', 'WebAssembly', 'ZeroMQ'],
-    status: 'LIVE',
-  },
-  {
-    id: 'PROJ-002',
-    name: 'NeuralNet-Go',
-    desc: 'Lightweight neural network implementation in pure Go with no external dependencies. Features backpropagation, convolutional layers, and support for model serialization. Used by 5K+ developers for ML prototyping.',
-    stack: ['Go', 'Math', 'CUDA', 'Protocol Buffers'],
-    status: 'ARCHIVED',
-  },
-  {
-    id: 'PROJ-003',
-    name: 'SynthwaveUI',
-    desc: 'React component library focusing on retro-futuristic aesthetics and accessibility. 50+ components with full TypeScript support, dark mode, and comprehensive documentation. 10K+ weekly npm downloads.',
-    stack: ['React', 'TypeScript', 'Tailwind', 'Storybook', 'Rollup'],
-    status: 'LIVE',
-  },
-  {
-    id: 'PROJ-004',
-    name: 'CipherFlow',
-    desc: 'End-to-end encrypted messaging platform using Signal Protocol. Supports group chats, file sharing, and message expiration. Built for privacy-conscious organizations with zero-knowledge architecture.',
-    stack: ['TypeScript', 'WebRTC', 'Signal Protocol', 'PostgreSQL', 'Docker'],
-    status: 'BETA',
-  },
-  {
-    id: 'PROJ-005',
-    name: 'QuantumDB',
-    desc: 'Distributed key-value store with quantum-resistant encryption. Features automatic sharding, consensus algorithms, and Byzantine fault tolerance. Designed for critical infrastructure applications.',
-    stack: ['Go', 'Rust', 'LevelDB', 'Raft', 'Libsodium'],
-    status: 'DEV',
-  },
-];
+export const PROJECTS: Project[] = PROJECTS_DATA.map(project => ({
+  id: project.id,
+  name: project.name,
+  desc: project.description,
+  stack: project.techStack,
+  status: project.status,
+}));
 
 export const BLOG_POSTS: BlogPost[] = [
   {

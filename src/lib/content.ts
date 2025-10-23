@@ -4,6 +4,7 @@ import { compileMDX } from 'next-mdx-remote/rsc';
 import { mdxComponents } from '@/components/ui/MDXComponents';
 import { calculateReadTime } from '@/lib/read-time';
 import { sortPostsByDate } from '@/lib/date-utils';
+import { PROJECTS_DATA } from '@/data/projects';
 import type { BlogPostFrontmatter, ProjectFrontmatter } from '@/types';
 
 const contentDirectory = path.join(process.cwd(), 'src/content');
@@ -95,46 +96,8 @@ export async function getBlogPostBySlug(slug: string) {
   }
 }
 
-export async function getProjectBySlug(slug: string) {
-  try {
-    const possibleExtensions = ['.mdx', '.md'];
-    let content = '';
-    let filePath = '';
-
-    for (const ext of possibleExtensions) {
-      const possiblePath = path.join('projects', `${slug}${ext}`);
-      try {
-        content = await readFileContent(possiblePath);
-        filePath = possiblePath;
-        break;
-      } catch {
-        // Try next extension
-      }
-    }
-
-    if (!content) {
-      throw new Error(`Project not found: ${slug}`);
-    }
-
-    const { content: mdxContent, frontmatter } = await compileMDX<ProjectFrontmatter>({
-      source: content,
-      options: {
-        parseFrontmatter: true,
-      },
-      components: mdxComponents,
-    });
-
-    return {
-      content: mdxContent,
-      frontmatter,
-      slug,
-      filePath,
-    };
-  } catch (error) {
-    console.error(`Error processing project ${slug}:`, error);
-    throw error;
-  }
-}
+// Project function removed since we now use JSON data structure
+// Individual project pages can be added later if needed
 
 export async function getAllBlogPosts() {
   const slugs = await getAllContentSlugs('blog');
@@ -163,21 +126,20 @@ export async function getAllBlogPosts() {
 }
 
 export async function getAllProjects() {
-  const slugs = await getAllContentSlugs('projects');
-  const projects = [];
-
-  for (const slug of slugs) {
-    try {
-      const { frontmatter } = await getProjectBySlug(slug);
-
-      projects.push({
-        slug,
-        frontmatter,
-      });
-    } catch (error) {
-      console.error(`Error loading project ${slug}:`, error);
-    }
-  }
+  // Convert PROJECTS_DATA to the expected format
+  const projects = PROJECTS_DATA.map(project => ({
+    slug: project.id.toLowerCase().replace('proj-', ''),
+    frontmatter: {
+      id: project.id,
+      name: project.name,
+      description: project.description,
+      status: project.status,
+      repoUrl: project.repoUrl,
+      techStack: project.techStack,
+      tags: project.tags,
+      featured: project.featured,
+    } as ProjectFrontmatter,
+  }));
 
   // Sort by featured status first, then by name
   return projects.sort((a, b) => {
