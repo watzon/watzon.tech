@@ -1,0 +1,93 @@
+---
+id: "PROJ-002"
+name: "Tourmaline"
+description: "A Crystal programming language framework for building Telegram bots with a focus on developer productivity and type safety."
+status: "LIVE"
+repoUrl: "https://github.com/watzon/tourmaline"
+techStack: ["Crystal", "Telegram Bot API", "HTTP", "WebSockets"]
+tags: ["telegram", "crystal", "bots", "api", "messaging"]
+featured: true
+---
+
+# Tourmaline
+
+Tourmaline is a comprehensive Crystal framework for Telegram bot development that provides a clean, type-safe API for building sophisticated bots and automation tools.
+
+## Getting Started
+
+```crystal
+require "tourmaline"
+
+class EchoBot < Tourmaline::Client
+  @[Command("echo")]
+  def echo_command(context, message)
+    text = message.text.not_nil![5..-1] # Remove "/echo "
+    context.bot.send_message(chat_id: message.chat.id, text: text)
+  end
+end
+
+bot = EchoBot.new(ENV["TELEGRAM_TOKEN"])
+bot.poll
+```
+
+## Features
+
+### Full Telegram Bot API Coverage
+- All API methods and types
+- Webhook and long polling support
+- File upload and download handling
+- Inline query support
+- Game integration
+
+### Developer Experience
+
+```crystal
+# Type-safe message handling
+@[On(:message, contains: ["hello", "hi"])]
+def handle_greetings(context, message)
+  context.bot.send_message(
+    chat_id: message.chat.id,
+    text: "Hello! 👋"
+  )
+end
+
+# Middleware support
+before do |context|
+  log_request(context)
+  true
+end
+```
+
+### Advanced Features
+
+- **Database integration**: Built-in support for PostgreSQL, MySQL, SQLite
+- **Rate limiting**: Automatic API rate limit handling
+- **Localization**: Multi-language bot support
+- **Plugins**: Extensible plugin system
+- **Background jobs**: Async task processing
+
+## Performance
+
+Tourmaline is built for high-performance scenarios:
+- Handles 1000+ messages per second
+- Memory efficient (<10MB baseline)
+- Zero-allocation message parsing
+- Native Crystal performance with Ruby-like productivity
+
+## Production Usage
+
+The framework powers several production bots handling millions of users:
+
+- Customer service automation bots
+- Gaming and entertainment bots
+- Content management systems
+- Educational platforms
+
+## Community
+
+- **Discord**: Active developer community
+- **Documentation**: Comprehensive guides and API reference
+- **Examples**: 20+ example bots and use cases
+- **Contributors**: Welcoming to new contributors
+
+Tourmaline combines the elegance of Ruby syntax with Crystal's performance, making it ideal for building scalable Telegram applications.

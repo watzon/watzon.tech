@@ -1,0 +1,152 @@
+---
+id: "PROJ-003"
+name: "Butterbase"
+description: "A modern E-commerce platform built with Next.js and a monorepo architecture, featuring headless commerce capabilities and multi-store support."
+status: "BETA"
+repoUrl: "https://github.com/watzon/butterbase"
+techStack: ["Next.js", "TypeScript", "PostgreSQL", "Prisma", "Stripe", "Tailwind"]
+tags: ["e-commerce", "nextjs", "typescript", "headless-commerce", "monorepo"]
+featured: false
+---
+
+# Butterbase
+
+Butterbase is a comprehensive e-commerce platform designed for modern online stores. Built as a monorepo with separate frontend, backend, and shared packages, it provides a flexible foundation for e-commerce businesses of all sizes.
+
+## Architecture
+
+The project uses a sophisticated monorepo structure:
+
+```
+butterbase/
+├── packages/
+│   ├── frontend/     # Next.js storefront
+│   ├── backend/      # NestJS API server
+│   ├── shared/       # Shared types and utilities
+│   └── admin/        # Admin dashboard
+├── apps/
+│   └── mobile/       # React Native app
+└── tools/
+    └── cli/          # Development tools
+```
+
+## Key Features
+
+### Headless Commerce API
+
+```typescript
+// Product catalog API
+interface ProductAPI {
+  getProducts(params: QueryParams): Promise<ProductPage>;
+  getProduct(slug: string): Promise<ProductDetail>;
+  searchProducts(query: string): Promise<SearchResult>;
+}
+
+// Shopping cart management
+interface CartAPI {
+  getCart(cartId: string): Promise<Cart>;
+  addToCart(cartId: string, item: CartItem): Promise<Cart>;
+  updateCartItem(cartId: string, itemId: string, quantity: number): Promise<Cart>;
+  removeFromCart(cartId: string, itemId: string): Promise<void>;
+}
+```
+
+### Multi-Store Support
+- Single backend serving multiple storefronts
+- Shared product catalog with store-specific pricing
+- Centralized inventory management
+- Store-specific themes and configurations
+
+### Modern Tech Stack
+
+**Frontend:**
+- Next.js 15 with App Router
+- Tailwind CSS for styling
+- Zustand for state management
+- React Query for server state
+
+**Backend:**
+- Node.js with Express/NestJS
+- Prisma ORM with PostgreSQL
+- Redis for caching
+- Stripe for payments
+
+**Infrastructure:**
+- Docker containers
+- Kubernetes deployment
+- AWS/GCP cloud-native
+- CDN integration
+
+## Performance Optimizations
+
+```typescript
+// Intelligent caching strategy
+const productCache = new Cache({
+  ttl: '5m',
+  staleWhileRevalidate: '1h',
+  keyGenerator: (params) => `product:${JSON.stringify(params)}`
+});
+
+// Image optimization
+const imageOptimizer = {
+  sizes: [300, 600, 900, 1200],
+  formats: ['webp', 'avif', 'jpg'],
+  quality: 80
+};
+```
+
+## Developer Experience
+
+- **Hot reload** across all packages
+- **Type safety** shared between frontend and backend
+- **Automated testing** with Jest and Playwright
+- **CI/CD pipeline** with GitHub Actions
+- **Code quality** with ESLint, Prettier, and Husky
+
+## Current Status
+
+The project is in beta and actively being developed:
+
+### Completed Features
+- ✅ Core product catalog
+- ✅ Shopping cart functionality
+- ✅ Payment integration
+- ✅ User authentication
+- ✅ Admin dashboard
+
+### In Development
+- 📋 Order management system
+- 📋 Inventory tracking
+- 📋 Email notifications
+- 📋 Analytics dashboard
+- 📋 Multi-currency support
+
+### Roadmap
+- 📌 Mobile app release
+- 📌 Advanced search and filtering
+- 📌 Subscription management
+- 📌 Third-party integrations
+- 📌 Internationalization
+
+## Getting Started
+
+```bash
+# Clone the repository
+git clone https://github.com/watzon/butterbase.git
+cd butterbase
+
+# Install dependencies
+npm install
+
+# Setup environment
+cp .env.example .env.local
+
+# Start development servers
+npm run dev
+```
+
+## Contributing
+
+Butterbase is open to contributions. The project follows a conventional commit policy and requires all pull requests to pass automated tests and code quality checks.
+
+The platform aims to be production-ready by Q3 2024, with several pilot stores already using the beta version for their e-commerce needs.
