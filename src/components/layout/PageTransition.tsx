@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 
 interface PageTransitionProps {
   children: React.ReactNode;
+  className?: string;
 }
 
 const screenVariants = {
@@ -12,14 +13,14 @@ const screenVariants = {
   exit: { opacity: 0, scale: 1.02, filter: 'blur(2px)', transition: { duration: 0.2 } },
 };
 
-export default function PageTransition({ children }: PageTransitionProps) {
+export default function PageTransition({ children, className }: PageTransitionProps) {
   return (
     <motion.div
       variants={screenVariants}
       initial="initial"
       animate="animate"
       exit="exit"
-      className="h-full max-w-4xl mx-auto"
+      className={`h-full mx-auto ${className ?? 'max-w-4xl'}`}
     >
       {children}
     </motion.div>
