@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Copy, MousePointer2, Square, Trash2, Type } from 'lucide-react';
 import PageTransition from '@/components/layout/PageTransition';
 
@@ -259,7 +259,6 @@ function resizeBox(origin: Box, handle: ResizeHandle, cell: Cell, rows: number, 
 
 function assertEqual(name: string, actual: string, expected: string) {
   if (actual !== expected) {
-    // eslint-disable-next-line no-console
     console.error(`[ASCII Wireframer TEST FAIL] ${name}\nExpected:\n${expected}\nActual:\n${actual}`);
     throw new Error(`Test failed: ${name}`);
   }
@@ -293,7 +292,6 @@ function runSelfTestsOnce() {
   });
   assertEqual('text overwrites border', out3.split('\n')[0], '+Hi--+');
 
-  // eslint-disable-next-line no-console
   console.log('[ASCII Wireframer] self-tests passed');
 }
 
@@ -426,7 +424,7 @@ export default function AsciiWireframerPage() {
     setTool('text');
   };
 
-  const commitTextEdit = () => {
+  const commitTextEdit = useCallback(() => {
     if (!editing) return;
     const v = String(editing.value || '').replace(/[\r\n]/g, '');
     if (!v.trim()) {
@@ -445,23 +443,26 @@ export default function AsciiWireframerPage() {
 
     setSelected([{ kind: 'text', id: editing.id }]);
     setEditing(null);
-  };
+  }, [editing]);
 
-  const cancelTextEdit = () => {
+  const cancelTextEdit = useCallback(() => {
     setEditing(null);
-  };
+  }, []);
 
   useEffect(() => {
-    if (editing && inputRef.current) {
-      inputRef.current.focus();
-      if (lastEditingIdRef.current !== editing.id) {
-        inputRef.current.select();
-        lastEditingIdRef.current = editing.id;
-      }
+    if (!editing) {
+      lastEditingIdRef.current = null;
       return;
     }
-    lastEditingIdRef.current = null;
-  }, [editing?.id]);
+    if (!inputRef.current) return;
+    if (document.activeElement !== inputRef.current) {
+      inputRef.current.focus();
+    }
+    if (lastEditingIdRef.current !== editing.id) {
+      inputRef.current.select();
+      lastEditingIdRef.current = editing.id;
+    }
+  }, [editing]);
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -663,14 +664,14 @@ export default function AsciiWireframerPage() {
     copyTimeoutRef.current = window.setTimeout(() => setCopied(false), 1400);
   };
 
-  const removeSelected = () => {
+  const removeSelected = useCallback(() => {
     if (!selected.length) return;
     const selectedBoxes = new Set(selected.filter((item) => item.kind === 'box').map((item) => item.id));
     const selectedTexts = new Set(selected.filter((item) => item.kind === 'text').map((item) => item.id));
     if (selectedBoxes.size > 0) setBoxes((prev) => prev.filter((b) => !selectedBoxes.has(b.id)));
     if (selectedTexts.size > 0) setTexts((prev) => prev.filter((t) => !selectedTexts.has(t.id)));
     setSelected([]);
-  };
+  }, [selected]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -742,7 +743,7 @@ export default function AsciiWireframerPage() {
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [selected, cols, rows, editing]);
+  }, [selected, cols, rows, editing, commitTextEdit, cancelTextEdit, removeSelected]);
 
   const singleSelection = selected.length === 1 ? selected[0] : null;
   const selectedBox = singleSelection && singleSelection.kind === 'box' ? boxes.find((b) => b.id === singleSelection.id) : null;
@@ -756,7 +757,7 @@ export default function AsciiWireframerPage() {
     <PageTransition className="max-w-6xl">
       <div className="space-y-6">
         <div className="space-y-3">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-phosphor-accent">// ASCII WIREFRAMER</h1>
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-phosphor-accent">{'// ASCII WIREFRAMER'}</h1>
           <p className="text-sm text-phosphor-secondary/80">
             Build terminal-ready wireframes with box-drawing ASCII and snap-to-grid precision.
           </p>
