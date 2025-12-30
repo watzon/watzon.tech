@@ -47,13 +47,13 @@ function createRedditRenderer(darkMode: boolean = false) {
   };
 
   // Override code inline rendering
-  md.renderer.rules.code_inline = function(tokens: any[], idx: number, _options: any, _env: any, _self: any) {
+  md.renderer.rules.code_inline = function(tokens: any[], idx: number) {
     const token = tokens[idx];
     return `<code class="bg-${darkMode ? 'gray-700' : 'gray-200'} px-2 py-1 rounded text-sm font-mono">${md.utils.escapeHtml(token.content)}</code>`;
   };
 
   // Override code block rendering
-  md.renderer.rules.fence = function(tokens: any[], idx: number, _options: any, _env: any, _self: any) {
+  md.renderer.rules.fence = function(tokens: any[], idx: number) {
     const token = tokens[idx];
     const highlighted = token.content ? md.utils.escapeHtml(token.content) : '';
 
