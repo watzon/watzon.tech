@@ -1,7 +1,21 @@
 import PageTransition from '@/components/layout/PageTransition';
 import { EXPERIMENTS } from '@/constants/experiments';
 import Link from 'next/link';
-import { ExternalLink, Play, Code } from 'lucide-react';
+import { ExternalLink, Play, Code, Calendar } from 'lucide-react';
+import { formatBlogDateWithRelative } from '@/lib/date-utils';
+import type { Metadata } from 'next';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://watzon.tech';
+  return {
+    title: 'Experiments',
+    alternates: {
+      types: {
+        'application/rss+xml': [{ title: 'Experiments RSS Feed', url: `${siteUrl}/experiments/rss.xml` }],
+      },
+    },
+  };
+}
 
 export default function ExperimentsPage() {
   const featuredExperiments = EXPERIMENTS.filter(exp => exp.featured);
@@ -16,6 +30,10 @@ export default function ExperimentsPage() {
           </h1>
           <p className="text-phosphor-secondary opacity-80">
             Interactive experiments and technical prototypes built right into this site
+            <span className="opacity-40 mx-2">|</span>
+            <Link href="/experiments/rss.xml" className="text-phosphor-accent hover:underline text-xs">
+              [RSS Feed]
+            </Link>
           </p>
         </div>
 
@@ -56,9 +74,17 @@ export default function ExperimentsPage() {
                     </div>
 
                     <div className="flex justify-between items-center">
-                      <div className="text-xs opacity-40">
-                        ID: {experiment.id}
-                      </div>
+                      {experiment.date && (
+                        <div className="flex items-center gap-1 text-xs text-phosphor-secondary opacity-60">
+                          <Calendar size={12} />
+                          <span
+                            title={formatBlogDateWithRelative(experiment.date).title}
+                            className="cursor-help"
+                          >
+                            {formatBlogDateWithRelative(experiment.date).formatted}
+                          </span>
+                        </div>
+                      )}
                       <div className="flex items-center gap-2 text-sm font-bold text-phosphor-accent">
                         <Play size={16} />
                         TRY IT
@@ -101,6 +127,17 @@ export default function ExperimentsPage() {
                         </span>
                       ))}
                     </div>
+                    {experiment.date && (
+                      <div className="flex items-center gap-1 text-xs text-phosphor-secondary opacity-60">
+                        <Calendar size={12} />
+                        <span
+                          title={formatBlogDateWithRelative(experiment.date).title}
+                          className="cursor-help"
+                        >
+                          {formatBlogDateWithRelative(experiment.date).formatted}
+                        </span>
+                      </div>
+                    )}
                   </div>
                   <Link
                     href={experiment.path}

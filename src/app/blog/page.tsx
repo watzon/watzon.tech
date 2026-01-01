@@ -3,6 +3,19 @@ import { getAllBlogPosts } from '@/lib/content';
 import Link from 'next/link';
 import { Calendar, Clock, Tag } from 'lucide-react';
 import { formatBlogDateWithRelative } from '@/lib/date-utils';
+import type { Metadata } from 'next';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://watzon.tech';
+  return {
+    title: 'Blog',
+    alternates: {
+      types: {
+        'application/rss+xml': [{ title: 'Blog RSS Feed', url: `${siteUrl}/blog/rss.xml` }],
+      },
+    },
+  };
+}
 
 // This is a server component that fetches blog posts
 export default async function BlogPage() {
@@ -17,6 +30,10 @@ export default async function BlogPage() {
           </h1>
           <p className="text-phosphor-secondary opacity-80">
             Technical thoughts and engineering insights
+            <span className="opacity-40 mx-2">|</span>
+            <Link href="/blog/rss.xml" className="text-phosphor-accent hover:underline text-xs">
+              [RSS Feed]
+            </Link>
           </p>
         </div>
 

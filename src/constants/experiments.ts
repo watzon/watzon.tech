@@ -8,6 +8,7 @@ export const EXPERIMENTS: Experiment[] = [
     path: '/experiments/squarify',
     techStack: ['Canvas API', 'Image Processing', 'React', 'TypeScript'],
     featured: false,
+    date: '2025-12-30',
   },
   {
     id: 'EXP-002',
@@ -16,6 +17,7 @@ export const EXPERIMENTS: Experiment[] = [
     path: '/experiments/redditshot',
     techStack: ['Reddit API', 'Canvas API', 'React', 'TypeScript', 'html2canvas'],
     featured: false,
+    date: '2025-10-23',
   },
   {
     id: 'EXP-003',
@@ -24,5 +26,6 @@ export const EXPERIMENTS: Experiment[] = [
     path: '/experiments/ascii-wireframer',
     techStack: ['React', 'TypeScript', 'Clipboard API', 'Pointer Events'],
     featured: true,
+    date: '2025-10-23',
   },
 ];

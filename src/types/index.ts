@@ -47,6 +47,7 @@ export interface Experiment {
   path: string;
   techStack: string[];
   featured?: boolean;
+  date?: string;
 }
 
 export interface Experience {
@@ -59,3 +60,23 @@ export interface Experience {
 
 
 export type ContentType = 'blog' | 'project';
+
+export interface RSSFeedItem {
+  title: string;
+  link: string;
+  description?: string;
+  content?: string;
+  pubDate?: Date | string;
+  guid?: string;
+  author?: string;
+  category?: string[];
+}
+
+export interface RSSFeedOptions {
+  title: string;
+  description: string;
+  link: string;
+  items: RSSFeedItem[];
+  language?: string;
+  lastBuildDate?: Date | string;
+}
