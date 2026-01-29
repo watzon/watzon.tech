@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SquarifyComponent from '../../components/experiments/Squarify';
+
+const title = "Squarify";
+const description = "Create square images with custom backgrounds. Perfect for social media profiles and thumbnails.";
+---
+
+<BaseLayout title={`${title} - Experiments`} description={description}>
+  <div class="container">
+    <article class="experiment-page">
+      <header class="experiment-header">
+        <a href="/experiments" class="back-link">← Back to experiments</a>
+        <h1 class="experiment-page-title">{title}</h1>
+        <p class="experiment-page-desc">{description}</p>
+      </header>
+      
+      <div class="experiment-content">
+        <SquarifyComponent client:load />
+      </div>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .experiment-page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: var(--space-xl) 0;
+  }
+  
+  .experiment-header {
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-lg);
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  
+  .back-link:hover {
+    color: var(--accent);
+  }
+  
+  .experiment-page-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: var(--space-md);
+    max-width: 20ch;
+  }
+  
+  .experiment-page-desc {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+</style>

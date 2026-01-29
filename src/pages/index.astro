@@ -1,0 +1,367 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+// Get all published blog posts, sorted by date (newest first)
+const allPosts = await getCollection("blog", ({ data }) => {
+    return data.published === true;
+});
+
+const posts = allPosts
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+    .slice(0, 3);
+
+// Format date to "Month Year" format
+function formatDate(date: Date): string {
+    return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+}
+---
+
+<BaseLayout
+    title="Chris Watson - Software Engineer"
+    description="Software Engineer specializing in developer tools, language architecture, and performance."
+>
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1><span id="hero-name">Chris Watson.</span><span id="cursor" class="cursor"></span></h1>
+            <p>
+                Software Engineer specializing in developer tools, language
+                architecture, and performance. Crafting in Go, TypeScript, and
+                Python.
+            </p>
+            <div class="hero-links">
+                <a
+                    href="https://github.com/watzon"
+                    target="_blank"
+                    rel="noopener noreferrer">GitHub</a
+                >
+                <a href="mailto:chris@watzon.tech">Email</a>
+                <a
+                    href="https://twitter.com/_watzon"
+                    target="_blank"
+                    rel="noopener noreferrer">Twitter</a
+                >
+                <a
+                    href="https://bsky.app/profile/watzon.tech"
+                    target="_blank"
+                    rel="noopener noreferrer">Bluesky</a
+                >
+            </div>
+        </section>
+
+        <!-- Projects Bento Grid -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Selected Works</h2>
+                <span class="meta">What I've Been Working On</span>
+            </div>
+
+            <div class="bento-grid">
+                <a
+                    href="https://butterbase.app"
+                    target="_blank"
+                    class="bento-item bento-item--featured"
+                    style="--project-color: #f59e0b;"
+                >
+                    <img
+                        src="/images/projects/butterbase.png"
+                        alt="Butterbase app"
+                        class="bento-image"
+                    />
+                    <div class="bento-content">
+                        <span class="bento-number">01</span>
+                        <h3 class="bento-title">Butterbase</h3>
+                        <p class="bento-desc">
+                            Kitchen management platform for home bakers. Track
+                            inventory, cost recipes, and manage orders.
+                        </p>
+                        <div class="bento-meta">
+                            <span class="bento-tech">SaaS</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a
+                    href="https://disforum.me"
+                    target="_blank"
+                    class="bento-item bento-item--tall"
+                    style="--project-color: #5865F2;"
+                >
+                    <img
+                        src="/images/projects/disforum.png"
+                        alt="Disforum"
+                        class="bento-image"
+                    />
+                    <div class="bento-content">
+                        <span class="bento-number">02</span>
+                        <h3 class="bento-title">Disforum</h3>
+                        <p class="bento-desc">
+                            Make Discord forums searchable on the web.
+                        </p>
+                        <div class="bento-meta">
+                            <span class="bento-tech">SaaS</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a
+                    href="https://github.com/watzon/pindrop"
+                    target="_blank"
+                    class="bento-item bento-item--wide"
+                    style="--project-color: #22d3ee;"
+                >
+                    <img
+                        src="/images/projects/pindrop.png"
+                        alt="Pindrop"
+                        class="bento-image"
+                    />
+                    <div class="bento-content">
+                        <span class="bento-number">03</span>
+                        <h3 class="bento-title">Pindrop</h3>
+                        <p class="bento-desc">
+                            Native macOS menu bar dictation app using local
+                            speech-to-text with WhisperKit.
+                        </p>
+                        <div class="bento-meta">
+                            <span class="bento-tech">Swift</span>
+                            <span class="bento-stars">★ 3</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a
+                    href="https://github.com/watzon/alyx"
+                    target="_blank"
+                    class="bento-item bento-item--wide"
+                    style="--project-color: #34d399;"
+                >
+                    <img
+                        src="/images/projects/alyx.png"
+                        alt="Alyx"
+                        class="bento-image"
+                    />
+                    <div class="bento-content">
+                        <span class="bento-number">04</span>
+                        <h3 class="bento-title">Alyx</h3>
+                        <p class="bento-desc">
+                            A portable, polyglot Backend-as-a-Service (BaaS)
+                            written in Go.
+                        </p>
+                        <div class="bento-meta">
+                            <span class="bento-tech">Go</span>
+                            <span class="bento-stars">★ 2</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Blog Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Writing</h2>
+                <span class="meta">Thoughts & Tutorials</span>
+            </div>
+
+            <div class="blog-grid">
+                {
+                    posts.map((post) => {
+                        const imageUrl =
+                            post.data.image ||
+                            `https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop&q=80`;
+                        return (
+                            <div class="blog-item">
+                                <a href={`/blog/${post.id}`} class="blog-card">
+                                    <img
+                                        src={imageUrl}
+                                        alt={post.data.title}
+                                        class="blog-card-image"
+                                    />
+                                    <div class="blog-meta">
+                                        {formatDate(post.data.date)}
+                                    </div>
+                                    <h3 class="blog-card-title">
+                                        {post.data.title}
+                                    </h3>
+                                    <p class="blog-excerpt">
+                                        {post.data.description}
+                                    </p>
+                                </a>
+                            </div>
+                        );
+                    })
+                }
+            </div>
+        </section>
+
+        <!-- Experiments Section -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Experiments</h2>
+                <a
+                    href="/experiments"
+                    class="meta"
+                    style="text-decoration: underline;">View All →</a
+                >
+            </div>
+
+            <div class="experiments-grid">
+                <a href="/experiments/ascii-wireframer" class="experiment-card">
+                    <div class="experiment-icon">┌─┐</div>
+                    <h3 class="experiment-title">ASCII Wireframer</h3>
+                    <p class="experiment-desc">
+                        Create terminal-ready wireframes with box-drawing
+                        characters.
+                    </p>
+                </a>
+                <a href="/experiments/squarify" class="experiment-card">
+                    <div class="experiment-icon">⬜</div>
+                    <h3 class="experiment-title">Squarify</h3>
+                    <p class="experiment-desc">
+                        Create square images with custom backgrounds. Perfect
+                        for social media.
+                    </p>
+                </a>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="section" style="border-bottom: none;">
+            <div class="about-content">
+                <h2
+                    class="section-title"
+                    style="margin-bottom: var(--space-lg)"
+                >
+                    About
+                </h2>
+                <p class="about-bio">
+                    I'm a software engineer passionate about building robust
+                    developer tools and exploring new languages. I focus on
+                    simplicity, performance, and developer experience.
+                </p>
+                <div class="about-skills">
+                    <span class="tag">Go</span>
+                    <span class="tag">TypeScript</span>
+                    <span class="tag">Python</span>
+                    <span class="tag">React</span>
+                    <span class="tag">TanStack</span>
+                    <span class="tag">Tailwind</span>
+                    <span class="tag">AI</span>
+                    <span class="tag">AWS</span>
+                    <span class="tag">Docker</span>
+                    <span class="tag">Linux</span>
+                </div>
+            </div>
+        </section>
+    </div>
+</BaseLayout>
+
+<style>
+    /* Animation Styles */
+    #hero-name {
+        background-image: linear-gradient(var(--selection-bg), var(--selection-bg));
+        background-repeat: no-repeat;
+        background-position: 100% 0;
+        background-size: 0% 100%;
+        padding-right: 0.05em; /* Slight padding for selection breathing room */
+    }
+
+    #hero-name.selecting {
+        transition: background-size 0.3s ease-out;
+        background-size: 100% 100%;
+    }
+
+    .cursor {
+        display: inline-block;
+        width: 0.08em;
+        height: 0.8em;
+        background-color: currentColor;
+        margin-left: 0.02em;
+        vertical-align: baseline;
+        opacity: 0;
+        position: relative;
+        top: 0.05em;
+    }
+
+    .cursor.typing {
+        opacity: 1;
+    }
+
+    .cursor.blinking {
+        animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }
+</style>
+
+<script>
+    const initAnimation = () => {
+        const heroName = document.getElementById('hero-name');
+        const cursor = document.getElementById('cursor');
+
+        if (!heroName || !cursor) return;
+
+        // Sequence
+        setTimeout(() => {
+            // 1. Start selection (1.5s delay)
+            heroName.classList.add('selecting');
+
+            setTimeout(() => {
+                // 2. Selection complete. Wait pause (0.2s)
+                
+                setTimeout(() => {
+                    // 3. Delete text
+                    heroName.textContent = "";
+                    heroName.classList.remove('selecting');
+                    
+                    // Show blinking cursor immediately after delete
+                    cursor.classList.add('blinking');
+                    
+                    // Wait with blinking cursor before typing
+                    setTimeout(() => {
+                        // Stop blinking, start solid cursor for typing
+                        cursor.classList.remove('blinking');
+                        cursor.classList.add('typing');
+                        
+                        // 4. Type "Watzon."
+                        const newText = "Watzon.";
+                        let i = 0;
+                        
+                        const typeChar = () => {
+                            if (i < newText.length) {
+                                heroName.textContent += newText.charAt(i);
+                                i++;
+                                setTimeout(typeChar, 80 + Math.random() * 40); // Slight random variation for realism
+                            } else {
+                                // 5. Done typing. Resume blinking cursor.
+                                cursor.classList.remove('typing');
+                                cursor.classList.add('blinking');
+                                
+                                // Disappear after a few blinks (3s)
+                                setTimeout(() => {
+                                    cursor.style.display = 'none';
+                                }, 3000);
+                            }
+                        };
+                        
+                        typeChar();
+                    }, 800); // Pause with blinking cursor before typing starts
+                    
+                }, 200); // Pause after selection
+                
+            }, 300); // Selection duration
+            
+        }, 1500); // Initial delay
+    };
+
+    // Run when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAnimation);
+    } else {
+        initAnimation();
+    }
+</script>

@@ -1,0 +1,53 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+// Get all published blog posts, sorted by date (newest first)
+const allPosts = await getCollection("blog", ({ data }) => {
+  return data.published === true;
+});
+
+const posts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Format date to "Month Year" format
+function formatDate(date: Date): string {
+  return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+}
+---
+
+<BaseLayout 
+  title="Blog - Chris Watson" 
+  description="Technical writing on developer tools, language architecture, and software engineering."
+>
+  <div class="container">
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">Writing</h2>
+        <span class="meta">Thoughts & Tutorials</span>
+      </div>
+
+      <div class="blog-grid">
+        {posts.map((post) => {
+          const imageUrl = post.data.image || `https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop&q=80`;
+          return (
+            <div class="blog-item">
+              <a href={`/blog/${post.id}`} class="blog-card">
+                <img src={imageUrl} alt={post.data.title} class="blog-card-image" />
+                <div class="blog-meta">{formatDate(post.data.date)}</div>
+                <h3 class="blog-card-title">{post.data.title}</h3>
+                <p class="blog-excerpt">{post.data.description}</p>
+                {post.data.tags && post.data.tags.length > 0 && (
+                  <div style="margin-top: 1rem;">
+                    {post.data.tags.map((tag) => (
+                      <span class="tag">{tag}</span>
+                    ))}
+                  </div>
+                )}
+              </a>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

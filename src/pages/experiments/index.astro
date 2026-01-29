@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const title = "Experiments";
+const description = "Small tools, prototypes, and experiments.";
+
+const experiments = [
+  {
+    title: "ASCII Wireframer",
+    description: "Create terminal-ready wireframes with box-drawing characters and snap-to-grid precision.",
+    href: "/experiments/ascii-wireframer",
+    tags: ["React", "ASCII Art", "Design Tool"]
+  },
+  {
+    title: "Squarify",
+    description: "Create square images with custom backgrounds. Useful for social media posts.",
+    href: "/experiments/squarify",
+    tags: ["React", "Canvas", "Image Processing"]
+  }
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="container section">
+    <div class="section-header">
+      <h1 class="section-title">Experiments</h1>
+      <div class="meta">Playground</div>
+    </div>
+
+    <div class="bento-grid">
+      {experiments.map(exp => (
+        <a href={exp.href} class="bento-item">
+          <div class="bento-content">
+            <h2 class="bento-title">{exp.title}</h2>
+            <p class="bento-desc">{exp.description}</p>
+            <div class="bento-meta">
+              {exp.tags.map(tag => (
+                <span class="bento-tech">{tag}</span>
+              ))}
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

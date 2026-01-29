@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AsciiWireframerComponent from '../../components/experiments/AsciiWireframer';
+
+const title = "ASCII Wireframer";
+const description = "Create terminal-ready wireframes with box-drawing characters and snap-to-grid precision.";
+---
+
+<BaseLayout title={`${title} - Experiments`} description={description}>
+  <div class="container">
+    <article class="experiment-page">
+      <header class="experiment-header">
+        <a href="/experiments" class="back-link">← Back to experiments</a>
+        <h1 class="experiment-page-title">{title}</h1>
+        <p class="experiment-page-desc">{description}</p>
+      </header>
+      
+      <div class="experiment-content">
+        <AsciiWireframerComponent client:load />
+      </div>
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .experiment-page {
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--space-xl) 0;
+  }
+  
+  /* Use wider container for this specific experiment if needed, but standard container might be fine. 
+     The component has its own layout-grid max-w-6xl equivalent in CSS if I added it.
+     Let's just ensure full width availability.
+  */
+  
+  .experiment-header {
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--border);
+    max-width: 720px; /* Keep header readable width */
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: var(--space-lg);
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  
+  .back-link:hover {
+    color: var(--accent);
+  }
+  
+  .experiment-page-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: var(--space-md);
+    max-width: 20ch;
+  }
+  
+  .experiment-page-desc {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  
+  .experiment-content {
+    /* Allow full width for the tool */
+    width: 100%;
+  }
+</style>
