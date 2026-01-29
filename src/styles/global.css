@@ -253,15 +253,45 @@ ul { list-style: none; }
 }
 
 @media (max-width: 768px) {
-  .bento-item--wide {
+  /* Reset all bento items to consistent mobile layout */
+  .bento-item {
     flex-direction: column;
   }
-  .bento-item--wide .bento-image {
+  
+  .bento-image {
+    position: relative;
     width: 100%;
+    height: 180px;
+    flex-shrink: 0;
+  }
+  
+  .bento-item--featured .bento-image,
+  .bento-item--tall .bento-image,
+  .bento-item--wide .bento-image {
     height: 200px;
   }
-  .bento-item--wide .bento-content {
+  
+  .bento-content {
     width: 100%;
+    flex-grow: 1;
+  }
+  
+  .bento-item--featured .bento-content,
+  .bento-item--tall .bento-content,
+  .bento-item--wide .bento-content {
+    height: auto;
+  }
+  
+  .bento-title {
+    font-size: 1.25rem;
+  }
+  
+  .bento-item--featured .bento-title {
+    font-size: 1.5rem;
+  }
+  
+  .bento-desc {
+    font-size: 0.9375rem;
   }
 }
 
