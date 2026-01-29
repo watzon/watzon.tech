@@ -253,45 +253,46 @@ ul { list-style: none; }
 }
 
 @media (max-width: 768px) {
-  /* Reset all bento items to consistent mobile layout */
-  .bento-item {
+  /* Reset ALL bento items to uniform mobile layout */
+  .bento-item,
+  .bento-item--featured,
+  .bento-item--tall,
+  .bento-item--wide {
     flex-direction: column;
   }
   
-  .bento-image {
-    position: relative;
-    width: 100%;
-    height: 180px;
-    flex-shrink: 0;
-  }
-  
+  /* Uniform image sizing with aspect ratio */
+  .bento-image,
   .bento-item--featured .bento-image,
   .bento-item--tall .bento-image,
   .bento-item--wide .bento-image {
-    height: 200px;
-  }
-  
-  .bento-content {
+    position: relative;
     width: 100%;
-    flex-grow: 1;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    flex-shrink: 0;
   }
   
+  /* Uniform content sizing */
+  .bento-content,
   .bento-item--featured .bento-content,
   .bento-item--tall .bento-content,
   .bento-item--wide .bento-content {
+    width: 100%;
     height: auto;
+    padding: var(--space-md);
+    flex-grow: 0;
   }
   
-  .bento-title {
+  /* Uniform typography */
+  .bento-title,
+  .bento-item--featured .bento-title {
     font-size: 1.25rem;
   }
   
-  .bento-item--featured .bento-title {
-    font-size: 1.5rem;
-  }
-  
   .bento-desc {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
+    margin-bottom: var(--space-sm);
   }
 }
 
@@ -433,6 +434,20 @@ ul { list-style: none; }
   display: flex;
   align-items: center;
   gap: var(--space-lg);
+}
+
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--space-lg);
+  }
+  
+  .footer-links {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 }
 
 /* About (Minimal) */
