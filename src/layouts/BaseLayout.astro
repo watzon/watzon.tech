@@ -1,0 +1,85 @@
+---
+import "../styles/global.css";
+import { ThemeToggle } from "../components/ThemeToggle.tsx";
+import { MobileNav } from "../components/MobileNav.tsx";
+import SEO from "../components/SEO.astro";
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  publishedTime?: Date;
+  modifiedTime?: Date;
+  tags?: string[];
+}
+
+const { 
+  title,
+  description,
+  image,
+  type,
+  publishedTime,
+  modifiedTime,
+  tags,
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <SEO
+      title={title}
+      description={description}
+      image={image}
+      type={type}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
+      tags={tags}
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Prevent Flash of Wrong Theme -->
+    <script is:inline>
+      (function() {
+        const theme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const initialTheme = theme || (systemPrefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', initialTheme);
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Floating Navigation -->
+    <div class="floating-nav">
+      <div class="desktop-nav-links">
+        <a href="/">Home</a>
+        <a href="/blog">Blog</a>
+        <a href="/experiments">Experiments</a>
+      </div>
+      <ThemeToggle client:load />
+      <MobileNav client:load />
+    </div>
+
+    <slot />
+
+    <!-- Footer -->
+    <footer class="footer container">
+      <div class="copyright">
+        &copy; {new Date().getFullYear()} Chris Watson. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/watzon" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://twitter.com/_watzon" target="_blank" rel="noopener noreferrer">Twitter</a>
+        <a href="https://bsky.app/profile/watzon.tech" target="_blank" rel="noopener noreferrer">Bluesky</a>
+        <a href="mailto:chris@watzon.tech">Email</a>
+      </div>
+    </footer>
+  </body>
+</html>
