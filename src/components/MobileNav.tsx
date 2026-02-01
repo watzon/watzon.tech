@@ -25,6 +25,7 @@ export function MobileNav() {
               <a href="/" onClick={() => setIsOpen(false)}>Home</a>
               <a href="/blog" onClick={() => setIsOpen(false)}>Blog</a>
               <a href="/experiments" onClick={() => setIsOpen(false)}>Experiments</a>
+              <a href="/resume" onClick={() => setIsOpen(false)}>Resume</a>
             </nav>
           </div>
         </>

@@ -766,3 +766,63 @@ ul { list-style: none; }
 .prose tr:nth-child(even) {
   background: var(--bg);
 }
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  @page {
+    size: letter;
+    margin: 0.5in;
+  }
+
+  html, body {
+    font-size: 10pt !important;
+    background: white !important;
+    color: #111 !important;
+  }
+
+  .floating-nav,
+  .footer,
+  .resume-download-hint {
+    display: none !important;
+  }
+
+  a {
+    color: #111 !important;
+  }
+
+  .resume-page {
+    padding: 0 !important;
+  }
+
+  .resume-container {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .resume-title {
+    color: #333 !important;
+  }
+
+  .resume-skill-tag {
+    background: white !important;
+    border-color: #999 !important;
+    color: #333 !important;
+  }
+
+  .resume-project-name {
+    color: #111 !important;
+  }
+
+  .resume-job,
+  .resume-section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
