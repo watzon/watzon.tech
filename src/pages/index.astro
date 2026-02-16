@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 
 // Get all published blog posts, sorted by date (newest first)
 const allPosts = await getCollection("blog", ({ data }) => {
@@ -10,6 +10,12 @@ const allPosts = await getCollection("blog", ({ data }) => {
 const posts = allPosts
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
     .slice(0, 3);
+
+// Get featured projects, sorted by number
+const projects = await getCollection('projects', ({ data }) => data.featured);
+projects.sort((a, b) => parseInt(a.data.number) - parseInt(b.data.number));
+
+const bentoClasses = ['bento-item--featured', 'bento-item--tall', 'bento-item--wide', 'bento-item--wide'];
 
 // Format date to "Month Year" format
 function formatDate(date: Date): string {
@@ -58,102 +64,33 @@ function formatDate(date: Date): string {
             </div>
 
             <div class="bento-grid">
-                <a
-                    href="https://butterbase.app"
-                    target="_blank"
-                    class="bento-item bento-item--featured"
-                    style="--project-color: #f59e0b;"
-                >
-                    <img
-                        src="/images/projects/butterbase.png"
-                        alt="Butterbase app"
-                        class="bento-image"
-                    />
-                    <div class="bento-content">
-                        <span class="bento-number">01</span>
-                        <h3 class="bento-title">Butterbase</h3>
-                        <p class="bento-desc">
-                            Kitchen management platform for home bakers. Track
-                            inventory, cost recipes, and manage orders.
-                        </p>
-                        <div class="bento-meta">
-                            <span class="bento-tech">SaaS</span>
-                        </div>
-                    </div>
-                </a>
-
-                <a
-                    href="https://disforum.me"
-                    target="_blank"
-                    class="bento-item bento-item--tall"
-                    style="--project-color: #5865F2;"
-                >
-                    <img
-                        src="/images/projects/disforum.png"
-                        alt="Disforum"
-                        class="bento-image"
-                    />
-                    <div class="bento-content">
-                        <span class="bento-number">02</span>
-                        <h3 class="bento-title">Disforum</h3>
-                        <p class="bento-desc">
-                            Make Discord forums searchable on the web.
-                        </p>
-                        <div class="bento-meta">
-                            <span class="bento-tech">SaaS</span>
-                        </div>
-                    </div>
-                </a>
-
-                <a
-                    href="https://github.com/watzon/pindrop"
-                    target="_blank"
-                    class="bento-item bento-item--wide"
-                    style="--project-color: #22d3ee;"
-                >
-                    <img
-                        src="/images/projects/pindrop.png"
-                        alt="Pindrop"
-                        class="bento-image"
-                    />
-                    <div class="bento-content">
-                        <span class="bento-number">03</span>
-                        <h3 class="bento-title">Pindrop</h3>
-                        <p class="bento-desc">
-                            Native macOS menu bar dictation app using local
-                            speech-to-text with WhisperKit.
-                        </p>
-                        <div class="bento-meta">
-                            <span class="bento-tech">Swift</span>
-                            <span class="bento-stars">★ 3</span>
-                        </div>
-                    </div>
-                </a>
-
-                <a
-                    href="https://github.com/watzon/alyx"
-                    target="_blank"
-                    class="bento-item bento-item--wide"
-                    style="--project-color: #34d399;"
-                >
-                    <img
-                        src="/images/projects/alyx.png"
-                        alt="Alyx"
-                        class="bento-image"
-                    />
-                    <div class="bento-content">
-                        <span class="bento-number">04</span>
-                        <h3 class="bento-title">Alyx</h3>
-                        <p class="bento-desc">
-                            A portable, polyglot Backend-as-a-Service (BaaS)
-                            written in Go.
-                        </p>
-                        <div class="bento-meta">
-                            <span class="bento-tech">Go</span>
-                            <span class="bento-stars">★ 2</span>
-                        </div>
-                    </div>
-                </a>
+                {projects.map(async (project, i) => {
+                    const { Content } = await render(project);
+                    const layoutClass = bentoClasses[i] || 'bento-item--wide';
+                    return (
+                        <a
+                            href={project.data.url}
+                            target="_blank"
+                            class={`bento-item ${layoutClass}`}
+                            style={`--project-color: ${project.data.color};`}
+                        >
+                            <img
+                                src={project.data.image}
+                                alt={project.data.name}
+                                class="bento-image"
+                            />
+                            <div class="bento-content">
+                                <span class="bento-number">{project.data.number}</span>
+                                <h3 class="bento-title">{project.data.name}</h3>
+                                <div class="bento-desc"><Content /></div>
+                                <div class="bento-meta">
+                                    {project.data.tech.map(t => <span class="bento-tech">{t}</span>)}
+                                    {project.data.stars && <span class="bento-stars">{project.data.stars}</span>}
+                                </div>
+                            </div>
+                        </a>
+                    );
+                })}
             </div>
         </section>
 

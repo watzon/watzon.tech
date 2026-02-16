@@ -1,5 +1,15 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from 'astro:content';
+
+const projectEntries = await getCollection('projects');
+const projects = projectEntries
+  .sort((a, b) => a.data.number.localeCompare(b.data.number))
+  .map(p => ({
+    name: p.data.name,
+    url: p.data.url.replace(/^https?:\/\//, ''),
+    description: p.data.description
+  }));
 
 const resume = {
   personal: {
@@ -75,28 +85,7 @@ const resume = {
     frameworks: ["React", "Svelte", "Vue.js", "Node.js", "Ruby on Rails", "Tailwind CSS"],
     tools: ["Docker", "Terraform", "AWS", "PostgreSQL", "MongoDB", "Redis", "Git", "Linux"]
   },
-  projects: [
-    {
-      name: "Butterbase",
-      url: "butterbase.app",
-      description: "Kitchen management platform for home bakers"
-    },
-    {
-      name: "Disforum",
-      url: "disforum.me",
-      description: "Make Discord forums searchable on the web"
-    },
-    {
-      name: "Pindrop",
-      url: "github.com/watzon/pindrop",
-      description: "macOS menu bar dictation with WhisperKit"
-    },
-    {
-      name: "Momo",
-      url: "github.com/momomemory/momo",
-      description: "Free, open-source, self-hostable alternative to SuperMemory"
-    }
-  ]
+  projects
 };
 ---
 
