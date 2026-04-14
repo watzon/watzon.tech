@@ -112,12 +112,13 @@ function formatDate(date: Date): string {
                                             src={post.data.image}
                                             alt={post.data.title}
                                             class="blog-card-image"
+                                            transition:name={`post-img-${post.id}`}
                                         />
                                     )}
                                     <div class="blog-meta">
                                         {formatDate(post.data.date)}
                                     </div>
-                                    <h3 class="blog-card-title">
+                                    <h3 class="blog-card-title" transition:name={`post-title-${post.id}`}>
                                         {post.data.title}
                                     </h3>
                                     <p class="blog-excerpt">

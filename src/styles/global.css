@@ -163,6 +163,117 @@ ul { list-style: none; }
     opacity: 1;
     transform: none;
   }
+
+  /* Disable scroll-driven animations */
+  .scroll-progress { display: none; }
+
+  .hero,
+  .section-header,
+  .bento-item,
+  .blog-item,
+  .experiment-card,
+  .about-content {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ========================================
+   SCROLL-DRIVEN ANIMATIONS
+   ======================================== */
+
+/* Scroll progress indicator */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent);
+  transform-origin: 0 0;
+  transform: scaleX(0);
+  z-index: 200;
+  pointer-events: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: progress-fill linear both;
+    animation-timeline: scroll();
+  }
+}
+
+@keyframes progress-fill {
+  to { transform: scaleX(1); }
+}
+
+/* Hero parallax drift on scroll */
+@supports (animation-timeline: scroll()) {
+  .hero {
+    animation: hero-drift linear both;
+    animation-timeline: scroll();
+    animation-range: 0px 600px;
+  }
+}
+
+@keyframes hero-drift {
+  to {
+    transform: translateY(-80px);
+    opacity: 0;
+  }
+}
+
+/* Scroll-proportional element reveals */
+@supports (animation-timeline: view()) {
+  /* Override IO-based section hiding — individual items handle reveals */
+  .section[data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .section-header {
+    animation: scroll-reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 35%;
+  }
+
+  .bento-item,
+  .blog-item,
+  .experiment-card {
+    animation: card-enter linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 45%;
+  }
+
+  .about-content {
+    animation: scroll-reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 40%;
+  }
+}
+
+@keyframes scroll-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* Utilities */
@@ -640,25 +751,50 @@ a.section-link {
   }
 }
 
-/* Theme Transition with View Transitions API */
-::view-transition-old(root) {
+/* ========================================
+   VIEW TRANSITIONS
+   ======================================== */
+
+/* Theme toggle — circular reveal (scoped) */
+html:active-view-transition-type(theme-toggle)::view-transition-old(root),
+html[data-theme-switch]::view-transition-old(root) {
   animation: none;
   z-index: 1;
 }
 
-::view-transition-new(root) {
+html:active-view-transition-type(theme-toggle)::view-transition-new(root),
+html[data-theme-switch]::view-transition-new(root) {
   animation: reveal 700ms var(--ease-out-expo);
   z-index: 9999;
   mix-blend-mode: normal;
 }
 
 @keyframes reveal {
-  from {
-    clip-path: circle(0px at var(--tx) var(--ty));
-  }
-  to {
-    clip-path: circle(150vmax at var(--tx) var(--ty));
-  }
+  from { clip-path: circle(0px at var(--tx) var(--ty)); }
+  to { clip-path: circle(150vmax at var(--tx) var(--ty)); }
+}
+
+/* Navigation slide transitions */
+@keyframes slideOut {
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+}
+
+@keyframes slideOutDown {
+  to { opacity: 0; transform: translateY(10px); }
+}
+
+@keyframes slideInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+}
+
+/* Shared element morph — smooth position/size interpolation */
+::view-transition-group(*) {
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Article Prose Typography */

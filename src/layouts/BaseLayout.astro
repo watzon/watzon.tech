@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { ClientRouter } from 'astro:transitions';
 import { ThemeToggle } from "../components/ThemeToggle.tsx";
 import { MobileNav } from "../components/MobileNav.tsx";
 import SEO from "../components/SEO.astro";
@@ -23,6 +24,17 @@ const {
   modifiedTime,
   tags,
 } = Astro.props;
+
+const slideUp = {
+  forwards: {
+    old: { name: 'slideOut', duration: '0.12s', easing: 'cubic-bezier(0.25, 1, 0.5, 1)', fillMode: 'both' },
+    new: { name: 'slideIn', duration: '0.25s', easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fillMode: 'both' },
+  },
+  backwards: {
+    old: { name: 'slideOutDown', duration: '0.12s', easing: 'cubic-bezier(0.25, 1, 0.5, 1)', fillMode: 'both' },
+    new: { name: 'slideInDown', duration: '0.25s', easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fillMode: 'both' },
+  },
+};
 ---
 
 <!DOCTYPE html>
@@ -37,6 +49,7 @@ const {
       modifiedTime={modifiedTime}
       tags={tags}
     />
+    <ClientRouter />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     
@@ -58,8 +71,11 @@ const {
   <body>
     <a href="#main" class="skip-to-content">Skip to content</a>
 
+    <!-- Scroll progress indicator -->
+    <div class="scroll-progress" aria-hidden="true"></div>
+
     <!-- Floating Navigation -->
-    <nav class="floating-nav" aria-label="Main navigation">
+    <nav class="floating-nav" aria-label="Main navigation" transition:persist>
       <div class="desktop-nav-links">
         <a href="/">Home</a>
         <a href="/blog">Blog</a>
@@ -70,13 +86,20 @@ const {
       <MobileNav client:load />
     </nav>
 
-    <main id="main">
+    <main id="main" transition:animate={slideUp}>
       <slot />
     </main>
 
-    <!-- Section reveal observer -->
+    <!-- Theme persistence across navigations + scroll reveal fallback -->
     <script is:inline>
-      (function() {
+      document.addEventListener('astro:after-swap', function() {
+        var theme = localStorage.getItem('theme');
+        var sys = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', theme || (sys ? 'dark' : 'light'));
+      });
+
+      document.addEventListener('astro:page-load', function() {
+        if (CSS.supports && CSS.supports('animation-timeline: view()')) return;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         var io = new IntersectionObserver(function(entries) {
           entries.forEach(function(e) {
@@ -87,11 +110,11 @@ const {
           });
         }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
         document.querySelectorAll('[data-reveal]').forEach(function(el) { io.observe(el); });
-      })();
+      });
     </script>
 
     <!-- Footer -->
-    <footer class="footer container">
+    <footer class="footer container" transition:animate="fade">
       <div class="copyright">
         &copy; {new Date().getFullYear()} Chris Watson. All rights reserved.
       </div>

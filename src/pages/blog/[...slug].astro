@@ -38,14 +38,23 @@ function formatDate(date: Date): string {
     <article class="article">
       <div class="article-header">
         <a href="/blog" class="back-link">← Back to writing</a>
-        
+
+        {post.data.image && (
+          <img
+            src={post.data.image}
+            alt=""
+            class="article-hero-image"
+            transition:name={`post-img-${post.id}`}
+          />
+        )}
+
         <div class="article-meta">
           <time datetime={post.data.date.toISOString()}>
             {formatDate(post.data.date)}
           </time>
         </div>
         
-        <h1 class="article-title">{post.data.title}</h1>
+        <h1 class="article-title" transition:name={`post-title-${post.id}`}>{post.data.title}</h1>
         
         <p class="article-description">{post.data.description}</p>
         
@@ -78,6 +87,14 @@ function formatDate(date: Date): string {
     border-bottom: 1px solid var(--border);
   }
   
+  .article-hero-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: var(--space-lg);
+  }
+
   .back-link {
     display: inline-block;
     font-size: 0.875rem;

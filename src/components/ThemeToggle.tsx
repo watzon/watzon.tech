@@ -29,18 +29,31 @@ export function ThemeToggle() {
     root.style.setProperty("--tx", `${x}px`);
     root.style.setProperty("--ty", `${y}px`);
 
-    if (!document.startViewTransition) {
+    const doToggle = () => {
       root.setAttribute("data-theme", newTheme);
       localStorage.setItem("theme", newTheme);
       setTheme(newTheme);
+    };
+
+    if (!document.startViewTransition) {
+      doToggle();
       return;
     }
 
-    document.startViewTransition(() => {
-      root.setAttribute("data-theme", newTheme);
-      localStorage.setItem("theme", newTheme);
-      setTheme(newTheme);
-    });
+    // Use View Transition types API for scoped circular reveal
+    try {
+      // @ts-expect-error — View Transition API v2 types
+      document.startViewTransition({
+        update: doToggle,
+        types: ['theme-toggle'],
+      });
+    } catch {
+      // Fallback for VT v1: use data attribute to scope the animation
+      root.dataset.themeSwitch = '';
+      const t = document.startViewTransition(doToggle);
+      t.finished.then(() => { delete root.dataset.themeSwitch; })
+        .catch(() => { delete root.dataset.themeSwitch; });
+    }
   }, [theme]);
 
   return (
