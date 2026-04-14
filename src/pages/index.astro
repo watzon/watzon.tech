@@ -30,7 +30,7 @@ function formatDate(date: Date): string {
     <div class="container">
         <!-- Hero Section -->
         <section class="hero">
-            <h1><span id="hero-name">Chris Watson.</span><span id="cursor" class="cursor"></span></h1>
+            <h1>Watzon.</h1>
             <p>
                 Software Engineer specializing in developer tools, language
                 architecture, and performance. Crafting in Go, TypeScript, and
@@ -57,7 +57,7 @@ function formatDate(date: Date): string {
         </section>
 
         <!-- Projects Bento Grid -->
-        <section class="section">
+        <section class="section" data-reveal>
             <div class="section-header">
                 <h2 class="section-title">Selected Works</h2>
                 <span class="meta">What I've Been Working On</span>
@@ -95,7 +95,7 @@ function formatDate(date: Date): string {
         </section>
 
         <!-- Blog Section -->
-        <section class="section">
+        <section class="section" data-reveal>
             <div class="section-header">
                 <h2 class="section-title">Writing</h2>
                 <span class="meta">Thoughts & Tutorials</span>
@@ -104,17 +104,16 @@ function formatDate(date: Date): string {
             <div class="blog-grid">
                 {
                     posts.map((post) => {
-                        const imageUrl =
-                            post.data.image ||
-                            `https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&h=600&fit=crop&q=80`;
                         return (
                             <div class="blog-item">
                                 <a href={`/blog/${post.id}`} class="blog-card">
-                                    <img
-                                        src={imageUrl}
-                                        alt={post.data.title}
-                                        class="blog-card-image"
-                                    />
+                                    {post.data.image && (
+                                        <img
+                                            src={post.data.image}
+                                            alt={post.data.title}
+                                            class="blog-card-image"
+                                        />
+                                    )}
                                     <div class="blog-meta">
                                         {formatDate(post.data.date)}
                                     </div>
@@ -133,13 +132,12 @@ function formatDate(date: Date): string {
         </section>
 
         <!-- Experiments Section -->
-        <section class="section">
+        <section class="section" data-reveal>
             <div class="section-header">
                 <h2 class="section-title">Experiments</h2>
                 <a
                     href="/experiments"
-                    class="meta"
-                    style="text-decoration: underline;">View All →</a
+                    class="meta section-link">View All →</
                 >
             </div>
 
@@ -164,7 +162,7 @@ function formatDate(date: Date): string {
         </section>
 
         <!-- About Section -->
-        <section class="section" style="border-bottom: none;">
+        <section class="section" data-reveal style="border-bottom: none;">
             <div class="about-content">
                 <h2
                     class="section-title"
@@ -194,111 +192,3 @@ function formatDate(date: Date): string {
     </div>
 </BaseLayout>
 
-<style>
-    /* Animation Styles */
-    #hero-name {
-        background-image: linear-gradient(var(--selection-bg), var(--selection-bg));
-        background-repeat: no-repeat;
-        background-position: 100% 0;
-        background-size: 0% 100%;
-        padding-right: 0.05em; /* Slight padding for selection breathing room */
-    }
-
-    #hero-name.selecting {
-        transition: background-size 0.3s ease-out;
-        background-size: 100% 100%;
-    }
-
-    .cursor {
-        display: inline-block;
-        width: 0.08em;
-        height: 0.8em;
-        background-color: currentColor;
-        margin-left: 0.02em;
-        vertical-align: baseline;
-        opacity: 0;
-        position: relative;
-        top: 0.05em;
-    }
-
-    .cursor.typing {
-        opacity: 1;
-    }
-
-    .cursor.blinking {
-        animation: blink 1s step-end infinite;
-    }
-
-    @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0; }
-    }
-</style>
-
-<script>
-    const initAnimation = () => {
-        const heroName = document.getElementById('hero-name');
-        const cursor = document.getElementById('cursor');
-
-        if (!heroName || !cursor) return;
-
-        // Sequence
-        setTimeout(() => {
-            // 1. Start selection (1.5s delay)
-            heroName.classList.add('selecting');
-
-            setTimeout(() => {
-                // 2. Selection complete. Wait pause (0.2s)
-                
-                setTimeout(() => {
-                    // 3. Delete text
-                    heroName.textContent = "";
-                    heroName.classList.remove('selecting');
-                    
-                    // Show blinking cursor immediately after delete
-                    cursor.classList.add('blinking');
-                    
-                    // Wait with blinking cursor before typing
-                    setTimeout(() => {
-                        // Stop blinking, start solid cursor for typing
-                        cursor.classList.remove('blinking');
-                        cursor.classList.add('typing');
-                        
-                        // 4. Type "Watzon."
-                        const newText = "Watzon.";
-                        let i = 0;
-                        
-                        const typeChar = () => {
-                            if (i < newText.length) {
-                                heroName.textContent += newText.charAt(i);
-                                i++;
-                                setTimeout(typeChar, 80 + Math.random() * 40); // Slight random variation for realism
-                            } else {
-                                // 5. Done typing. Resume blinking cursor.
-                                cursor.classList.remove('typing');
-                                cursor.classList.add('blinking');
-                                
-                                // Disappear after a few blinks (3s)
-                                setTimeout(() => {
-                                    cursor.style.display = 'none';
-                                }, 3000);
-                            }
-                        };
-                        
-                        typeChar();
-                    }, 800); // Pause with blinking cursor before typing starts
-                    
-                }, 200); // Pause after selection
-                
-            }, 300); // Selection duration
-            
-        }, 1500); // Initial delay
-    };
-
-    // Run when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initAnimation);
-    } else {
-        initAnimation();
-    }
-</script>

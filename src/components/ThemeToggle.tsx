@@ -95,7 +95,7 @@ export function ThemeToggle() {
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: all 0.2s;
+          transition: border-color 0.2s;
         }
 
         .theme-toggle:hover {

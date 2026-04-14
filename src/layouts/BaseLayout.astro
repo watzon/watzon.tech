@@ -43,7 +43,7 @@ const {
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
     
     <!-- Prevent Flash of Wrong Theme -->
     <script is:inline>
@@ -56,8 +56,10 @@ const {
     </script>
   </head>
   <body>
+    <a href="#main" class="skip-to-content">Skip to content</a>
+
     <!-- Floating Navigation -->
-    <div class="floating-nav">
+    <nav class="floating-nav" aria-label="Main navigation">
       <div class="desktop-nav-links">
         <a href="/">Home</a>
         <a href="/blog">Blog</a>
@@ -66,9 +68,27 @@ const {
       </div>
       <ThemeToggle client:load />
       <MobileNav client:load />
-    </div>
+    </nav>
 
-    <slot />
+    <main id="main">
+      <slot />
+    </main>
+
+    <!-- Section reveal observer -->
+    <script is:inline>
+      (function() {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var io = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) {
+            if (e.isIntersecting) {
+              e.target.classList.add('revealed');
+              io.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('[data-reveal]').forEach(function(el) { io.observe(el); });
+      })();
+    </script>
 
     <!-- Footer -->
     <footer class="footer container">

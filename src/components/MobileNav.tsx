@@ -51,9 +51,9 @@ export function MobileNav() {
         .mobile-nav-overlay {
           position: fixed;
           inset: 0;
-          background: rgba(0, 0, 0, 0.5);
+          background: oklch(0.15 0.01 70 / 0.5);
           z-index: 998;
-          animation: fadeIn 0.2s ease;
+          animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes fadeIn {
@@ -71,7 +71,7 @@ export function MobileNav() {
           border-left: 1px solid var(--border);
           z-index: 999;
           padding: 2rem;
-          animation: slideIn 0.3s ease;
+          animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes slideIn {
