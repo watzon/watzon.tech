@@ -1,0 +1,110 @@
+---
+import BooruLegalLayout from "../../layouts/BooruLegalLayout.astro";
+
+const updated = "May 31, 2026";
+const githubUrl = "https://github.com/watzon/booru-browser";
+---
+
+<BooruLegalLayout
+  title="Booru Browser — Terms of Use"
+  description="The terms that govern your use of Booru Browser: a free, open-source client that connects only to the booru servers you choose to add."
+  heading="Terms of Use"
+  updated={updated}
+>
+  <p>
+    Booru Browser is a free, open-source client application developed by Chris
+    Watson (“I”, “me”). By installing or using the app, you agree to these terms.
+    If you do not agree, please do not use the app.
+  </p>
+
+  <h2>The app</h2>
+  <p>
+    Booru Browser is provided free of charge as open-source software. The source
+    code is available on <a href={githubUrl} target="_blank" rel="noopener noreferrer">GitHub</a>
+    and your use of that code is governed by the license published there. These
+    terms cover your use of the application itself, not the third-party content it
+    can display.
+  </p>
+
+  <h2>No accounts, no servers</h2>
+  <p>
+    The app has no user accounts and I run no servers. Booru Browser ships with no
+    default server list. It only connects to the booru sites <em>you</em> choose to
+    add, and it talks to them directly from your device. I do not host, proxy,
+    cache on my behalf, or relay any of that traffic.
+  </p>
+
+  <h2>Third-party sites and content</h2>
+  <p>
+    The images, tags, and other content you browse come from independent
+    third-party services that I neither operate, control, nor endorse. Each site
+    has its own terms of service, content, and rules, and your use of any site
+    through the app is subject to that site’s terms. You are responsible for
+    reviewing and complying with them, including any rules on API access, rate
+    limits, and acceptable use.
+  </p>
+  <p>
+    I make no guarantee that any particular site will be reachable, will keep
+    working, or will return any particular content. Sites may change, restrict
+    access, or shut down at any time.
+  </p>
+
+  <h2>Acceptable use</h2>
+  <p>You agree not to use Booru Browser to:</p>
+  <ul>
+    <li>access, store, or distribute content that is illegal where you live;</li>
+    <li>violate the terms, rules, or technical limits of any site you connect to;</li>
+    <li>infringe the rights of artists or other rights holders; or</li>
+    <li>break any applicable law or regulation.</li>
+  </ul>
+  <p>
+    You are solely responsible for the servers you add, the searches you run, and
+    the media you view, download, or share.
+  </p>
+
+  <h2>Mature content and age</h2>
+  <p>
+    Booru Browser is rated 17+. Mature content is hidden by default and stays
+    locked behind an explicit age confirmation that you must enable yourself. By
+    unlocking it, you confirm that you are of legal age to view such material where
+    you live and that doing so is lawful there. The app is not directed to children.
+  </p>
+
+  <h2>Intellectual property</h2>
+  <p>
+    Booru Browser does not own, license, or claim any rights to the content served
+    by third-party sites. All artwork and other media remain the property of their
+    respective creators and rights holders. Downloading or sharing media does not
+    grant you any rights to it, and you are responsible for using it lawfully.
+  </p>
+
+  <h2>No warranty</h2>
+  <p>
+    The app is provided “as is” and “as available”, without warranties of any kind,
+    whether express or implied, including fitness for a particular purpose and
+    non-infringement. I do not warrant that the app will be uninterrupted, secure,
+    or error-free.
+  </p>
+
+  <h2>Limitation of liability</h2>
+  <p>
+    To the maximum extent permitted by law, I am not liable for any indirect,
+    incidental, or consequential damages, or for any loss of data, arising from
+    your use of the app or of any third-party site accessed through it. Because the
+    app is free, your sole remedy if you are unhappy with it is to stop using it
+    and uninstall it.
+  </p>
+
+  <h2>Changes</h2>
+  <p>
+    These terms may change over time. Updates will be posted on this page with a
+    revised “last updated” date, and your continued use of the app after a change
+    means you accept the new terms.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions about these terms? Email
+    <a href="mailto:chris@watzon.tech">chris@watzon.tech</a>.
+  </p>
+</BooruLegalLayout>

@@ -1,53 +1,39 @@
 ---
 import SEO from "../components/SEO.astro";
 
-const updated = "May 31, 2026";
 const githubUrl = "https://github.com/watzon/booru-browser";
+// Shipping an iOS TestFlight beta first; Android comes later. Replace with the
+// real public TestFlight invite link once the build is live.
+const testflightUrl = "https://testflight.apple.com/join/REPLACE_ME";
 
-const features = [
-  {
-    title: "Pluggable sources",
-    body: "Danbooru, Gelbooru, e621, Moebooru, Kemono — and any custom site — sit behind a single adapter interface. Add a server, scan a QR code, or import a shareable config.",
-    accent: "#ec4899",
-    icon: "layers",
-  },
-  {
-    title: "Private by design",
-    body: "No analytics. No tracking. No bundled server list and no servers I operate. API keys are sealed in the device keychain, never in plain storage.",
-    accent: "#a855f7",
-    icon: "shield",
-  },
-  {
-    title: "SFW by default",
-    body: "A structural age-gate every search passes through — UI code physically can't bypass it. Mature content stays locked behind an explicit 18+ opt-in.",
-    accent: "#38bdf8",
-    icon: "lock",
-  },
-  {
-    title: "Built for speed",
-    body: "Virtualized image grids and aggressive image caching keep scrolling fluid, even across thousands of results. Browser-grade networking handles stubborn hosts.",
-    accent: "#f59e0b",
-    icon: "bolt",
-  },
-  {
-    title: "Tag search, done right",
-    body: "Per-source tag autocomplete, search history, and rating filters. Find exactly what you're looking for without fighting the query syntax.",
-    accent: "#34d399",
-    icon: "search",
-  },
-  {
-    title: "Favorites & downloads",
-    body: "Save posts locally and export full-resolution media straight to your photo library or the share sheet. Your collection lives on your device.",
-    accent: "#fb7185",
-    icon: "heart",
-  },
-];
+// Gallery imagery: real rating:safe posts pulled from Safebooru (the board the
+// mockups depict) and self-hosted under /images/booru/gallery. Each tile keeps a
+// brand-tinted fallback colour so it reads as intentional before the image loads.
+// NOTE: these are third-party fan works shown without per-artist credit; swap for
+// owned/licensed assets (or add attribution) before any public launch.
+const hues = ["var(--bb-pink)", "var(--bb-cyan)", "var(--bb-violet)", "var(--bb-gold)"];
+const G = (n) => `/images/booru/gallery/${String(((n - 1) % 24) + 1).padStart(2, "0")}.jpg`;
+const masonry = (shapes, start) =>
+  shapes.map((ar, i) => ({ ar, img: G(start + i), hue: hues[(start + i) % 4] }));
+// Two-column masonry sets (varied aspect ratios = real booru grid rhythm).
+const heroA = masonry(["3 / 4", "2 / 3", "3 / 5", "4 / 5", "2 / 3"], 1);
+const heroB = masonry(["2 / 3", "3 / 4", "4 / 5", "3 / 4", "3 / 5"], 6);
+const showA = masonry(["2 / 3", "3 / 4", "4 / 5", "2 / 3", "3 / 4"], 11);
+const showB = masonry(["3 / 4", "2 / 3", "3 / 5", "4 / 5", "2 / 3"], 16);
+const gridImgs = [21, 22, 23, 24, 3, 8, 13, 18].map(G);
+const singleImgs = [4, 12, 20].map(G);
+const miniImgs = [1, 2, 5, 7, 9, 11, 14, 17].map(G);
+const float1 = G(19);
+const float2 = G(24);
 
-const shots = [
-  { caption: "Gallery grid", tone: "#ec4899" },
-  { caption: "Post viewer", tone: "#a855f7" },
-  { caption: "Tag search", tone: "#38bdf8" },
-  { caption: "Server management", tone: "#34d399" },
+// Supported source families, with monogram marks in brand hues.
+const sources = [
+  { name: "Danbooru", mark: "D", hue: "var(--bb-pink)" },
+  { name: "Gelbooru", mark: "G", hue: "var(--bb-cyan)" },
+  { name: "e621", mark: "e6", hue: "var(--bb-gold)" },
+  { name: "Konachan", mark: "K", hue: "var(--bb-violet)" },
+  { name: "Kemono", mark: "Ke", hue: "var(--bb-pink)" },
+  { name: "Custom", mark: "+", hue: "var(--bb-cyan)" },
 ];
 
 const stack = [
@@ -61,15 +47,32 @@ const stack = [
   "Reanimated",
 ];
 
-// Minimal inline icon set (stroke-based, currentColor)
-const icons: Record<string, string> = {
-  layers: `<path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/>`,
-  shield: `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>`,
-  lock: `<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>`,
-  bolt: `<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/>`,
-  search: `<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>`,
-  heart: `<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>`,
-};
+// Mockup data — the in-app screens are recreated from the real app's actual
+// layout (a real mini-version of the UI, not a fake screenshot). The app shows
+// the active board's name as the screen title and toggles between masonry,
+// compact-grid, and single-column layouts.
+// The quick board switcher (long-press the search button). These are boards the
+// user has added — the app ships with no bundled server list. Current = gradient.
+const switcher = [
+  { name: "Konachan" },
+  { name: "Konachan (SFW)", state: "active" },
+  { name: "e926 (SFW)" },
+  { name: "Hypnohub" },
+  { name: "Gelbooru" },
+  { name: "Danbooru" },
+  { name: "e621" },
+  { name: "Safebooru", state: "current" },
+];
+
+// Curated, strictly-SFW starter list (the app ships with no servers). The JSON
+// and QR live in /public/booru-browser; the QR encodes a boorubrowser://import
+// deep link pointing at the hosted list.
+const listUrl = "/booru-browser/servers.booruconfig.json";
+const starterServers = [
+  { name: "Safebooru", host: "safebooru.org", mark: "S", hue: "var(--bb-pink)" },
+  { name: "e926", host: "e926.net", mark: "e9", hue: "var(--bb-gold)" },
+  { name: "Konachan", host: "konachan.net", mark: "K", hue: "var(--bb-violet)" },
+];
 ---
 
 <!DOCTYPE html>
@@ -84,8 +87,9 @@ const icons: Record<string, string> = {
     <link rel="icon" href="/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Baloo 2 is the app's actual display face; Figtree carries body copy. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Figtree:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <!-- This page is a deliberate dark-only theme takeover; force it before paint. -->
@@ -102,11 +106,9 @@ const icons: Record<string, string> = {
     </noscript>
   </head>
   <body class="bb">
-    <!-- Animated aurora backdrop -->
-    <div class="bb-aurora" aria-hidden="true">
-      <span class="bb-blob bb-blob--pink"></span>
-      <span class="bb-blob bb-blob--purple"></span>
-      <span class="bb-blob bb-blob--cyan"></span>
+    <!-- Restrained brand backdrop: one top wash + a single soft glow + grain. -->
+    <div class="bb-backdrop" aria-hidden="true">
+      <span class="bb-glow"></span>
       <div class="bb-grain"></div>
     </div>
 
@@ -116,167 +118,370 @@ const icons: Record<string, string> = {
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
         watzon.tech
       </a>
-      <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="bb-topbar-link">GitHub ↗</a>
+      <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="bb-topbar-link">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 1C5.92 1 1 5.92 1 12c0 4.87 3.15 8.99 7.52 10.45.55.1.75-.24.75-.53v-1.85c-3.06.67-3.71-1.48-3.71-1.48-.5-1.27-1.22-1.61-1.22-1.61-1-.68.08-.67.08-.67 1.1.08 1.69 1.14 1.69 1.14.98 1.69 2.58 1.2 3.21.92.1-.71.39-1.2.7-1.48-2.44-.28-5.01-1.22-5.01-5.44 0-1.2.43-2.18 1.13-2.95-.11-.28-.49-1.4.11-2.92 0 0 .92-.3 3.02 1.13a10.4 10.4 0 0 1 5.5 0c2.1-1.43 3.02-1.13 3.02-1.13.6 1.52.22 2.64.11 2.92.7.77 1.13 1.75 1.13 2.95 0 4.23-2.58 5.16-5.03 5.43.4.34.75 1.01.75 2.04v3.03c0 .29.2.64.76.53A11.01 11.01 0 0 0 23 12c0-6.08-4.92-11-11-11Z"/></svg>
+        GitHub
+      </a>
     </header>
 
     <main>
       <!-- HERO -->
       <section class="bb-hero">
         <div class="bb-hero-copy">
-          <p class="bb-eyebrow bb-fade" style="--d:0s">iOS · Android · Open source</p>
-          <h1 class="bb-title bb-fade" style="--d:.08s">Booru&nbsp;Browser</h1>
+          <div class="bb-lockup bb-fade" style="--d:0s">
+            <img src="/images/booru/icon-square.png" alt="Booru Browser app icon" class="bb-lockup-icon" width="56" height="56" />
+            <div class="bb-lockup-text">
+              <span class="bb-lockup-name">Booru Browser</span>
+              <span class="bb-lockup-sub">Free, open source</span>
+            </div>
+          </div>
+          <h1 class="bb-title bb-fade" style="--d:.08s">Every booru.<br />One beautiful app.</h1>
           <p class="bb-lede bb-fade" style="--d:.16s">
-            A fast, private, gallery-first image browser for the booru ecosystem.
-            Every source behind one interface — and not a single byte of tracking.
+            A fast, private, gallery-first browser for the booru ecosystem.
+            Every source, one interface, zero tracking.
           </p>
           <div class="bb-cta bb-fade" style="--d:.24s">
-            <a class="bb-btn bb-btn--primary" href="#" aria-disabled="true">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16.5 1.6c0 1.2-.5 2.4-1.3 3.3-.9 1-2.3 1.7-3.5 1.6-.1-1.2.5-2.4 1.3-3.2.9-1 2.4-1.7 3.5-1.7ZM20.3 17c-.6 1.4-.9 2-1.7 3.2-1 1.7-2.5 3.8-4.3 3.8-1.6 0-2-1-4.2-1-2.1 0-2.6 1-4.1 1-1.8 0-3.2-1.9-4.3-3.6C-.4 17 .5 11 3.7 9.4c1.3-.7 2.6-.6 3.8-.6 1.3 0 2.1.7 3.4.7 1.2 0 2-.7 3.5-.7 1.1 0 2.3.3 3.2 1-2.8 1.6-2.4 5.7.7 7.2Z"/></svg>
-              <span class="bb-btn-stack"><small>Coming soon to</small>App&nbsp;Store</span>
+            <a class="bb-badge bb-badge--apple" href={testflightUrl} target="_blank" rel="noopener noreferrer" aria-label="Join the TestFlight beta for iPhone">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M16.5 1.6c0 1.2-.5 2.4-1.3 3.3-.9 1-2.3 1.7-3.5 1.6-.1-1.2.5-2.4 1.3-3.2.9-1 2.4-1.7 3.5-1.7ZM20.3 17c-.6 1.4-.9 2-1.7 3.2-1 1.7-2.5 3.8-4.3 3.8-1.6 0-2-1-4.2-1-2.1 0-2.6 1-4.1 1-1.8 0-3.2-1.9-4.3-3.6C-.4 17 .5 11 3.7 9.4c1.3-.7 2.6-.6 3.8-.6 1.3 0 2.1.7 3.4.7 1.2 0 2-.7 3.5-.7 1.1 0 2.3.3 3.2 1-2.8 1.6-2.4 5.7.7 7.2Z"/></svg>
+              <span class="bb-badge-stack"><small>iPhone beta on</small><strong>TestFlight</strong></span>
             </a>
-            <a class="bb-btn bb-btn--ghost" href={githubUrl} target="_blank" rel="noopener noreferrer">View source</a>
+            <a class="bb-badge bb-badge--ghost" href={githubUrl} target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 1C5.92 1 1 5.92 1 12c0 4.87 3.15 8.99 7.52 10.45.55.1.75-.24.75-.53v-1.85c-3.06.67-3.71-1.48-3.71-1.48-.5-1.27-1.22-1.61-1.22-1.61-1-.68.08-.67.08-.67 1.1.08 1.69 1.14 1.69 1.14.98 1.69 2.58 1.2 3.21.92.1-.71.39-1.2.7-1.48-2.44-.28-5.01-1.22-5.01-5.44 0-1.2.43-2.18 1.13-2.95-.11-.28-.49-1.4.11-2.92 0 0 .92-.3 3.02 1.13a10.4 10.4 0 0 1 5.5 0c2.1-1.43 3.02-1.13 3.02-1.13.6 1.52.22 2.64.11 2.92.7.77 1.13 1.75 1.13 2.95 0 4.23-2.58 5.16-5.03 5.43.4.34.75 1.01.75 2.04v3.03c0 .29.2.64.76.53A11.01 11.01 0 0 0 23 12c0-6.08-4.92-11-11-11Z"/></svg>
+              <span class="bb-badge-stack"><strong>View on GitHub</strong></span>
+            </a>
           </div>
-          <p class="bb-rating bb-fade" style="--d:.32s">Rated 17+ · Mature content gated by default</p>
         </div>
 
-        <div class="bb-hero-art bb-fade" style="--d:.2s">
-          <div class="bb-icon-halo"></div>
-          <img src="/images/booru/icon.png" alt="Booru Browser app icon" class="bb-app-icon" width="320" height="320" />
+        <div class="bb-hero-stage bb-fade" style="--d:.2s">
+          <span class="bb-floater bb-floater--1" aria-hidden="true" style={`background-image:url(${float1})`}></span>
+          <span class="bb-floater bb-floater--2" aria-hidden="true" style={`background-image:url(${float2})`}></span>
+
+          <div class="bb-phone bb-phone--hero">
+            <div class="bb-screen">
+              <!-- Browse / masonry screen, with a live auto-scrolling wall -->
+              <div class="bb-galwall">
+                <div class="bb-galcol bb-galcol--up">
+                  {[...heroA, ...heroA].map((t) => (
+                    <span class="bb-tile" style={`aspect-ratio:${t.ar}; --c:${t.hue}; background-image:url(${t.img})`}></span>
+                  ))}
+                </div>
+                <div class="bb-galcol bb-galcol--up2">
+                  {[...heroB, ...heroB].map((t) => (
+                    <span class="bb-tile" style={`aspect-ratio:${t.ar}; --c:${t.hue}; background-image:url(${t.img})`}></span>
+                  ))}
+                </div>
+              </div>
+              <header class="bb-apphead">
+                <div class="bb-statusbar"><span class="bb-sb-time">1:50</span><span class="bb-island" aria-hidden="true"></span><span class="bb-statusbar-r" aria-hidden="true"><svg class="bb-sb" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="0.6"/><rect x="5" y="5.5" width="3" height="6.5" rx="0.6"/><rect x="10" y="3" width="3" height="9" rx="0.6"/><rect x="15" y="0" width="3" height="12" rx="0.6"/></svg><svg class="bb-sb" viewBox="0 0 16 12"><path d="M8 2C5 2 2.3 3.1.4 4.9l1.4 1.4C3.4 4.8 5.6 4 8 4s4.6.8 6.2 2.3l1.4-1.4C13.7 3.1 11 2 8 2Zm0 4c-1.7 0-3.3.6-4.5 1.7l1.5 1.5C5.7 8.5 6.8 8 8 8s2.3.5 3 1.2l1.5-1.5C11.3 6.6 9.7 6 8 6Zm0 3.8c-.7 0-1.3.3-1.8.7L8 12.3l1.8-1.8c-.5-.4-1.1-.7-1.8-.7Z"/></svg><svg class="bb-sb bb-sb-bat" viewBox="0 0 26 12"><rect x="0.5" y="1" width="21" height="10" rx="2.6" fill="none" stroke="currentColor" stroke-opacity="0.5"/><rect x="2" y="2.5" width="17" height="7" rx="1.4"/><rect x="23" y="4.2" width="2" height="3.6" rx="1"/></svg></span></div>
+                <div class="bb-apphead-row">
+                  <span class="bb-apphead-title">Safebooru</span>
+                  <span class="bb-apphead-tools">
+                    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M6 12h12M9 18h6"/></svg>
+                    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="6" rx="1"/><rect x="14" y="11" width="7" height="10" rx="1"/></svg>
+                  </span>
+                </div>
+              </header>
+              <nav class="bb-dock">
+                <div class="bb-dock-bar">
+                  <span class="bb-dock-browse"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Browse</span>
+                  <span class="bb-dock-ic"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 18.5 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg></span>
+                  <span class="bb-dock-ic"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.82 1.17V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 7.6 19.4l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 3 12.6H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 7.6l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6 1.65 1.65 0 0 0 10 3.09V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 15 4.6l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></span>
+                </div>
+                <span class="bb-dock-search"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg></span>
+              </nav>
+            </div>
+          </div>
         </div>
       </section>
 
-      <!-- FEATURES -->
+      <!-- TRUST STRIP -->
+      <section class="bb-trust" aria-label="What sets it apart">
+        <div class="bb-trust-grid" data-reveal>
+          <span class="bb-trust-item" style="--c:var(--bb-pink)">
+            <span class="bb-trust-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.1 9.1 0 0 1 12 4c7 0 10 8 10 8a18.5 18.5 0 0 1-2.16 3.19M6.6 6.6A18.6 18.6 0 0 0 2 12s3 8 10 8a9.3 9.3 0 0 0 5.4-1.6"/><path d="M2 2l20 20"/></svg></span>
+            <strong>No tracking</strong>
+            <small>Zero analytics, ads, or telemetry</small>
+          </span>
+          <span class="bb-trust-item" style="--c:var(--bb-cyan)">
+            <span class="bb-trust-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01"/></svg></span>
+            <strong>No servers</strong>
+            <small>Nothing I operate sees your data</small>
+          </span>
+          <span class="bb-trust-item" style="--c:var(--bb-violet)">
+            <span class="bb-trust-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+            <strong>Keychain-sealed</strong>
+            <small>Credentials never in plain storage</small>
+          </span>
+          <span class="bb-trust-item" style="--c:var(--bb-gold)">
+            <span class="bb-trust-ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <strong>SFW by default</strong>
+            <small>Mature content gated behind 17+</small>
+          </span>
+        </div>
+      </section>
+
+      <!-- FEATURES (bento) -->
       <section class="bb-section" id="features">
         <div class="bb-section-head" data-reveal>
           <span class="bb-kicker">What it does</span>
           <h2 class="bb-h2">Considered down to the last invariant.</h2>
         </div>
-        <div class="bb-features">
-          {features.map((f, i) => (
-            <article class="bb-feature" data-reveal style={`--accent:${f.accent}; --i:${i}`}>
-              <span class="bb-feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={icons[f.icon]} />
-              </span>
-              <h3 class="bb-feature-title">{f.title}</h3>
-              <p class="bb-feature-body">{f.body}</p>
-            </article>
-          ))}
+
+        <div class="bb-bento">
+          <article class="bb-cell bb-cell--sources" data-reveal>
+            <div class="bb-cell-body">
+              <h3 class="bb-cell-title">Pluggable sources</h3>
+              <p class="bb-cell-text">
+                Danbooru, Gelbooru, e621, Moebooru, Kemono, and any custom site sit behind one
+                adapter. Add a server, scan a QR code, or import a shareable config.
+              </p>
+            </div>
+            <ul class="bb-sourcemarks" aria-label="Supported sources">
+              {sources.map((s) => (
+                <li class="bb-mark" style={`--c:${s.hue}`} title={s.name}><span>{s.mark}</span></li>
+              ))}
+            </ul>
+          </article>
+
+          <article class="bb-cell bb-cell--private" data-reveal style="--c:var(--bb-violet)">
+            <span class="bb-cell-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></span>
+            <h3 class="bb-cell-title">Private by design</h3>
+            <p class="bb-cell-text">No analytics. No tracking. No bundled server list, and no servers I run. API keys are sealed in the device keychain, never in plain storage.</p>
+          </article>
+
+          <article class="bb-cell bb-cell--speed" data-reveal style="--c:var(--bb-gold)">
+            <div class="bb-cell-body">
+              <span class="bb-cell-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/></svg></span>
+              <h3 class="bb-cell-title">Built for speed</h3>
+              <p class="bb-cell-text">Virtualized grids and aggressive image caching keep scrolling fluid across thousands of results. Browser-grade networking handles stubborn hosts.</p>
+            </div>
+            <div class="bb-minigrid" aria-hidden="true">
+              {miniImgs.map((img) => (
+                <span style={`background-image:url(${img})`}></span>
+              ))}
+            </div>
+          </article>
+
+          <article class="bb-cell bb-cell--sfw" data-reveal style="--c:var(--bb-cyan)">
+            <span class="bb-cell-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+            <h3 class="bb-cell-title">SFW by default</h3>
+            <p class="bb-cell-text">A structural age gate every search passes through, so UI code physically can't bypass it. Mature content stays behind an explicit 18+ opt-in.</p>
+          </article>
+
+          <article class="bb-cell bb-cell--search" data-reveal style="--c:var(--bb-pink)">
+            <span class="bb-cell-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
+            <h3 class="bb-cell-title">Tag search, done right</h3>
+            <p class="bb-cell-text">Per-source tag autocomplete, search history, and rating filters. Find exactly what you want without fighting query syntax.</p>
+          </article>
+
+          <article class="bb-cell bb-cell--favs" data-reveal style="--c:var(--bb-pink)">
+            <span class="bb-cell-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span>
+            <h3 class="bb-cell-title">Favorites and downloads</h3>
+            <p class="bb-cell-text">Save posts locally and export full-resolution media to your photo library or the share sheet. Your collection lives on your device.</p>
+          </article>
         </div>
       </section>
 
-      <!-- SCREENSHOTS -->
-      <section class="bb-section" id="screenshots">
+      <!-- SCREENS SHOWCASE -->
+      <section class="bb-section" id="screens">
         <div class="bb-section-head" data-reveal>
           <span class="bb-kicker">A look inside</span>
           <h2 class="bb-h2">Built to disappear behind the art.</h2>
         </div>
-        <div class="bb-shots" data-reveal>
-          {shots.map((s, i) => (
-            <figure class="bb-phone" style={`--tone:${s.tone}; --i:${i}`}>
-              <div class="bb-phone-frame">
-                <span class="bb-phone-notch" aria-hidden="true"></span>
-                <!--
-                  SCREENSHOT SLOT — drop a portrait screenshot here, e.g.:
-                  <img src="/images/booru/shot-1.png" alt={s.caption} class="bb-phone-shot" />
-                  Recommended size: 1290×2796 (iPhone 6.7"). Until then, a styled placeholder shows.
-                -->
-                <div class="bb-phone-placeholder" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+
+        <div class="bb-showcase" data-reveal>
+          <!-- Masonry -->
+          <figure class="bb-show bb-show--a">
+            <div class="bb-phone">
+              <div class="bb-screen">
+                <div class="bb-galwall bb-galwall--static">
+                  <div class="bb-galcol">{showA.map((t) => (<span class="bb-tile" style={`aspect-ratio:${t.ar}; --c:${t.hue}; background-image:url(${t.img})`}></span>))}</div>
+                  <div class="bb-galcol">{showB.map((t) => (<span class="bb-tile" style={`aspect-ratio:${t.ar}; --c:${t.hue}; background-image:url(${t.img})`}></span>))}</div>
                 </div>
+                <header class="bb-apphead">
+                  <div class="bb-statusbar"><span class="bb-sb-time">1:50</span><span class="bb-island" aria-hidden="true"></span><span class="bb-statusbar-r" aria-hidden="true"><svg class="bb-sb" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="0.6"/><rect x="5" y="5.5" width="3" height="6.5" rx="0.6"/><rect x="10" y="3" width="3" height="9" rx="0.6"/><rect x="15" y="0" width="3" height="12" rx="0.6"/></svg><svg class="bb-sb" viewBox="0 0 16 12"><path d="M8 2C5 2 2.3 3.1.4 4.9l1.4 1.4C3.4 4.8 5.6 4 8 4s4.6.8 6.2 2.3l1.4-1.4C13.7 3.1 11 2 8 2Zm0 4c-1.7 0-3.3.6-4.5 1.7l1.5 1.5C5.7 8.5 6.8 8 8 8s2.3.5 3 1.2l1.5-1.5C11.3 6.6 9.7 6 8 6Zm0 3.8c-.7 0-1.3.3-1.8.7L8 12.3l1.8-1.8c-.5-.4-1.1-.7-1.8-.7Z"/></svg><svg class="bb-sb bb-sb-bat" viewBox="0 0 26 12"><rect x="0.5" y="1" width="21" height="10" rx="2.6" fill="none" stroke="currentColor" stroke-opacity="0.5"/><rect x="2" y="2.5" width="17" height="7" rx="1.4"/><rect x="23" y="4.2" width="2" height="3.6" rx="1"/></svg></span></div>
+                  <div class="bb-apphead-row">
+                    <span class="bb-apphead-title">Safebooru</span>
+                    <span class="bb-apphead-tools">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M6 12h12M9 18h6"/></svg>
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="6" rx="1"/><rect x="14" y="11" width="7" height="10" rx="1"/></svg>
+                    </span>
+                  </div>
+                </header>
+                <nav class="bb-dock">
+                  <div class="bb-dock-bar">
+                    <span class="bb-dock-browse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Browse</span>
+                    <span class="bb-dock-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 18.5 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg></span>
+                    <span class="bb-dock-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.82 1.17V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 7.6 19.4l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 3 12.6H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 7.6l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6 1.65 1.65 0 0 0 10 3.09V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 15 4.6l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></span>
+                  </div>
+                  <span class="bb-dock-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg></span>
+                </nav>
               </div>
-              <figcaption class="bb-phone-cap">{s.caption}</figcaption>
-            </figure>
-          ))}
+            </div>
+            <figcaption>Masonry grid</figcaption>
+          </figure>
+
+          <!-- Compact grid -->
+          <figure class="bb-show bb-show--b">
+            <div class="bb-phone">
+              <div class="bb-screen">
+                <div class="bb-galgrid">
+                  {gridImgs.map((img) => (<span style={`background-image:url(${img})`}></span>))}
+                </div>
+                <header class="bb-apphead">
+                  <div class="bb-statusbar"><span class="bb-sb-time">1:50</span><span class="bb-island" aria-hidden="true"></span><span class="bb-statusbar-r" aria-hidden="true"><svg class="bb-sb" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="0.6"/><rect x="5" y="5.5" width="3" height="6.5" rx="0.6"/><rect x="10" y="3" width="3" height="9" rx="0.6"/><rect x="15" y="0" width="3" height="12" rx="0.6"/></svg><svg class="bb-sb" viewBox="0 0 16 12"><path d="M8 2C5 2 2.3 3.1.4 4.9l1.4 1.4C3.4 4.8 5.6 4 8 4s4.6.8 6.2 2.3l1.4-1.4C13.7 3.1 11 2 8 2Zm0 4c-1.7 0-3.3.6-4.5 1.7l1.5 1.5C5.7 8.5 6.8 8 8 8s2.3.5 3 1.2l1.5-1.5C11.3 6.6 9.7 6 8 6Zm0 3.8c-.7 0-1.3.3-1.8.7L8 12.3l1.8-1.8c-.5-.4-1.1-.7-1.8-.7Z"/></svg><svg class="bb-sb bb-sb-bat" viewBox="0 0 26 12"><rect x="0.5" y="1" width="21" height="10" rx="2.6" fill="none" stroke="currentColor" stroke-opacity="0.5"/><rect x="2" y="2.5" width="17" height="7" rx="1.4"/><rect x="23" y="4.2" width="2" height="3.6" rx="1"/></svg></span></div>
+                  <div class="bb-apphead-row">
+                    <span class="bb-apphead-title">Safebooru</span>
+                    <span class="bb-apphead-tools">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M6 12h12M9 18h6"/></svg>
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    </span>
+                  </div>
+                </header>
+                <nav class="bb-dock">
+                  <div class="bb-dock-bar">
+                    <span class="bb-dock-browse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Browse</span>
+                    <span class="bb-dock-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 18.5 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg></span>
+                    <span class="bb-dock-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.82 1.17V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 7.6 19.4l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 3 12.6H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 7.6l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6 1.65 1.65 0 0 0 10 3.09V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 15 4.6l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></span>
+                  </div>
+                  <span class="bb-dock-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg></span>
+                </nav>
+              </div>
+            </div>
+            <figcaption>Compact grid</figcaption>
+          </figure>
+
+          <!-- Single column -->
+          <figure class="bb-show bb-show--c">
+            <div class="bb-phone">
+              <div class="bb-screen">
+                <div class="bb-galsingle">
+                  {singleImgs.map((img) => (<span style={`background-image:url(${img})`}></span>))}
+                </div>
+                <header class="bb-apphead">
+                  <div class="bb-statusbar"><span class="bb-sb-time">1:50</span><span class="bb-island" aria-hidden="true"></span><span class="bb-statusbar-r" aria-hidden="true"><svg class="bb-sb" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="0.6"/><rect x="5" y="5.5" width="3" height="6.5" rx="0.6"/><rect x="10" y="3" width="3" height="9" rx="0.6"/><rect x="15" y="0" width="3" height="12" rx="0.6"/></svg><svg class="bb-sb" viewBox="0 0 16 12"><path d="M8 2C5 2 2.3 3.1.4 4.9l1.4 1.4C3.4 4.8 5.6 4 8 4s4.6.8 6.2 2.3l1.4-1.4C13.7 3.1 11 2 8 2Zm0 4c-1.7 0-3.3.6-4.5 1.7l1.5 1.5C5.7 8.5 6.8 8 8 8s2.3.5 3 1.2l1.5-1.5C11.3 6.6 9.7 6 8 6Zm0 3.8c-.7 0-1.3.3-1.8.7L8 12.3l1.8-1.8c-.5-.4-1.1-.7-1.8-.7Z"/></svg><svg class="bb-sb bb-sb-bat" viewBox="0 0 26 12"><rect x="0.5" y="1" width="21" height="10" rx="2.6" fill="none" stroke="currentColor" stroke-opacity="0.5"/><rect x="2" y="2.5" width="17" height="7" rx="1.4"/><rect x="23" y="4.2" width="2" height="3.6" rx="1"/></svg></span></div>
+                  <div class="bb-apphead-row">
+                    <span class="bb-apphead-title">Safebooru</span>
+                    <span class="bb-apphead-tools">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M6 12h12M9 18h6"/></svg>
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+                    </span>
+                  </div>
+                </header>
+                <nav class="bb-dock">
+                  <div class="bb-dock-bar">
+                    <span class="bb-dock-browse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Browse</span>
+                    <span class="bb-dock-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 18.5 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg></span>
+                    <span class="bb-dock-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.82 1.17V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 7.6 19.4l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 3 12.6H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 7.6l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6 1.65 1.65 0 0 0 10 3.09V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 15 4.6l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></span>
+                  </div>
+                  <span class="bb-dock-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg></span>
+                </nav>
+              </div>
+            </div>
+            <figcaption>Single column</figcaption>
+          </figure>
+
+          <!-- Board switcher -->
+          <figure class="bb-show bb-show--d">
+            <div class="bb-phone">
+              <div class="bb-screen">
+                <div class="bb-galwall bb-galwall--static">
+                  <div class="bb-galcol">{heroA.map((t) => (<span class="bb-tile" style={`aspect-ratio:${t.ar}; --c:${t.hue}; background-image:url(${t.img})`}></span>))}</div>
+                  <div class="bb-galcol">{heroB.map((t) => (<span class="bb-tile" style={`aspect-ratio:${t.ar}; --c:${t.hue}; background-image:url(${t.img})`}></span>))}</div>
+                </div>
+                <span class="bb-switch-scrim" aria-hidden="true"></span>
+                <header class="bb-apphead">
+                  <div class="bb-statusbar"><span class="bb-sb-time">1:50</span><span class="bb-island" aria-hidden="true"></span><span class="bb-statusbar-r" aria-hidden="true"><svg class="bb-sb" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="0.6"/><rect x="5" y="5.5" width="3" height="6.5" rx="0.6"/><rect x="10" y="3" width="3" height="9" rx="0.6"/><rect x="15" y="0" width="3" height="12" rx="0.6"/></svg><svg class="bb-sb" viewBox="0 0 16 12"><path d="M8 2C5 2 2.3 3.1.4 4.9l1.4 1.4C3.4 4.8 5.6 4 8 4s4.6.8 6.2 2.3l1.4-1.4C13.7 3.1 11 2 8 2Zm0 4c-1.7 0-3.3.6-4.5 1.7l1.5 1.5C5.7 8.5 6.8 8 8 8s2.3.5 3 1.2l1.5-1.5C11.3 6.6 9.7 6 8 6Zm0 3.8c-.7 0-1.3.3-1.8.7L8 12.3l1.8-1.8c-.5-.4-1.1-.7-1.8-.7Z"/></svg><svg class="bb-sb bb-sb-bat" viewBox="0 0 26 12"><rect x="0.5" y="1" width="21" height="10" rx="2.6" fill="none" stroke="currentColor" stroke-opacity="0.5"/><rect x="2" y="2.5" width="17" height="7" rx="1.4"/><rect x="23" y="4.2" width="2" height="3.6" rx="1"/></svg></span></div>
+                  <div class="bb-apphead-row">
+                    <span class="bb-apphead-title">Safebooru</span>
+                    <span class="bb-apphead-tools">
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M6 12h12M9 18h6"/></svg>
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="6" rx="1"/><rect x="14" y="11" width="7" height="10" rx="1"/></svg>
+                    </span>
+                  </div>
+                </header>
+                <div class="bb-switcher">
+                  {switcher.map((b) => (
+                    <span class={`bb-swpill${b.state === "current" ? " bb-swpill--current" : ""}${b.state === "active" ? " bb-swpill--active" : ""}`}>{b.name}</span>
+                  ))}
+                </div>
+                <nav class="bb-dock">
+                  <div class="bb-dock-bar">
+                    <span class="bb-dock-browse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Browse</span>
+                    <span class="bb-dock-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 18.5 6.1 20.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg></span>
+                    <span class="bb-dock-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.82 1.17V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 7.6 19.4l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 3 12.6H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 7.6l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6 1.65 1.65 0 0 0 10 3.09V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 15 4.6l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></span>
+                  </div>
+                  <span class="bb-dock-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg></span>
+                </nav>
+              </div>
+            </div>
+            <figcaption>Long-press to switch boards</figcaption>
+          </figure>
         </div>
       </section>
 
       <!-- TECH STRIP -->
       <section class="bb-section bb-section--tight">
-        <div class="bb-section-head" data-reveal>
-          <span class="bb-kicker">Under the hood</span>
-        </div>
+        <p class="bb-tech-label" data-reveal>Under the hood</p>
         <ul class="bb-stack" data-reveal>
           {stack.map((t) => <li class="bb-chip">{t}</li>)}
         </ul>
       </section>
 
-      <!-- PRIVACY POLICY -->
-      <section class="bb-section bb-privacy" id="privacy">
-        <div class="bb-section-head" data-reveal>
-          <span class="bb-kicker">Legal</span>
-          <h2 class="bb-h2">Privacy Policy</h2>
-          <p class="bb-updated">Last updated {updated}</p>
-        </div>
-        <div class="bb-prose" data-reveal>
-          <p>
-            Booru Browser is an independent client application developed by Chris Watson
-            (“I”, “me”). This policy explains exactly what the app does — and does not —
-            do with your data. The short version: <strong>the app collects nothing and
-            sends nothing to me.</strong>
-          </p>
+      <!-- FINAL CTA (with SFW starter list) -->
+      <section class="bb-getcta" id="get">
+        <div class="bb-getcta-inner" data-reveal>
+          <img src="/images/booru/icon-square.png" alt="" class="bb-getcta-icon" width="80" height="80" aria-hidden="true" />
+          <h2 class="bb-h2 bb-getcta-title">Bring every board home.</h2>
+          <p class="bb-getcta-sub">Now in beta on iPhone via TestFlight. Android comes later, and the source is open today.</p>
+          <div class="bb-cta bb-cta--center">
+            <a class="bb-badge bb-badge--apple" href={testflightUrl} target="_blank" rel="noopener noreferrer" aria-label="Join the TestFlight beta for iPhone">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M16.5 1.6c0 1.2-.5 2.4-1.3 3.3-.9 1-2.3 1.7-3.5 1.6-.1-1.2.5-2.4 1.3-3.2.9-1 2.4-1.7 3.5-1.7ZM20.3 17c-.6 1.4-.9 2-1.7 3.2-1 1.7-2.5 3.8-4.3 3.8-1.6 0-2-1-4.2-1-2.1 0-2.6 1-4.1 1-1.8 0-3.2-1.9-4.3-3.6C-.4 17 .5 11 3.7 9.4c1.3-.7 2.6-.6 3.8-.6 1.3 0 2.1.7 3.4.7 1.2 0 2-.7 3.5-.7 1.1 0 2.3.3 3.2 1-2.8 1.6-2.4 5.7.7 7.2Z"/></svg>
+              <span class="bb-badge-stack"><small>iPhone beta on</small><strong>TestFlight</strong></span>
+            </a>
+            <a class="bb-badge bb-badge--ghost" href={githubUrl} target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 1C5.92 1 1 5.92 1 12c0 4.87 3.15 8.99 7.52 10.45.55.1.75-.24.75-.53v-1.85c-3.06.67-3.71-1.48-3.71-1.48-.5-1.27-1.22-1.61-1.22-1.61-1-.68.08-.67.08-.67 1.1.08 1.69 1.14 1.69 1.14.98 1.69 2.58 1.2 3.21.92.1-.71.39-1.2.7-1.48-2.44-.28-5.01-1.22-5.01-5.44 0-1.2.43-2.18 1.13-2.95-.11-.28-.49-1.4.11-2.92 0 0 .92-.3 3.02 1.13a10.4 10.4 0 0 1 5.5 0c2.1-1.43 3.02-1.13 3.02-1.13.6 1.52.22 2.64.11 2.92.7.77 1.13 1.75 1.13 2.95 0 4.23-2.58 5.16-5.03 5.43.4.34.75 1.01.75 2.04v3.03c0 .29.2.64.76.53A11.01 11.01 0 0 0 23 12c0-6.08-4.92-11-11-11Z"/></svg>
+              <span class="bb-badge-stack"><strong>View on GitHub</strong></span>
+            </a>
+          </div>
 
-          <h3>No data collection</h3>
-          <p>
-            Booru Browser contains no analytics, no advertising, no crash-reporting SDKs,
-            and no telemetry of any kind. I operate no servers and never receive your
-            usage, identity, search terms, or browsing activity.
-          </p>
-
-          <h3>Data stored on your device</h3>
-          <p>Everything the app saves stays on your device and never leaves it:</p>
-          <ul>
-            <li><strong>Server list &amp; settings</strong> — the booru sites you add, stored in local app storage.</li>
-            <li><strong>Credentials</strong> — any API keys, usernames, or cookies you enter are stored in the operating-system secure keychain (iOS Keychain / Android Keystore), never in plain storage.</li>
-            <li><strong>Favorites &amp; downloads</strong> — posts you save and media you export, kept in the app’s local storage and your photo library.</li>
-            <li><strong>Image cache</strong> — temporary copies of images to make browsing fast.</li>
-          </ul>
-          <p>
-            You can erase all of this at any time by clearing the cache and downloads in
-            Settings, or by deleting the app.
-          </p>
-
-          <h3>Connections to third-party sites</h3>
-          <p>
-            Booru Browser connects directly from your device to the booru servers
-            <em>you</em> choose to add. The app ships with no default server list. When you
-            search or view images, your device sends requests (including any credentials
-            you configured for that server) straight to those third-party sites. Those
-            services are operated by others and have their own privacy practices, which I
-            neither control nor monitor. Please review the policies of any site you connect to.
-          </p>
-
-          <h3>Permissions</h3>
-          <p>The app requests device permissions only for features you explicitly invoke:</p>
-          <ul>
-            <li><strong>Camera</strong> — used solely to scan a QR code when importing a server list.</li>
-            <li><strong>Photos / Media library</strong> — used solely to save images you choose to download.</li>
-          </ul>
-          <p>You can decline these and the rest of the app continues to work.</p>
-
-          <h3>Mature content &amp; age</h3>
-          <p>
-            Booru Browser is rated 17+. Mature content is filtered out by default and
-            remains locked behind an explicit age confirmation that you must enable
-            yourself. The app is not directed to children.
-          </p>
-
-          <h3>Changes</h3>
-          <p>
-            If this policy changes, the updated version will be posted on this page with a
-            revised “last updated” date.
-          </p>
-
-          <h3>Contact</h3>
-          <p>
-            Questions about this policy? Email
-            <a href="mailto:chris@watzon.tech">chris@watzon.tech</a>.
-          </p>
+          <div class="bb-starter">
+            <div class="bb-qr">
+              <img src="/booru-browser/servers-qr.svg" alt="QR code that imports the SFW starter server list into Booru Browser" width="120" height="120" />
+            </div>
+            <div class="bb-starter-side">
+              <p class="bb-starter-lede">
+                New here? The app ships with no servers. Scan to import a small, strictly-SFW
+                starter list, or grab the file.
+              </p>
+              <ul class="bb-starter-marks" aria-label="Starter servers">
+                {starterServers.map((s) => (
+                  <li class="bb-starter-chip" style={`--c:${s.hue}`}>
+                    <span class="bb-mark bb-mark--sm" style={`--c:${s.hue}`}><span>{s.mark}</span></span>
+                    {s.name}
+                  </li>
+                ))}
+              </ul>
+              <a class="bb-starter-dl" href={listUrl} download="servers.booruconfig.json">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+                Download the list
+              </a>
+            </div>
+          </div>
         </div>
       </section>
+
     </main>
 
     <footer class="bb-footer">
-      <a href="/" class="bb-back" data-astro-reload>← Back to watzon.tech</a>
+      <a href="/" class="bb-back" data-astro-reload>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        Back to watzon.tech
+      </a>
+      <nav class="bb-footer-nav">
+        <a href="/booru-browser/privacy">Privacy</a>
+        <a href="/booru-browser/terms">Terms</a>
+      </nav>
       <span class="bb-footer-meta">© {new Date().getFullYear()} Chris Watson</span>
     </footer>
 
@@ -309,24 +514,31 @@ const icons: Record<string, string> = {
     <style is:global>
       /* ============================================================
          BOORU BROWSER — dark-only theme takeover
-         Self-contained; does not import the site's global tokens.
+         Self-contained; palette + display face match the real app
+         (deep navy #010C2E, pink/violet brand gradient, Baloo 2).
          ============================================================ */
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
       :root {
-        --bb-bg: #06081a;
-        --bb-bg-2: #0b0e26;
-        --bb-text: #e9eaf6;
-        --bb-muted: #9498c2;
-        --bb-faint: #6b6f99;
+        --bb-bg: #010c2e;
+        --bb-bg-2: #061238;
+        --bb-text: #eef0fb;
+        --bb-muted: #9aa0c8;
+        --bb-faint: #6a6f9c;
         --bb-border: rgba(255, 255, 255, 0.09);
-        --bb-surface: rgba(255, 255, 255, 0.035);
-        --bb-pink: #ec4899;
-        --bb-purple: #a855f7;
-        --bb-cyan: #38bdf8;
-        --bb-display: "Bricolage Grotesque", system-ui, sans-serif;
+        --bb-surface: rgba(255, 255, 255, 0.04);
+        --bb-surface-2: rgba(255, 255, 255, 0.06);
+        --bb-pink: #ff5fb0;
+        --bb-violet: #9b6bff;
+        --bb-cyan: #3fc9ff;
+        --bb-gold: #ffb23e;
+        --bb-grad: linear-gradient(135deg, #ff5fb0, #9b6bff);
+        --bb-display: "Baloo 2", "SF Pro Rounded", system-ui, sans-serif;
         --bb-body: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
         --bb-ease: cubic-bezier(0.16, 1, 0.3, 1);
+        /* Radius lock: badges/buttons pill, cards 20px, tiles 12px, marks 14px */
+        --r-card: 20px;
+        --r-tile: 12px;
       }
 
       html.bb-root { background: var(--bb-bg); scroll-behavior: smooth; }
@@ -334,7 +546,7 @@ const icons: Record<string, string> = {
       body.bb {
         font-family: var(--bb-body);
         background:
-          radial-gradient(120% 80% at 50% -10%, #141a45 0%, var(--bb-bg) 55%),
+          radial-gradient(125% 75% at 50% -12%, #122163 0%, rgba(18, 33, 99, 0) 55%),
           var(--bb-bg);
         color: var(--bb-text);
         line-height: 1.6;
@@ -342,190 +554,338 @@ const icons: Record<string, string> = {
         -webkit-font-smoothing: antialiased;
         overflow-x: hidden;
         position: relative;
-        min-height: 100vh;
+        min-height: 100dvh;
       }
 
       body.bb a { color: inherit; text-decoration: none; }
       body.bb ul { list-style: none; }
-      body.bb ::selection { background: rgba(236, 72, 153, 0.35); }
-      body.bb :focus-visible { outline: 2px solid var(--bb-pink); outline-offset: 3px; border-radius: 4px; }
+      body.bb ::selection { background: rgba(255, 95, 176, 0.35); }
+      body.bb :focus-visible { outline: 2px solid var(--bb-pink); outline-offset: 3px; border-radius: 6px; }
 
-      /* ---------- Aurora backdrop ---------- */
-      .bb-aurora {
-        position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+      /* ---------- Backdrop ---------- */
+      .bb-backdrop { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+      .bb-glow {
+        position: absolute; top: -10%; right: -6%; width: 60vw; height: 60vw;
+        max-width: 760px; max-height: 760px; border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 95, 176, 0.28), rgba(155, 107, 255, 0.14) 42%, transparent 70%);
+        filter: blur(60px);
       }
-      .bb-blob {
-        position: absolute; width: 60vw; height: 60vw; max-width: 760px; max-height: 760px;
-        border-radius: 50%; filter: blur(90px); opacity: 0.5; mix-blend-mode: screen;
-        will-change: transform;
+      .bb-grain {
+        position: absolute; inset: 0;
+        background-image: radial-gradient(rgba(255, 255, 255, 0.5) 0.5px, transparent 0.5px);
+        background-size: 4px 4px; opacity: 0.02;
       }
-      .bb-blob--pink { background: radial-gradient(circle, #ec4899, transparent 65%); top: -12%; left: -8%; animation: bb-drift-1 22s var(--bb-ease) infinite alternate; }
-      .bb-blob--purple { background: radial-gradient(circle, #7c3aed, transparent 65%); top: 18%; right: -14%; animation: bb-drift-2 26s var(--bb-ease) infinite alternate; }
-      .bb-blob--cyan { background: radial-gradient(circle, #0ea5e9, transparent 65%); bottom: -18%; left: 22%; opacity: 0.35; animation: bb-drift-3 30s var(--bb-ease) infinite alternate; }
-      .bb-grain { position: absolute; inset: -200%; background-image: radial-gradient(rgba(255,255,255,0.5) 0.5px, transparent 0.5px); background-size: 4px 4px; opacity: 0.02; }
-
-      @keyframes bb-drift-1 { to { transform: translate3d(12vw, 8vh, 0) scale(1.15); } }
-      @keyframes bb-drift-2 { to { transform: translate3d(-10vw, 12vh, 0) scale(1.1); } }
-      @keyframes bb-drift-3 { to { transform: translate3d(8vw, -10vh, 0) scale(1.2); } }
 
       /* ---------- Layout shell ---------- */
       main, .bb-topbar, .bb-footer { position: relative; z-index: 1; }
-      .bb-section, .bb-hero, .bb-topbar, .bb-footer {
+      .bb-section, .bb-hero, .bb-topbar, .bb-footer, .bb-trust, .bb-getcta-inner {
         width: 100%; max-width: 1200px; margin: 0 auto; padding-left: 1.5rem; padding-right: 1.5rem;
       }
 
       /* ---------- Top bar ---------- */
       .bb-topbar {
         display: flex; align-items: center; justify-content: space-between;
-        padding-top: 1.5rem; padding-bottom: 1.5rem; font-size: 0.9rem; font-weight: 500;
+        padding-top: 1.4rem; padding-bottom: 1.4rem; font-size: 0.9rem; font-weight: 500;
       }
       .bb-back { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--bb-muted); transition: color 0.2s; }
       .bb-back:hover { color: var(--bb-text); }
       .bb-back svg { transition: transform 0.25s var(--bb-ease); }
       .bb-back:hover svg { transform: translateX(-3px); }
-      .bb-topbar-link { color: var(--bb-muted); transition: color 0.2s; }
+      .bb-topbar-link { display: inline-flex; align-items: center; gap: 0.45rem; color: var(--bb-muted); transition: color 0.2s; }
       .bb-topbar-link:hover { color: var(--bb-cyan); }
 
       /* ---------- Hero ---------- */
       .bb-hero {
-        display: grid; grid-template-columns: 1.1fr 0.9fr; align-items: center; gap: 2rem;
-        padding-top: clamp(2rem, 6vw, 5rem); padding-bottom: clamp(3rem, 8vw, 6rem);
+        display: grid; grid-template-columns: 1.05fr 0.95fr; align-items: center; gap: 2.5rem;
+        padding-top: clamp(1.5rem, 4vw, 3rem); padding-bottom: clamp(3rem, 8vw, 5.5rem);
+        min-height: min(86dvh, 760px);
       }
-      .bb-eyebrow {
-        text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.78rem; font-weight: 600;
-        color: var(--bb-cyan); margin-bottom: 1.25rem;
-      }
+      .bb-lockup { display: inline-flex; align-items: center; gap: 0.8rem; margin-bottom: 1.6rem; }
+      .bb-lockup-icon { width: 52px; height: 52px; border-radius: 14px; box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.7); }
+      .bb-lockup-text { display: flex; flex-direction: column; line-height: 1.15; }
+      .bb-lockup-name { font-family: var(--bb-display); font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; }
+      .bb-lockup-sub { font-size: 0.8rem; color: var(--bb-faint); }
+
       .bb-title {
-        font-family: var(--bb-display); font-weight: 800; line-height: 0.95; letter-spacing: -0.035em;
-        font-size: clamp(3rem, 8vw, 5.75rem); margin-bottom: 1.5rem;
-        background: linear-gradient(110deg, #ffffff 10%, #f9a8d4 35%, #c4b5fd 60%, #7dd3fc 85%);
-        background-size: 220% auto; -webkit-background-clip: text; background-clip: text; color: transparent;
-        animation: bb-shimmer 8s linear infinite;
+        font-family: var(--bb-display); font-weight: 800; line-height: 1.0; letter-spacing: -0.03em;
+        font-size: clamp(2.6rem, 6.4vw, 4.7rem); margin-bottom: 1.4rem; color: var(--bb-text);
       }
-      @keyframes bb-shimmer { to { background-position: 220% center; } }
-      .bb-lede { font-size: clamp(1.1rem, 1.6vw, 1.3rem); color: var(--bb-muted); max-width: 36ch; margin-bottom: 2rem; }
-      .bb-cta { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
-      .bb-rating { margin-top: 1.25rem; font-size: 0.82rem; color: var(--bb-faint); }
+      .bb-lede { font-size: clamp(1.08rem, 1.5vw, 1.28rem); color: var(--bb-muted); max-width: 34ch; margin-bottom: 2rem; }
 
-      .bb-btn {
-        display: inline-flex; align-items: center; gap: 0.65rem; font-weight: 600;
-        padding: 0.85rem 1.4rem; border-radius: 14px; font-size: 0.95rem;
-        transition: transform 0.25s var(--bb-ease), box-shadow 0.25s var(--bb-ease), background 0.25s, border-color 0.25s;
-        border: 1px solid transparent; line-height: 1.1;
-      }
-      .bb-btn-stack { display: flex; flex-direction: column; align-items: flex-start; }
-      .bb-btn-stack small { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.75; }
-      .bb-btn--primary {
-        background: linear-gradient(135deg, #ec4899, #a855f7); color: #fff;
-        box-shadow: 0 10px 30px -10px rgba(168, 85, 247, 0.7);
-      }
-      .bb-btn--primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px -12px rgba(236, 72, 153, 0.8); }
-      .bb-btn--ghost { background: var(--bb-surface); border-color: var(--bb-border); color: var(--bb-text); }
-      .bb-btn--ghost:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); }
+      .bb-cta { display: flex; flex-wrap: wrap; gap: 0.85rem; align-items: center; }
+      .bb-cta--center { justify-content: center; }
 
-      /* ---------- Hero art ---------- */
-      .bb-hero-art { position: relative; display: grid; place-items: center; }
-      .bb-app-icon {
-        width: clamp(200px, 26vw, 320px); height: auto; position: relative; z-index: 1;
-        filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.55));
-        animation: bb-float 6s ease-in-out infinite;
+      /* Store badges */
+      .bb-badge {
+        display: inline-flex; align-items: center; gap: 0.6rem;
+        padding: 0.7rem 1.15rem; border-radius: 999px; line-height: 1;
+        border: 1px solid var(--bb-border); background: var(--bb-surface-2); color: var(--bb-text);
+        transition: transform 0.25s var(--bb-ease), border-color 0.25s, background 0.25s, box-shadow 0.25s;
       }
-      .bb-icon-halo {
-        position: absolute; width: 115%; aspect-ratio: 1; border-radius: 50%;
-        background: radial-gradient(circle, rgba(236, 72, 153, 0.45), rgba(56, 189, 248, 0.18) 45%, transparent 70%);
-        filter: blur(40px); animation: bb-pulse 6s ease-in-out infinite;
+      .bb-badge svg { flex-shrink: 0; }
+      .bb-badge-stack { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
+      .bb-badge-stack small { font-size: 0.62rem; font-weight: 500; letter-spacing: 0.04em; color: var(--bb-muted); text-transform: uppercase; }
+      .bb-badge-stack strong { font-family: var(--bb-display); font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; }
+      .bb-badge--apple {
+        background: var(--bb-grad); border-color: transparent; color: #fff;
+        box-shadow: 0 12px 34px -12px rgba(255, 95, 176, 0.7);
       }
-      @keyframes bb-float { 50% { transform: translateY(-16px); } }
-      @keyframes bb-pulse { 0%, 100% { opacity: 0.7; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
+      .bb-badge--apple .bb-badge-stack small { color: rgba(255, 255, 255, 0.82); }
+      .bb-badge:hover { transform: translateY(-2px); }
+      .bb-badge--apple:hover { box-shadow: 0 18px 44px -12px rgba(255, 95, 176, 0.85); }
+      .bb-badge--ghost:hover { border-color: rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.08); }
+      .bb-badge:active { transform: translateY(0) scale(0.98); }
+
+      /* ---------- Hero stage (phone + floaters) ---------- */
+      .bb-hero-stage { position: relative; display: grid; place-items: center; min-height: 540px; }
+      .bb-floater {
+        position: absolute; width: clamp(110px, 13vw, 168px); aspect-ratio: 3 / 4;
+        border-radius: var(--r-tile); background-size: cover; background-position: center;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.7); z-index: 0; opacity: 0.92;
+      }
+      .bb-floater--1 { top: 4%; left: 0; transform: rotate(-7deg); animation: bb-float-a 8s ease-in-out infinite; }
+      .bb-floater--2 { bottom: 6%; right: -2%; transform: rotate(8deg); animation: bb-float-b 9s ease-in-out infinite; }
+      @keyframes bb-float-a { 50% { transform: rotate(-7deg) translateY(-16px); } }
+      @keyframes bb-float-b { 50% { transform: rotate(8deg) translateY(-20px); } }
+
+      /* ---------- Phone mockup ---------- */
+      .bb-phone {
+        position: relative; z-index: 1; width: 100%; max-width: 300px; aspect-ratio: 9 / 19.5;
+        border-radius: 38px; padding: 9px;
+        background: linear-gradient(165deg, #1a2356, #060c26);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.85), inset 0 0 0 1.5px rgba(255, 255, 255, 0.05);
+      }
+      .bb-phone--hero { animation: bb-phone-float 7s ease-in-out infinite; }
+      @keyframes bb-phone-float { 50% { transform: translateY(-12px); } }
+      /* In-phone chrome scales with the phone's own width (container units),
+         so the header and dock stay correctly proportioned on the large hero
+         phone and the smaller showcase phones alike. */
+      .bb-screen {
+        position: relative; width: 100%; height: 100%; border-radius: 30px; overflow: hidden;
+        background: #0a1130; container-type: inline-size;
+      }
+
+      /* App header (overlays the grid, translucent like the real app).
+         Sizes use container units so the chrome stays in proportion on the
+         large hero phone and the smaller showcase phones alike. */
+      .bb-apphead {
+        position: absolute; top: 0; left: 0; right: 0; z-index: 3;
+        padding: 2.8cqw 3.4cqw 4cqw;
+        background: linear-gradient(180deg, rgba(7, 12, 36, 0.96) 45%, rgba(7, 12, 36, 0));
+        -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+      }
+      .bb-statusbar {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 0 2cqw; margin-bottom: 6cqw;
+        font-weight: 700; color: var(--bb-text);
+      }
+      .bb-sb-time { font-size: 11px; font-size: 3.4cqw; letter-spacing: 0.02em; }
+      /* Dynamic Island — the top safe-area pill */
+      .bb-island { width: 26cqw; height: 6.4cqw; border-radius: 999px; background: #05060f; flex-shrink: 0; }
+      .bb-statusbar-r { display: inline-flex; gap: 1.7cqw; align-items: center; color: var(--bb-text); }
+      .bb-statusbar-r .bb-sb { height: 3cqw; width: auto; fill: currentColor; }
+      .bb-apphead-row { display: flex; align-items: center; justify-content: space-between; }
+      .bb-apphead-title { font-family: var(--bb-display); font-weight: 800; font-size: 19px; font-size: 7.2cqw; letter-spacing: -0.01em; color: var(--bb-text); }
+      .bb-apphead-tools { display: inline-flex; gap: 3.2cqw; color: var(--bb-pink); }
+      .bb-apphead-tools svg { width: 5.8cqw; height: 5.8cqw; }
+
+      /* Gallery wall — edge-to-edge masonry, sharp corners (matches the app) */
+      .bb-galwall {
+        position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 3px; overflow: hidden;
+      }
+      .bb-galcol { display: flex; flex-direction: column; gap: 3px; will-change: transform; }
+      .bb-galcol--up { animation: bb-scroll 26s linear infinite; }
+      .bb-galcol--up2 { animation: bb-scroll 32s linear infinite; }
+      @keyframes bb-scroll { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+      .bb-tile {
+        display: block; width: 100%; background-size: cover; background-position: center;
+        background-color: color-mix(in srgb, var(--c) 26%, #0a1130);
+      }
+      /* Compact even grid */
+      .bb-galgrid { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 3px; align-content: start; overflow: hidden; }
+      .bb-galgrid span { aspect-ratio: 4 / 5; background-size: cover; background-position: center; background-color: #141a37; }
+      /* Single column */
+      .bb-galsingle { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 3px; overflow: hidden; }
+      .bb-galsingle span { width: 100%; aspect-ratio: 5 / 6; flex-shrink: 0; background-size: cover; background-position: center; background-color: #141a37; }
+
+      /* Floating dock — capsule [Browse · favorites · settings] + detached search */
+      .bb-dock {
+        position: absolute; left: 0; right: 0; bottom: 3.4cqw; z-index: 4;
+        display: flex; align-items: center; justify-content: space-between; gap: 1.8cqw; padding: 0 3.2cqw;
+      }
+      .bb-dock-bar {
+        flex: 1; min-width: 0;
+        display: flex; align-items: center; justify-content: space-between; gap: 1.4cqw; padding: 1.5cqw 4cqw 1.5cqw 1.5cqw; border-radius: 999px;
+        background: rgba(12, 18, 44, 0.55); border: 1px solid rgba(255, 255, 255, 0.16);
+        -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+        box-shadow: 0 2.5cqw 6cqw -2.5cqw rgba(0, 0, 0, 0.7);
+      }
+      .bb-dock-browse {
+        flex: 0 1 auto; display: inline-flex; align-items: center; justify-content: center; gap: 1.6cqw; padding: 2cqw 7cqw; border-radius: 999px;
+        background: linear-gradient(90deg, #ff5fb0, #9b6bff); color: #fff; font-family: var(--bb-display); font-weight: 700; font-size: 13px; font-size: 4.4cqw;
+        box-shadow: 0 1.6cqw 3.6cqw -1.6cqw rgba(255, 95, 176, 0.6);
+      }
+      .bb-dock-browse svg { width: 4.6cqw; height: 4.6cqw; flex-shrink: 0; }
+      .bb-dock-ic { color: var(--bb-faint); display: inline-grid; place-items: center; }
+      .bb-dock-ic svg { width: 5.4cqw; height: 5.4cqw; }
+      .bb-dock-search {
+        width: 12cqw; height: 12cqw; border-radius: 50%; display: inline-grid; place-items: center; flex-shrink: 0; color: #fff;
+        background: linear-gradient(135deg, rgba(255, 95, 176, 0.72), rgba(155, 107, 255, 0.9));
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+        box-shadow: 0 2cqw 5cqw -2cqw rgba(155, 107, 255, 0.8);
+      }
+      .bb-dock-search svg { width: 5.6cqw; height: 5.6cqw; }
+
+      /* Board switcher overlay (long-press the search button in the real app) */
+      .bb-switch-scrim { position: absolute; inset: 0; z-index: 2; background: rgba(2, 6, 22, 0.55); }
+      /* Pops up from the search button: anchored bottom-right, stacks upward. */
+      .bb-switcher {
+        position: absolute; right: 2.4cqw; top: 7cqw; bottom: 22.5cqw; z-index: 4;
+        display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 1.8cqw;
+      }
+      .bb-swpill {
+        padding: 2.2cqw 4cqw; border-radius: 999px; white-space: nowrap;
+        font-family: var(--bb-display); font-weight: 700; font-size: 12px; font-size: 3.7cqw; color: #fff;
+        background: rgba(22, 28, 58, 0.85); border: 1px solid rgba(255, 255, 255, 0.1);
+        -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+      }
+      .bb-swpill--current { background: var(--bb-grad); border-color: transparent; box-shadow: 0 1.6cqw 4cqw -1.6cqw rgba(255, 95, 176, 0.7); }
+      .bb-swpill--active { background: rgba(255, 178, 62, 0.2); border-color: rgba(255, 178, 62, 0.6); color: #ffd591; }
+
+      /* ---------- Trust strip ---------- */
+      .bb-trust { padding-top: clamp(1rem, 3vw, 2rem); }
+      .bb-trust-grid {
+        display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+        background: var(--bb-border); border: 1px solid var(--bb-border); border-radius: var(--r-card); overflow: hidden;
+      }
+      .bb-trust-item {
+        display: flex; flex-direction: column; gap: 0.3rem; padding: 1.4rem 1.5rem;
+        background: var(--bb-bg);
+      }
+      .bb-trust-ico {
+        display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 10px;
+        color: var(--c); background: color-mix(in srgb, var(--c) 15%, transparent);
+        margin-bottom: 0.6rem;
+      }
+      .bb-trust-item strong { font-family: var(--bb-display); font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; color: var(--bb-text); line-height: 1.2; }
+      .bb-trust-item small { font-size: 0.85rem; color: var(--bb-muted); line-height: 1.45; }
 
       /* ---------- Sections ---------- */
-      .bb-section { padding-top: clamp(3.5rem, 8vw, 7rem); padding-bottom: clamp(1rem, 2vw, 1.5rem); }
+      .bb-section { padding-top: clamp(3.5rem, 8vw, 7rem); padding-bottom: clamp(0.5rem, 2vw, 1rem); }
       .bb-section--tight { padding-top: clamp(2.5rem, 5vw, 4rem); }
-      .bb-section-head { margin-bottom: clamp(2rem, 4vw, 3rem); max-width: 40ch; }
+      .bb-section-head { margin-bottom: clamp(2rem, 4vw, 3rem); max-width: 42ch; }
       .bb-kicker {
         display: inline-block; text-transform: uppercase; letter-spacing: 0.16em; font-size: 0.74rem;
         font-weight: 600; color: var(--bb-pink); margin-bottom: 0.85rem;
       }
       .bb-h2 {
-        font-family: var(--bb-display); font-weight: 700; letter-spacing: -0.025em; line-height: 1.08;
-        font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+        font-family: var(--bb-display); font-weight: 700; letter-spacing: -0.02em; line-height: 1.08;
+        font-size: clamp(1.8rem, 3.6vw, 2.7rem);
       }
-      .bb-updated { color: var(--bb-faint); font-size: 0.85rem; margin-top: 0.75rem; }
+      .bb-updated { color: var(--bb-faint); font-size: 0.85rem; margin-top: 0.65rem; }
 
-      /* ---------- Features ---------- */
-      .bb-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; }
-      .bb-feature {
-        position: relative; padding: 1.75rem; border-radius: 18px;
+      /* ---------- Feature bento ---------- */
+      .bb-bento {
+        display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem;
+        grid-auto-rows: minmax(150px, auto);
+      }
+      .bb-cell {
+        position: relative; padding: 1.6rem; border-radius: var(--r-card);
         background: var(--bb-surface); border: 1px solid var(--bb-border); overflow: hidden;
         transition: transform 0.35s var(--bb-ease), border-color 0.35s, background 0.35s;
       }
-      .bb-feature::before {
-        content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
-        background: linear-gradient(135deg, var(--accent), transparent 55%);
-        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-        -webkit-mask-composite: xor; mask-composite: exclude;
-        opacity: 0; transition: opacity 0.35s;
-      }
-      .bb-feature:hover { transform: translateY(-5px); background: rgba(255,255,255,0.06); }
-      .bb-feature:hover::before { opacity: 1; }
-      .bb-feature-icon {
-        display: inline-grid; place-items: center; width: 46px; height: 46px; border-radius: 12px;
-        color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, transparent);
-        margin-bottom: 1.1rem;
-      }
-      .bb-feature-title { font-family: var(--bb-display); font-size: 1.2rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 0.5rem; }
-      .bb-feature-body { color: var(--bb-muted); font-size: 0.95rem; line-height: 1.6; }
+      .bb-cell:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--c, var(--bb-pink)) 45%, transparent); background: var(--bb-surface-2); }
+      .bb-cell--sources { grid-column: span 3; grid-row: span 2; display: flex; flex-direction: column; justify-content: space-between; gap: 1.5rem; }
+      .bb-cell--private { grid-column: span 3; }
+      .bb-cell--speed { grid-column: span 3; display: flex; gap: 1.25rem; align-items: stretch; }
+      .bb-cell--speed .bb-cell-body { flex: 1; }
+      .bb-cell--sfw { grid-column: span 2; }
+      .bb-cell--search { grid-column: span 2; }
+      .bb-cell--favs { grid-column: span 2; }
 
-      /* ---------- Screenshots ---------- */
-      .bb-shots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
-      .bb-phone { display: flex; flex-direction: column; align-items: center; gap: 0.9rem; }
-      .bb-phone-frame {
-        position: relative; width: 100%; aspect-ratio: 9 / 19.5; border-radius: 30px;
-        background: linear-gradient(160deg, #15173a, #0a0c20); padding: 8px;
-        border: 1px solid var(--bb-border);
-        box-shadow: 0 24px 50px -22px rgba(0,0,0,0.8), inset 0 0 0 1.5px rgba(255,255,255,0.04);
-        transition: transform 0.4s var(--bb-ease), box-shadow 0.4s;
-        overflow: hidden;
+      .bb-cell-ico {
+        display: inline-grid; place-items: center; width: 42px; height: 42px; border-radius: 12px;
+        color: var(--c, var(--bb-pink)); background: color-mix(in srgb, var(--c, var(--bb-pink)) 16%, transparent);
+        margin-bottom: 1rem;
       }
-      .bb-phone:hover .bb-phone-frame { transform: translateY(-8px); box-shadow: 0 34px 60px -22px color-mix(in srgb, var(--tone) 55%, black); }
-      .bb-phone-notch {
-        position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 3;
-        width: 34%; height: 16px; background: #05060f; border-radius: 0 0 10px 10px;
+      .bb-cell-title { font-family: var(--bb-display); font-size: 1.2rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.45rem; }
+      .bb-cell--sources .bb-cell-title { font-size: 1.45rem; }
+      .bb-cell-text { color: var(--bb-muted); font-size: 0.92rem; line-height: 1.55; }
+
+      .bb-sourcemarks { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+      .bb-mark {
+        width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center;
+        font-family: var(--bb-display); font-weight: 700; font-size: 0.95rem;
+        color: var(--c); background: color-mix(in srgb, var(--c) 14%, transparent);
+        border: 1px solid color-mix(in srgb, var(--c) 38%, transparent);
+        transition: transform 0.25s var(--bb-ease);
       }
-      .bb-phone-placeholder {
-        position: absolute; inset: 8px; border-radius: 23px; display: grid; place-items: center;
-        color: color-mix(in srgb, var(--tone) 75%, white 10%);
-        background:
-          radial-gradient(80% 60% at 50% 25%, color-mix(in srgb, var(--tone) 28%, transparent), transparent 70%),
-          repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 10px, transparent 10px 20px),
-          #0c0e22;
-      }
-      .bb-phone-placeholder svg { opacity: 0.55; }
-      .bb-phone-shot { position: absolute; inset: 8px; width: calc(100% - 16px); height: calc(100% - 16px); object-fit: cover; border-radius: 23px; }
-      .bb-phone-cap { font-size: 0.85rem; color: var(--bb-muted); font-weight: 500; }
+      .bb-cell--sources:hover .bb-mark { transform: translateY(-2px); }
+
+      .bb-minigrid { display: grid; grid-template-columns: repeat(2, 56px); grid-auto-rows: 56px; gap: 5px; align-content: center; flex-shrink: 0; }
+      .bb-minigrid span { border-radius: 9px; background-size: cover; background-position: center; background-color: rgba(255, 255, 255, 0.05); }
+      .bb-minigrid span:nth-child(n+5) { display: none; }
+
+      /* ---------- Screens showcase ---------- */
+      .bb-showcase { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; align-items: end; }
+      .bb-show { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+      .bb-show .bb-phone { max-width: 230px; transition: transform 0.4s var(--bb-ease); }
+      .bb-show--a, .bb-show--c { transform: translateY(-1.5rem); }
+      .bb-show:hover .bb-phone { transform: translateY(-8px); }
+      .bb-show figcaption { font-size: 0.85rem; color: var(--bb-muted); font-weight: 500; }
 
       /* ---------- Tech strip ---------- */
+      .bb-tech-label { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--bb-faint); margin-bottom: 1.1rem; }
       .bb-stack { display: flex; flex-wrap: wrap; gap: 0.6rem; }
       .bb-chip {
         font-size: 0.82rem; font-weight: 500; color: var(--bb-text);
         padding: 0.45rem 0.9rem; border-radius: 999px;
         background: var(--bb-surface); border: 1px solid var(--bb-border);
-        transition: border-color 0.25s, color 0.25s;
+        transition: border-color 0.25s, color 0.25s, background 0.25s;
       }
-      .bb-chip:hover { border-color: rgba(255,255,255,0.25); color: #fff; }
+      .bb-chip:hover { border-color: rgba(255, 255, 255, 0.25); color: #fff; background: var(--bb-surface-2); }
 
-      /* ---------- Privacy prose ---------- */
-      .bb-privacy { border-top: 1px solid var(--bb-border); margin-top: clamp(3rem, 6vw, 5rem); }
-      .bb-prose { max-width: 70ch; color: var(--bb-muted); }
-      .bb-prose > * + * { margin-top: 1.2rem; }
-      .bb-prose h3 { font-family: var(--bb-display); color: var(--bb-text); font-size: 1.25rem; font-weight: 600; letter-spacing: -0.015em; margin-top: 2.4rem; }
-      .bb-prose strong { color: var(--bb-text); font-weight: 600; }
-      .bb-prose em { font-style: italic; }
-      .bb-prose ul { display: flex; flex-direction: column; gap: 0.6rem; padding-left: 1.1rem; }
-      .bb-prose li { position: relative; padding-left: 1rem; }
-      .bb-prose li::before { content: ""; position: absolute; left: 0; top: 0.65em; width: 5px; height: 5px; border-radius: 50%; background: var(--bb-pink); }
-      .bb-prose a { color: var(--bb-cyan); text-decoration: underline; text-underline-offset: 3px; }
-      .bb-prose a:hover { color: #7dd3fc; }
+      /* ---------- Starter list (secondary block inside the final CTA) ---------- */
+      .bb-mark--sm { width: 30px; height: 30px; border-radius: 50%; font-size: 0.72rem; }
+      .bb-starter {
+        display: flex; align-items: center; justify-content: center; gap: 1.5rem;
+        max-width: 540px; margin: clamp(2rem, 4vw, 2.75rem) auto 0; padding-top: clamp(2rem, 4vw, 2.75rem);
+        border-top: 1px solid var(--bb-border); text-align: left;
+      }
+      .bb-qr {
+        flex-shrink: 0; background: #fff; border-radius: 14px; padding: 6px; line-height: 0;
+        box-shadow: 0 14px 36px -18px rgba(0, 0, 0, 0.7);
+      }
+      .bb-qr img { display: block; width: 132px; height: auto; }
+      .bb-starter-side { min-width: 0; }
+      .bb-starter-lede { color: var(--bb-muted); font-size: 0.92rem; line-height: 1.5; margin-bottom: 0.85rem; }
+      .bb-starter-marks { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+      .bb-starter-chip {
+        display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.25rem 0.7rem 0.25rem 0.3rem;
+        border-radius: 999px; font-size: 0.82rem; font-weight: 500; color: var(--bb-text);
+        background: var(--bb-surface-2); border: 1px solid var(--bb-border);
+      }
+      .bb-starter-dl {
+        display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; font-weight: 500;
+        color: var(--bb-cyan); transition: color 0.2s;
+      }
+      .bb-starter-dl:hover { color: #7de0ff; }
+
+      /* ---------- Final CTA ---------- */
+      .bb-getcta { padding-top: clamp(3.5rem, 8vw, 6.5rem); }
+      .bb-getcta-inner {
+        position: relative; text-align: center; padding: clamp(2.5rem, 5vw, 4rem) 1.5rem;
+        border-radius: 28px; border: 1px solid var(--bb-border); overflow: hidden;
+        background:
+          radial-gradient(90% 130% at 50% -20%, rgba(255, 95, 176, 0.16), transparent 60%),
+          var(--bb-surface);
+      }
+      .bb-getcta-icon { width: 72px; height: 72px; border-radius: 18px; margin: 0 auto 1.2rem; box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.7); }
+      .bb-getcta-title { margin-bottom: 0.6rem; }
+      .bb-getcta-sub { color: var(--bb-muted); margin-bottom: 1.8rem; }
 
       /* ---------- Footer ---------- */
       .bb-footer {
@@ -533,38 +893,56 @@ const icons: Record<string, string> = {
         padding-top: 2.5rem; padding-bottom: 2.5rem; margin-top: clamp(3rem, 6vw, 5rem);
         border-top: 1px solid var(--bb-border); color: var(--bb-faint); font-size: 0.85rem;
       }
+      .bb-footer-nav { display: inline-flex; gap: 1.4rem; }
+      .bb-footer-nav a { color: var(--bb-muted); transition: color 0.2s; }
+      .bb-footer-nav a:hover { color: var(--bb-text); }
 
       /* ---------- Entrance + reveal animations ---------- */
       .bb-fade { opacity: 0; transform: translateY(1.4rem); animation: bb-enter 0.8s var(--bb-ease) forwards; animation-delay: var(--d, 0s); }
       @keyframes bb-enter { to { opacity: 1; transform: none; } }
-
       [data-reveal] { opacity: 0; transform: translateY(1.6rem); transition: opacity 0.7s var(--bb-ease), transform 0.7s var(--bb-ease); }
       [data-reveal].in { opacity: 1; transform: none; }
-      .bb-feature[data-reveal] { transition-delay: calc(var(--i, 0) * 70ms); }
+      .bb-show--a, .bb-show--c { transform: translateY(-1.5rem); }
 
       /* ---------- Responsive ---------- */
-      @media (max-width: 900px) {
-        .bb-features { grid-template-columns: repeat(2, 1fr); }
-        .bb-shots { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+      @media (max-width: 980px) {
+        .bb-bento { grid-template-columns: repeat(2, 1fr); }
+        .bb-cell--sources { grid-column: span 2; grid-row: auto; }
+        .bb-cell--private, .bb-cell--speed { grid-column: span 2; }
+        .bb-cell--sfw, .bb-cell--search, .bb-cell--favs { grid-column: span 2; }
+        .bb-showcase { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+        .bb-show--a, .bb-show--c { transform: none; }
       }
-      @media (max-width: 720px) {
-        .bb-hero { grid-template-columns: 1fr; text-align: center; }
+      @media (max-width: 760px) {
+        .bb-hero { grid-template-columns: 1fr; text-align: center; gap: 2rem; min-height: 0; }
         .bb-hero-copy { order: 2; }
-        .bb-hero-art { order: 1; }
-        .bb-cta, .bb-section-head { margin-left: auto; margin-right: auto; }
-        .bb-lede { margin-left: auto; margin-right: auto; }
+        .bb-hero-stage { order: 1; min-height: 460px; }
+        .bb-lockup, .bb-cta, .bb-lede { margin-left: auto; margin-right: auto; }
         .bb-cta { justify-content: center; }
+        .bb-trust-grid { grid-template-columns: repeat(2, 1fr); }
+        .bb-starter { flex-direction: column; text-align: center; }
+        .bb-starter-marks { justify-content: center; }
       }
-      @media (max-width: 480px) {
-        .bb-features { grid-template-columns: 1fr; }
-        .bb-shots { grid-template-columns: 1fr; max-width: 280px; margin-inline: auto; }
+      @media (max-width: 520px) {
+        body.bb { font-size: 1rem; }
+        .bb-bento { grid-template-columns: 1fr; }
+        .bb-cell--sources, .bb-cell--private, .bb-cell--speed,
+        .bb-cell--sfw, .bb-cell--search, .bb-cell--favs { grid-column: span 1; }
+        .bb-cell--speed { flex-direction: column; }
+        .bb-minigrid { grid-template-columns: repeat(4, 1fr); }
+        .bb-minigrid span:nth-child(n+5) { display: block; }
+        .bb-showcase { grid-template-columns: 1fr; max-width: 280px; margin-inline: auto; }
+        .bb-trust-grid { grid-template-columns: 1fr; }
       }
 
       /* ---------- Reduced motion ---------- */
       @media (prefers-reduced-motion: reduce) {
-        .bb-blob, .bb-app-icon, .bb-icon-halo, .bb-title { animation: none !important; }
+        .bb-floater, .bb-phone--hero, .bb-galcol--up, .bb-galcol--up2, .bb-caret { animation: none !important; }
+        .bb-floater--1 { transform: rotate(-7deg); }
+        .bb-floater--2 { transform: rotate(8deg); }
         .bb-fade { opacity: 1 !important; transform: none !important; animation: none !important; }
         [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+        .bb-show--a, .bb-show--c { transform: translateY(-1.5rem); }
         html.bb-root { scroll-behavior: auto; }
       }
     </style>

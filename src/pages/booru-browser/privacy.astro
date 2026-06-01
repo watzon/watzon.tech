@@ -1,0 +1,76 @@
+---
+import BooruLegalLayout from "../../layouts/BooruLegalLayout.astro";
+
+const updated = "May 31, 2026";
+---
+
+<BooruLegalLayout
+  title="Booru Browser — Privacy Policy"
+  description="Booru Browser collects nothing and sends nothing to its developer. Everything the app stores stays on your device. Read the full privacy policy."
+  heading="Privacy Policy"
+  updated={updated}
+>
+  <p>
+    Booru Browser is an independent client application developed by Chris Watson
+    (“I”, “me”). This policy explains exactly what the app does, and does not, do
+    with your data. The short version: <strong>the app collects nothing and sends
+    nothing to me.</strong>
+  </p>
+
+  <h2>No data collection</h2>
+  <p>
+    Booru Browser contains no analytics, no advertising, no crash-reporting SDKs,
+    and no telemetry of any kind. I operate no servers and never receive your
+    usage, identity, search terms, or browsing activity.
+  </p>
+
+  <h2>Data stored on your device</h2>
+  <p>Everything the app saves stays on your device and never leaves it:</p>
+  <ul>
+    <li><strong>Server list and settings.</strong> The booru sites you add, stored in local app storage.</li>
+    <li><strong>Credentials.</strong> Any API keys, usernames, or cookies you enter are stored in the operating-system secure keychain (iOS Keychain or Android Keystore), never in plain storage.</li>
+    <li><strong>Favorites and downloads.</strong> Posts you save and media you export, kept in the app’s local storage and your photo library.</li>
+    <li><strong>Image cache.</strong> Temporary copies of images to make browsing fast.</li>
+  </ul>
+  <p>
+    You can erase all of this at any time by clearing the cache and downloads in
+    Settings, or by deleting the app.
+  </p>
+
+  <h2>Connections to third-party sites</h2>
+  <p>
+    Booru Browser connects directly from your device to the booru servers
+    <em>you</em> choose to add. The app ships with no default server list. When you
+    search or view images, your device sends requests (including any credentials
+    you configured for that server) straight to those third-party sites. Those
+    services are operated by others and have their own privacy practices, which I
+    neither control nor monitor. Please review the policies of any site you connect to.
+  </p>
+
+  <h2>Permissions</h2>
+  <p>The app requests device permissions only for features you explicitly invoke:</p>
+  <ul>
+    <li><strong>Camera.</strong> Used solely to scan a QR code when importing a server list.</li>
+    <li><strong>Photos and media library.</strong> Used solely to save images you choose to download.</li>
+  </ul>
+  <p>You can decline these and the rest of the app continues to work.</p>
+
+  <h2>Mature content and age</h2>
+  <p>
+    Booru Browser is rated 17+. Mature content is filtered out by default and
+    remains locked behind an explicit age confirmation that you must enable
+    yourself. The app is not directed to children.
+  </p>
+
+  <h2>Changes</h2>
+  <p>
+    If this policy changes, the updated version will be posted on this page with a
+    revised “last updated” date.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions about this policy? Email
+    <a href="mailto:chris@watzon.tech">chris@watzon.tech</a>.
+  </p>
+</BooruLegalLayout>

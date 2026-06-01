@@ -1,0 +1,186 @@
+---
+import SEO from "../components/SEO.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  heading: string;
+  updated?: string;
+}
+
+const { title, description, heading, updated } = Astro.props;
+const githubUrl = "https://github.com/watzon/booru-browser";
+const year = new Date().getFullYear();
+const pathname = Astro.url.pathname.replace(/\/$/, "");
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" class="bb-root">
+  <head>
+    <SEO title={title} description={description} image="/images/projects/booru-browser.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Figtree:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      document.documentElement.setAttribute("data-theme", "dark");
+    </script>
+  </head>
+  <body class="bb">
+    <div class="bb-backdrop" aria-hidden="true">
+      <span class="bb-glow"></span>
+      <div class="bb-grain"></div>
+    </div>
+
+    <header class="bb-topbar">
+      <a href="/booru-browser" class="bb-back" data-astro-reload>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        Booru Browser
+      </a>
+      <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="bb-topbar-link">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 1C5.92 1 1 5.92 1 12c0 4.87 3.15 8.99 7.52 10.45.55.1.75-.24.75-.53v-1.85c-3.06.67-3.71-1.48-3.71-1.48-.5-1.27-1.22-1.61-1.22-1.61-1-.68.08-.67.08-.67 1.1.08 1.69 1.14 1.69 1.14.98 1.69 2.58 1.2 3.21.92.1-.71.39-1.2.7-1.48-2.44-.28-5.01-1.22-5.01-5.44 0-1.2.43-2.18 1.13-2.95-.11-.28-.49-1.4.11-2.92 0 0 .92-.3 3.02 1.13a10.4 10.4 0 0 1 5.5 0c2.1-1.43 3.02-1.13 3.02-1.13.6 1.52.22 2.64.11 2.92.7.77 1.13 1.75 1.13 2.95 0 4.23-2.58 5.16-5.03 5.43.4.34.75 1.01.75 2.04v3.03c0 .29.2.64.76.53A11.01 11.01 0 0 0 23 12c0-6.08-4.92-11-11-11Z"/></svg>
+        GitHub
+      </a>
+    </header>
+
+    <main class="bb-legal">
+      <div class="bb-legal-head">
+        <span class="bb-kicker">Legal</span>
+        <h1 class="bb-h1">{heading}</h1>
+        {updated && <p class="bb-updated">Last updated {updated}</p>}
+      </div>
+
+      <nav class="bb-legal-nav" aria-label="Legal documents">
+        <a href="/booru-browser/privacy" class:list={["bb-legal-tab", { "is-active": pathname.endsWith("/privacy") }]}>Privacy Policy</a>
+        <a href="/booru-browser/terms" class:list={["bb-legal-tab", { "is-active": pathname.endsWith("/terms") }]}>Terms of Use</a>
+      </nav>
+
+      <article class="bb-prose">
+        <slot />
+      </article>
+    </main>
+
+    <footer class="bb-footer">
+      <a href="/booru-browser" class="bb-back" data-astro-reload>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        Back to Booru Browser
+      </a>
+      <span class="bb-footer-meta">© {year} Chris Watson</span>
+    </footer>
+
+    <style is:global>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bb-bg: #010c2e;
+        --bb-text: #eef0fb;
+        --bb-muted: #9aa0c8;
+        --bb-faint: #6a6f9c;
+        --bb-border: rgba(255, 255, 255, 0.09);
+        --bb-surface: rgba(255, 255, 255, 0.04);
+        --bb-surface-2: rgba(255, 255, 255, 0.06);
+        --bb-pink: #ff5fb0;
+        --bb-violet: #9b6bff;
+        --bb-cyan: #3fc9ff;
+        --bb-grad: linear-gradient(135deg, #ff5fb0, #9b6bff);
+        --bb-display: "Baloo 2", "SF Pro Rounded", system-ui, sans-serif;
+        --bb-body: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        --bb-ease: cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      html.bb-root { background: var(--bb-bg); scroll-behavior: smooth; }
+      body.bb {
+        font-family: var(--bb-body);
+        background:
+          radial-gradient(125% 70% at 50% -12%, #122163 0%, rgba(18, 33, 99, 0) 55%),
+          var(--bb-bg);
+        color: var(--bb-text);
+        line-height: 1.6; font-size: 1.0625rem;
+        -webkit-font-smoothing: antialiased; overflow-x: hidden; position: relative; min-height: 100dvh;
+      }
+      body.bb a { color: inherit; text-decoration: none; }
+      body.bb ul { list-style: none; }
+      body.bb ::selection { background: rgba(255, 95, 176, 0.35); }
+      body.bb :focus-visible { outline: 2px solid var(--bb-pink); outline-offset: 3px; border-radius: 6px; }
+
+      .bb-backdrop { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+      .bb-glow {
+        position: absolute; top: -12%; right: -6%; width: 55vw; height: 55vw; max-width: 680px; max-height: 680px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 95, 176, 0.24), rgba(155, 107, 255, 0.12) 42%, transparent 70%);
+        filter: blur(60px);
+      }
+      .bb-grain {
+        position: absolute; inset: 0;
+        background-image: radial-gradient(rgba(255, 255, 255, 0.5) 0.5px, transparent 0.5px);
+        background-size: 4px 4px; opacity: 0.02;
+      }
+
+      .bb-topbar, .bb-legal, .bb-footer {
+        position: relative; z-index: 1; width: 100%; max-width: 820px; margin: 0 auto;
+        padding-left: 1.5rem; padding-right: 1.5rem;
+      }
+      .bb-topbar {
+        display: flex; align-items: center; justify-content: space-between;
+        padding-top: 1.4rem; padding-bottom: 1.4rem; font-size: 0.9rem; font-weight: 500;
+      }
+      .bb-back { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--bb-muted); transition: color 0.2s; }
+      .bb-back:hover { color: var(--bb-text); }
+      .bb-back svg { transition: transform 0.25s var(--bb-ease); }
+      .bb-back:hover svg { transform: translateX(-3px); }
+      .bb-topbar-link { display: inline-flex; align-items: center; gap: 0.45rem; color: var(--bb-muted); transition: color 0.2s; }
+      .bb-topbar-link:hover { color: var(--bb-cyan); }
+
+      .bb-legal { padding-top: clamp(2.5rem, 6vw, 4.5rem); padding-bottom: 2rem; }
+      .bb-legal-head { margin-bottom: 1.6rem; }
+      .bb-kicker {
+        display: inline-block; text-transform: uppercase; letter-spacing: 0.16em; font-size: 0.74rem;
+        font-weight: 600; color: var(--bb-pink); margin-bottom: 0.85rem;
+      }
+      .bb-h1 {
+        font-family: var(--bb-display); font-weight: 800; letter-spacing: -0.025em; line-height: 1.05;
+        font-size: clamp(2.1rem, 5vw, 3.1rem);
+      }
+      .bb-updated { color: var(--bb-faint); font-size: 0.85rem; margin-top: 0.65rem; }
+
+      .bb-legal-nav { display: flex; gap: 0.5rem; margin-bottom: clamp(2rem, 4vw, 2.75rem); }
+      .bb-legal-tab {
+        font-size: 0.88rem; font-weight: 500; color: var(--bb-muted);
+        padding: 0.45rem 1rem; border-radius: 999px;
+        background: var(--bb-surface); border: 1px solid var(--bb-border);
+        transition: color 0.2s, border-color 0.2s, background 0.2s;
+      }
+      .bb-legal-tab:hover { color: var(--bb-text); border-color: rgba(255, 255, 255, 0.22); }
+      .bb-legal-tab.is-active { color: #fff; background: var(--bb-grad); border-color: transparent; }
+
+      .bb-prose { color: var(--bb-muted); max-width: 70ch; }
+      .bb-prose > * + * { margin-top: 1.2rem; }
+      .bb-prose h2 {
+        font-family: var(--bb-display); color: var(--bb-text); font-size: 1.3rem; font-weight: 700;
+        letter-spacing: -0.015em; margin-top: 2.6rem;
+      }
+      .bb-prose h2:first-child { margin-top: 0; }
+      .bb-prose strong { color: var(--bb-text); font-weight: 600; }
+      .bb-prose em { font-style: italic; }
+      .bb-prose ul { display: flex; flex-direction: column; gap: 0.6rem; padding-left: 1.1rem; }
+      .bb-prose li { position: relative; padding-left: 1rem; }
+      .bb-prose li::before { content: ""; position: absolute; left: 0; top: 0.65em; width: 5px; height: 5px; border-radius: 50%; background: var(--bb-pink); }
+      .bb-prose a { color: var(--bb-cyan); text-decoration: underline; text-underline-offset: 3px; }
+      .bb-prose a:hover { color: #7de0ff; }
+
+      .bb-footer {
+        display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        padding-top: 2.5rem; padding-bottom: 2.5rem; margin-top: clamp(3rem, 6vw, 5rem);
+        border-top: 1px solid var(--bb-border); color: var(--bb-faint); font-size: 0.85rem;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html.bb-root { scroll-behavior: auto; }
+      }
+    </style>
+  </body>
+</html>

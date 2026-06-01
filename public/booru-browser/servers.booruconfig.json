@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "servers": [
+    {
+      "id": "safebooru",
+      "name": "Safebooru",
+      "kind": "gelbooru",
+      "baseUrl": "https://safebooru.org"
+    },
+    {
+      "id": "e926",
+      "name": "e926 (SFW)",
+      "kind": "e621",
+      "baseUrl": "https://e926.net"
+    },
+    {
+      "id": "konachan-net",
+      "name": "Konachan (SFW)",
+      "kind": "moebooru",
+      "baseUrl": "https://konachan.net"
+    }
+  ],
+  "defaultServerId": "safebooru"
+}
