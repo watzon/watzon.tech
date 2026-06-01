@@ -31,6 +31,9 @@ const projects = defineCollection({
     name: z.string(),
     description: z.string(),
     url: z.string(),
+    // Optional internal route — when set, the home-page card links here
+    // (same tab) instead of opening `url` in a new tab.
+    page: z.string().optional(),
     tech: z.array(z.string()),
     image: z.string(),
     number: z.string(),

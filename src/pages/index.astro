@@ -67,10 +67,13 @@ function formatDate(date: Date): string {
                 {projects.map(async (project, i) => {
                     const { Content } = await render(project);
                     const layoutClass = bentoClasses[i] || 'bento-item--wide';
+                    const internal = project.data.page;
                     return (
                         <a
-                            href={project.data.url}
-                            target="_blank"
+                            href={internal ?? project.data.url}
+                            target={internal ? undefined : "_blank"}
+                            rel={internal ? undefined : "noopener noreferrer"}
+                            data-astro-reload={internal ? true : undefined}
                             class={`bento-item ${layoutClass}`}
                             style={`--project-color: ${project.data.color};`}
                         >

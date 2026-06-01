@@ -1,0 +1,572 @@
+---
+import SEO from "../components/SEO.astro";
+
+const updated = "May 31, 2026";
+const githubUrl = "https://github.com/watzon/booru-browser";
+
+const features = [
+  {
+    title: "Pluggable sources",
+    body: "Danbooru, Gelbooru, e621, Moebooru, Kemono — and any custom site — sit behind a single adapter interface. Add a server, scan a QR code, or import a shareable config.",
+    accent: "#ec4899",
+    icon: "layers",
+  },
+  {
+    title: "Private by design",
+    body: "No analytics. No tracking. No bundled server list and no servers I operate. API keys are sealed in the device keychain, never in plain storage.",
+    accent: "#a855f7",
+    icon: "shield",
+  },
+  {
+    title: "SFW by default",
+    body: "A structural age-gate every search passes through — UI code physically can't bypass it. Mature content stays locked behind an explicit 18+ opt-in.",
+    accent: "#38bdf8",
+    icon: "lock",
+  },
+  {
+    title: "Built for speed",
+    body: "Virtualized image grids and aggressive image caching keep scrolling fluid, even across thousands of results. Browser-grade networking handles stubborn hosts.",
+    accent: "#f59e0b",
+    icon: "bolt",
+  },
+  {
+    title: "Tag search, done right",
+    body: "Per-source tag autocomplete, search history, and rating filters. Find exactly what you're looking for without fighting the query syntax.",
+    accent: "#34d399",
+    icon: "search",
+  },
+  {
+    title: "Favorites & downloads",
+    body: "Save posts locally and export full-resolution media straight to your photo library or the share sheet. Your collection lives on your device.",
+    accent: "#fb7185",
+    icon: "heart",
+  },
+];
+
+const shots = [
+  { caption: "Gallery grid", tone: "#ec4899" },
+  { caption: "Post viewer", tone: "#a855f7" },
+  { caption: "Tag search", tone: "#38bdf8" },
+  { caption: "Server management", tone: "#34d399" },
+];
+
+const stack = [
+  "Expo SDK 54",
+  "React Native",
+  "TypeScript",
+  "React Query",
+  "Zustand",
+  "expo-secure-store",
+  "FlashList",
+  "Reanimated",
+];
+
+// Minimal inline icon set (stroke-based, currentColor)
+const icons: Record<string, string> = {
+  layers: `<path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/>`,
+  shield: `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>`,
+  lock: `<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>`,
+  bolt: `<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8Z"/>`,
+  search: `<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>`,
+  heart: `<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>`,
+};
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" class="bb-root">
+  <head>
+    <SEO
+      title="Booru Browser — A private, gallery-first booru client"
+      description="A fast, privacy-first mobile image browser for the booru ecosystem. Pluggable sources, a structural SFW age-gate, and credentials sealed in the device keychain. Built with Expo."
+      image="/images/projects/booru-browser.png"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- This page is a deliberate dark-only theme takeover; force it before paint. -->
+    <script is:inline>
+      document.documentElement.setAttribute("data-theme", "dark");
+    </script>
+    <!-- Without JS the scroll-reveal never fires; keep all content (incl. the
+         privacy policy) fully visible as a fallback. -->
+    <noscript>
+      <style>
+        [data-reveal] { opacity: 1 !important; transform: none !important; }
+        .bb-fade { opacity: 1 !important; transform: none !important; animation: none !important; }
+      </style>
+    </noscript>
+  </head>
+  <body class="bb">
+    <!-- Animated aurora backdrop -->
+    <div class="bb-aurora" aria-hidden="true">
+      <span class="bb-blob bb-blob--pink"></span>
+      <span class="bb-blob bb-blob--purple"></span>
+      <span class="bb-blob bb-blob--cyan"></span>
+      <div class="bb-grain"></div>
+    </div>
+
+    <!-- Top bar -->
+    <header class="bb-topbar">
+      <a href="/" class="bb-back" data-astro-reload>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        watzon.tech
+      </a>
+      <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="bb-topbar-link">GitHub ↗</a>
+    </header>
+
+    <main>
+      <!-- HERO -->
+      <section class="bb-hero">
+        <div class="bb-hero-copy">
+          <p class="bb-eyebrow bb-fade" style="--d:0s">iOS · Android · Open source</p>
+          <h1 class="bb-title bb-fade" style="--d:.08s">Booru&nbsp;Browser</h1>
+          <p class="bb-lede bb-fade" style="--d:.16s">
+            A fast, private, gallery-first image browser for the booru ecosystem.
+            Every source behind one interface — and not a single byte of tracking.
+          </p>
+          <div class="bb-cta bb-fade" style="--d:.24s">
+            <a class="bb-btn bb-btn--primary" href="#" aria-disabled="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16.5 1.6c0 1.2-.5 2.4-1.3 3.3-.9 1-2.3 1.7-3.5 1.6-.1-1.2.5-2.4 1.3-3.2.9-1 2.4-1.7 3.5-1.7ZM20.3 17c-.6 1.4-.9 2-1.7 3.2-1 1.7-2.5 3.8-4.3 3.8-1.6 0-2-1-4.2-1-2.1 0-2.6 1-4.1 1-1.8 0-3.2-1.9-4.3-3.6C-.4 17 .5 11 3.7 9.4c1.3-.7 2.6-.6 3.8-.6 1.3 0 2.1.7 3.4.7 1.2 0 2-.7 3.5-.7 1.1 0 2.3.3 3.2 1-2.8 1.6-2.4 5.7.7 7.2Z"/></svg>
+              <span class="bb-btn-stack"><small>Coming soon to</small>App&nbsp;Store</span>
+            </a>
+            <a class="bb-btn bb-btn--ghost" href={githubUrl} target="_blank" rel="noopener noreferrer">View source</a>
+          </div>
+          <p class="bb-rating bb-fade" style="--d:.32s">Rated 17+ · Mature content gated by default</p>
+        </div>
+
+        <div class="bb-hero-art bb-fade" style="--d:.2s">
+          <div class="bb-icon-halo"></div>
+          <img src="/images/booru/icon.png" alt="Booru Browser app icon" class="bb-app-icon" width="320" height="320" />
+        </div>
+      </section>
+
+      <!-- FEATURES -->
+      <section class="bb-section" id="features">
+        <div class="bb-section-head" data-reveal>
+          <span class="bb-kicker">What it does</span>
+          <h2 class="bb-h2">Considered down to the last invariant.</h2>
+        </div>
+        <div class="bb-features">
+          {features.map((f, i) => (
+            <article class="bb-feature" data-reveal style={`--accent:${f.accent}; --i:${i}`}>
+              <span class="bb-feature-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={icons[f.icon]} />
+              </span>
+              <h3 class="bb-feature-title">{f.title}</h3>
+              <p class="bb-feature-body">{f.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- SCREENSHOTS -->
+      <section class="bb-section" id="screenshots">
+        <div class="bb-section-head" data-reveal>
+          <span class="bb-kicker">A look inside</span>
+          <h2 class="bb-h2">Built to disappear behind the art.</h2>
+        </div>
+        <div class="bb-shots" data-reveal>
+          {shots.map((s, i) => (
+            <figure class="bb-phone" style={`--tone:${s.tone}; --i:${i}`}>
+              <div class="bb-phone-frame">
+                <span class="bb-phone-notch" aria-hidden="true"></span>
+                <!--
+                  SCREENSHOT SLOT — drop a portrait screenshot here, e.g.:
+                  <img src="/images/booru/shot-1.png" alt={s.caption} class="bb-phone-shot" />
+                  Recommended size: 1290×2796 (iPhone 6.7"). Until then, a styled placeholder shows.
+                -->
+                <div class="bb-phone-placeholder" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </div>
+              </div>
+              <figcaption class="bb-phone-cap">{s.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <!-- TECH STRIP -->
+      <section class="bb-section bb-section--tight">
+        <div class="bb-section-head" data-reveal>
+          <span class="bb-kicker">Under the hood</span>
+        </div>
+        <ul class="bb-stack" data-reveal>
+          {stack.map((t) => <li class="bb-chip">{t}</li>)}
+        </ul>
+      </section>
+
+      <!-- PRIVACY POLICY -->
+      <section class="bb-section bb-privacy" id="privacy">
+        <div class="bb-section-head" data-reveal>
+          <span class="bb-kicker">Legal</span>
+          <h2 class="bb-h2">Privacy Policy</h2>
+          <p class="bb-updated">Last updated {updated}</p>
+        </div>
+        <div class="bb-prose" data-reveal>
+          <p>
+            Booru Browser is an independent client application developed by Chris Watson
+            (“I”, “me”). This policy explains exactly what the app does — and does not —
+            do with your data. The short version: <strong>the app collects nothing and
+            sends nothing to me.</strong>
+          </p>
+
+          <h3>No data collection</h3>
+          <p>
+            Booru Browser contains no analytics, no advertising, no crash-reporting SDKs,
+            and no telemetry of any kind. I operate no servers and never receive your
+            usage, identity, search terms, or browsing activity.
+          </p>
+
+          <h3>Data stored on your device</h3>
+          <p>Everything the app saves stays on your device and never leaves it:</p>
+          <ul>
+            <li><strong>Server list &amp; settings</strong> — the booru sites you add, stored in local app storage.</li>
+            <li><strong>Credentials</strong> — any API keys, usernames, or cookies you enter are stored in the operating-system secure keychain (iOS Keychain / Android Keystore), never in plain storage.</li>
+            <li><strong>Favorites &amp; downloads</strong> — posts you save and media you export, kept in the app’s local storage and your photo library.</li>
+            <li><strong>Image cache</strong> — temporary copies of images to make browsing fast.</li>
+          </ul>
+          <p>
+            You can erase all of this at any time by clearing the cache and downloads in
+            Settings, or by deleting the app.
+          </p>
+
+          <h3>Connections to third-party sites</h3>
+          <p>
+            Booru Browser connects directly from your device to the booru servers
+            <em>you</em> choose to add. The app ships with no default server list. When you
+            search or view images, your device sends requests (including any credentials
+            you configured for that server) straight to those third-party sites. Those
+            services are operated by others and have their own privacy practices, which I
+            neither control nor monitor. Please review the policies of any site you connect to.
+          </p>
+
+          <h3>Permissions</h3>
+          <p>The app requests device permissions only for features you explicitly invoke:</p>
+          <ul>
+            <li><strong>Camera</strong> — used solely to scan a QR code when importing a server list.</li>
+            <li><strong>Photos / Media library</strong> — used solely to save images you choose to download.</li>
+          </ul>
+          <p>You can decline these and the rest of the app continues to work.</p>
+
+          <h3>Mature content &amp; age</h3>
+          <p>
+            Booru Browser is rated 17+. Mature content is filtered out by default and
+            remains locked behind an explicit age confirmation that you must enable
+            yourself. The app is not directed to children.
+          </p>
+
+          <h3>Changes</h3>
+          <p>
+            If this policy changes, the updated version will be posted on this page with a
+            revised “last updated” date.
+          </p>
+
+          <h3>Contact</h3>
+          <p>
+            Questions about this policy? Email
+            <a href="mailto:chris@watzon.tech">chris@watzon.tech</a>.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bb-footer">
+      <a href="/" class="bb-back" data-astro-reload>← Back to watzon.tech</a>
+      <span class="bb-footer-meta">© {new Date().getFullYear()} Chris Watson</span>
+    </footer>
+
+    <!-- Scroll reveal (self-contained; respects reduced motion) -->
+    <script is:inline>
+      (function () {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          document.querySelectorAll("[data-reveal]").forEach(function (el) {
+            el.classList.add("in");
+          });
+          return;
+        }
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (e) {
+              if (e.isIntersecting) {
+                e.target.classList.add("in");
+                io.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.12, rootMargin: "0px 0px -60px 0px" }
+        );
+        document.querySelectorAll("[data-reveal]").forEach(function (el) {
+          io.observe(el);
+        });
+      })();
+    </script>
+
+    <style is:global>
+      /* ============================================================
+         BOORU BROWSER — dark-only theme takeover
+         Self-contained; does not import the site's global tokens.
+         ============================================================ */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bb-bg: #06081a;
+        --bb-bg-2: #0b0e26;
+        --bb-text: #e9eaf6;
+        --bb-muted: #9498c2;
+        --bb-faint: #6b6f99;
+        --bb-border: rgba(255, 255, 255, 0.09);
+        --bb-surface: rgba(255, 255, 255, 0.035);
+        --bb-pink: #ec4899;
+        --bb-purple: #a855f7;
+        --bb-cyan: #38bdf8;
+        --bb-display: "Bricolage Grotesque", system-ui, sans-serif;
+        --bb-body: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        --bb-ease: cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      html.bb-root { background: var(--bb-bg); scroll-behavior: smooth; }
+
+      body.bb {
+        font-family: var(--bb-body);
+        background:
+          radial-gradient(120% 80% at 50% -10%, #141a45 0%, var(--bb-bg) 55%),
+          var(--bb-bg);
+        color: var(--bb-text);
+        line-height: 1.6;
+        font-size: 1.0625rem;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+        position: relative;
+        min-height: 100vh;
+      }
+
+      body.bb a { color: inherit; text-decoration: none; }
+      body.bb ul { list-style: none; }
+      body.bb ::selection { background: rgba(236, 72, 153, 0.35); }
+      body.bb :focus-visible { outline: 2px solid var(--bb-pink); outline-offset: 3px; border-radius: 4px; }
+
+      /* ---------- Aurora backdrop ---------- */
+      .bb-aurora {
+        position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+      }
+      .bb-blob {
+        position: absolute; width: 60vw; height: 60vw; max-width: 760px; max-height: 760px;
+        border-radius: 50%; filter: blur(90px); opacity: 0.5; mix-blend-mode: screen;
+        will-change: transform;
+      }
+      .bb-blob--pink { background: radial-gradient(circle, #ec4899, transparent 65%); top: -12%; left: -8%; animation: bb-drift-1 22s var(--bb-ease) infinite alternate; }
+      .bb-blob--purple { background: radial-gradient(circle, #7c3aed, transparent 65%); top: 18%; right: -14%; animation: bb-drift-2 26s var(--bb-ease) infinite alternate; }
+      .bb-blob--cyan { background: radial-gradient(circle, #0ea5e9, transparent 65%); bottom: -18%; left: 22%; opacity: 0.35; animation: bb-drift-3 30s var(--bb-ease) infinite alternate; }
+      .bb-grain { position: absolute; inset: -200%; background-image: radial-gradient(rgba(255,255,255,0.5) 0.5px, transparent 0.5px); background-size: 4px 4px; opacity: 0.02; }
+
+      @keyframes bb-drift-1 { to { transform: translate3d(12vw, 8vh, 0) scale(1.15); } }
+      @keyframes bb-drift-2 { to { transform: translate3d(-10vw, 12vh, 0) scale(1.1); } }
+      @keyframes bb-drift-3 { to { transform: translate3d(8vw, -10vh, 0) scale(1.2); } }
+
+      /* ---------- Layout shell ---------- */
+      main, .bb-topbar, .bb-footer { position: relative; z-index: 1; }
+      .bb-section, .bb-hero, .bb-topbar, .bb-footer {
+        width: 100%; max-width: 1200px; margin: 0 auto; padding-left: 1.5rem; padding-right: 1.5rem;
+      }
+
+      /* ---------- Top bar ---------- */
+      .bb-topbar {
+        display: flex; align-items: center; justify-content: space-between;
+        padding-top: 1.5rem; padding-bottom: 1.5rem; font-size: 0.9rem; font-weight: 500;
+      }
+      .bb-back { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--bb-muted); transition: color 0.2s; }
+      .bb-back:hover { color: var(--bb-text); }
+      .bb-back svg { transition: transform 0.25s var(--bb-ease); }
+      .bb-back:hover svg { transform: translateX(-3px); }
+      .bb-topbar-link { color: var(--bb-muted); transition: color 0.2s; }
+      .bb-topbar-link:hover { color: var(--bb-cyan); }
+
+      /* ---------- Hero ---------- */
+      .bb-hero {
+        display: grid; grid-template-columns: 1.1fr 0.9fr; align-items: center; gap: 2rem;
+        padding-top: clamp(2rem, 6vw, 5rem); padding-bottom: clamp(3rem, 8vw, 6rem);
+      }
+      .bb-eyebrow {
+        text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.78rem; font-weight: 600;
+        color: var(--bb-cyan); margin-bottom: 1.25rem;
+      }
+      .bb-title {
+        font-family: var(--bb-display); font-weight: 800; line-height: 0.95; letter-spacing: -0.035em;
+        font-size: clamp(3rem, 8vw, 5.75rem); margin-bottom: 1.5rem;
+        background: linear-gradient(110deg, #ffffff 10%, #f9a8d4 35%, #c4b5fd 60%, #7dd3fc 85%);
+        background-size: 220% auto; -webkit-background-clip: text; background-clip: text; color: transparent;
+        animation: bb-shimmer 8s linear infinite;
+      }
+      @keyframes bb-shimmer { to { background-position: 220% center; } }
+      .bb-lede { font-size: clamp(1.1rem, 1.6vw, 1.3rem); color: var(--bb-muted); max-width: 36ch; margin-bottom: 2rem; }
+      .bb-cta { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+      .bb-rating { margin-top: 1.25rem; font-size: 0.82rem; color: var(--bb-faint); }
+
+      .bb-btn {
+        display: inline-flex; align-items: center; gap: 0.65rem; font-weight: 600;
+        padding: 0.85rem 1.4rem; border-radius: 14px; font-size: 0.95rem;
+        transition: transform 0.25s var(--bb-ease), box-shadow 0.25s var(--bb-ease), background 0.25s, border-color 0.25s;
+        border: 1px solid transparent; line-height: 1.1;
+      }
+      .bb-btn-stack { display: flex; flex-direction: column; align-items: flex-start; }
+      .bb-btn-stack small { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.75; }
+      .bb-btn--primary {
+        background: linear-gradient(135deg, #ec4899, #a855f7); color: #fff;
+        box-shadow: 0 10px 30px -10px rgba(168, 85, 247, 0.7);
+      }
+      .bb-btn--primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px -12px rgba(236, 72, 153, 0.8); }
+      .bb-btn--ghost { background: var(--bb-surface); border-color: var(--bb-border); color: var(--bb-text); }
+      .bb-btn--ghost:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); }
+
+      /* ---------- Hero art ---------- */
+      .bb-hero-art { position: relative; display: grid; place-items: center; }
+      .bb-app-icon {
+        width: clamp(200px, 26vw, 320px); height: auto; position: relative; z-index: 1;
+        filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.55));
+        animation: bb-float 6s ease-in-out infinite;
+      }
+      .bb-icon-halo {
+        position: absolute; width: 115%; aspect-ratio: 1; border-radius: 50%;
+        background: radial-gradient(circle, rgba(236, 72, 153, 0.45), rgba(56, 189, 248, 0.18) 45%, transparent 70%);
+        filter: blur(40px); animation: bb-pulse 6s ease-in-out infinite;
+      }
+      @keyframes bb-float { 50% { transform: translateY(-16px); } }
+      @keyframes bb-pulse { 0%, 100% { opacity: 0.7; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
+
+      /* ---------- Sections ---------- */
+      .bb-section { padding-top: clamp(3.5rem, 8vw, 7rem); padding-bottom: clamp(1rem, 2vw, 1.5rem); }
+      .bb-section--tight { padding-top: clamp(2.5rem, 5vw, 4rem); }
+      .bb-section-head { margin-bottom: clamp(2rem, 4vw, 3rem); max-width: 40ch; }
+      .bb-kicker {
+        display: inline-block; text-transform: uppercase; letter-spacing: 0.16em; font-size: 0.74rem;
+        font-weight: 600; color: var(--bb-pink); margin-bottom: 0.85rem;
+      }
+      .bb-h2 {
+        font-family: var(--bb-display); font-weight: 700; letter-spacing: -0.025em; line-height: 1.08;
+        font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+      }
+      .bb-updated { color: var(--bb-faint); font-size: 0.85rem; margin-top: 0.75rem; }
+
+      /* ---------- Features ---------- */
+      .bb-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; }
+      .bb-feature {
+        position: relative; padding: 1.75rem; border-radius: 18px;
+        background: var(--bb-surface); border: 1px solid var(--bb-border); overflow: hidden;
+        transition: transform 0.35s var(--bb-ease), border-color 0.35s, background 0.35s;
+      }
+      .bb-feature::before {
+        content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
+        background: linear-gradient(135deg, var(--accent), transparent 55%);
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor; mask-composite: exclude;
+        opacity: 0; transition: opacity 0.35s;
+      }
+      .bb-feature:hover { transform: translateY(-5px); background: rgba(255,255,255,0.06); }
+      .bb-feature:hover::before { opacity: 1; }
+      .bb-feature-icon {
+        display: inline-grid; place-items: center; width: 46px; height: 46px; border-radius: 12px;
+        color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, transparent);
+        margin-bottom: 1.1rem;
+      }
+      .bb-feature-title { font-family: var(--bb-display); font-size: 1.2rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 0.5rem; }
+      .bb-feature-body { color: var(--bb-muted); font-size: 0.95rem; line-height: 1.6; }
+
+      /* ---------- Screenshots ---------- */
+      .bb-shots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+      .bb-phone { display: flex; flex-direction: column; align-items: center; gap: 0.9rem; }
+      .bb-phone-frame {
+        position: relative; width: 100%; aspect-ratio: 9 / 19.5; border-radius: 30px;
+        background: linear-gradient(160deg, #15173a, #0a0c20); padding: 8px;
+        border: 1px solid var(--bb-border);
+        box-shadow: 0 24px 50px -22px rgba(0,0,0,0.8), inset 0 0 0 1.5px rgba(255,255,255,0.04);
+        transition: transform 0.4s var(--bb-ease), box-shadow 0.4s;
+        overflow: hidden;
+      }
+      .bb-phone:hover .bb-phone-frame { transform: translateY(-8px); box-shadow: 0 34px 60px -22px color-mix(in srgb, var(--tone) 55%, black); }
+      .bb-phone-notch {
+        position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 3;
+        width: 34%; height: 16px; background: #05060f; border-radius: 0 0 10px 10px;
+      }
+      .bb-phone-placeholder {
+        position: absolute; inset: 8px; border-radius: 23px; display: grid; place-items: center;
+        color: color-mix(in srgb, var(--tone) 75%, white 10%);
+        background:
+          radial-gradient(80% 60% at 50% 25%, color-mix(in srgb, var(--tone) 28%, transparent), transparent 70%),
+          repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 10px, transparent 10px 20px),
+          #0c0e22;
+      }
+      .bb-phone-placeholder svg { opacity: 0.55; }
+      .bb-phone-shot { position: absolute; inset: 8px; width: calc(100% - 16px); height: calc(100% - 16px); object-fit: cover; border-radius: 23px; }
+      .bb-phone-cap { font-size: 0.85rem; color: var(--bb-muted); font-weight: 500; }
+
+      /* ---------- Tech strip ---------- */
+      .bb-stack { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+      .bb-chip {
+        font-size: 0.82rem; font-weight: 500; color: var(--bb-text);
+        padding: 0.45rem 0.9rem; border-radius: 999px;
+        background: var(--bb-surface); border: 1px solid var(--bb-border);
+        transition: border-color 0.25s, color 0.25s;
+      }
+      .bb-chip:hover { border-color: rgba(255,255,255,0.25); color: #fff; }
+
+      /* ---------- Privacy prose ---------- */
+      .bb-privacy { border-top: 1px solid var(--bb-border); margin-top: clamp(3rem, 6vw, 5rem); }
+      .bb-prose { max-width: 70ch; color: var(--bb-muted); }
+      .bb-prose > * + * { margin-top: 1.2rem; }
+      .bb-prose h3 { font-family: var(--bb-display); color: var(--bb-text); font-size: 1.25rem; font-weight: 600; letter-spacing: -0.015em; margin-top: 2.4rem; }
+      .bb-prose strong { color: var(--bb-text); font-weight: 600; }
+      .bb-prose em { font-style: italic; }
+      .bb-prose ul { display: flex; flex-direction: column; gap: 0.6rem; padding-left: 1.1rem; }
+      .bb-prose li { position: relative; padding-left: 1rem; }
+      .bb-prose li::before { content: ""; position: absolute; left: 0; top: 0.65em; width: 5px; height: 5px; border-radius: 50%; background: var(--bb-pink); }
+      .bb-prose a { color: var(--bb-cyan); text-decoration: underline; text-underline-offset: 3px; }
+      .bb-prose a:hover { color: #7dd3fc; }
+
+      /* ---------- Footer ---------- */
+      .bb-footer {
+        display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+        padding-top: 2.5rem; padding-bottom: 2.5rem; margin-top: clamp(3rem, 6vw, 5rem);
+        border-top: 1px solid var(--bb-border); color: var(--bb-faint); font-size: 0.85rem;
+      }
+
+      /* ---------- Entrance + reveal animations ---------- */
+      .bb-fade { opacity: 0; transform: translateY(1.4rem); animation: bb-enter 0.8s var(--bb-ease) forwards; animation-delay: var(--d, 0s); }
+      @keyframes bb-enter { to { opacity: 1; transform: none; } }
+
+      [data-reveal] { opacity: 0; transform: translateY(1.6rem); transition: opacity 0.7s var(--bb-ease), transform 0.7s var(--bb-ease); }
+      [data-reveal].in { opacity: 1; transform: none; }
+      .bb-feature[data-reveal] { transition-delay: calc(var(--i, 0) * 70ms); }
+
+      /* ---------- Responsive ---------- */
+      @media (max-width: 900px) {
+        .bb-features { grid-template-columns: repeat(2, 1fr); }
+        .bb-shots { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+      }
+      @media (max-width: 720px) {
+        .bb-hero { grid-template-columns: 1fr; text-align: center; }
+        .bb-hero-copy { order: 2; }
+        .bb-hero-art { order: 1; }
+        .bb-cta, .bb-section-head { margin-left: auto; margin-right: auto; }
+        .bb-lede { margin-left: auto; margin-right: auto; }
+        .bb-cta { justify-content: center; }
+      }
+      @media (max-width: 480px) {
+        .bb-features { grid-template-columns: 1fr; }
+        .bb-shots { grid-template-columns: 1fr; max-width: 280px; margin-inline: auto; }
+      }
+
+      /* ---------- Reduced motion ---------- */
+      @media (prefers-reduced-motion: reduce) {
+        .bb-blob, .bb-app-icon, .bb-icon-halo, .bb-title { animation: none !important; }
+        .bb-fade { opacity: 1 !important; transform: none !important; animation: none !important; }
+        [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+        html.bb-root { scroll-behavior: auto; }
+      }
+    </style>
+  </body>
+</html>
