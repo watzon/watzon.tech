@@ -695,8 +695,7 @@ const starterServers = [
         position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 3px; overflow: hidden;
       }
       .bb-galcol { display: flex; flex-direction: column; gap: 3px; will-change: transform; }
-      .bb-galcol--up { animation: bb-scroll 26s linear infinite; }
-      .bb-galcol--up2 { animation: bb-scroll 32s linear infinite; }
+      .bb-galcol--up, .bb-galcol--up2 { animation: bb-scroll 28s linear infinite; }
       @keyframes bb-scroll { from { transform: translateY(0); } to { transform: translateY(-50%); } }
       .bb-tile {
         display: block; width: 100%; background-size: cover; background-position: center;
